@@ -6,24 +6,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("enginemachining")
@@ -98,12 +88,12 @@ public class EngineMachiningMod
         @SubscribeEvent
         public static void onItemsRegistry(final RegistryEvent.Register<Item> itemsRegistryEvent) {
             LOGGER.info("Starting Item Registry...");
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_copper, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_copper"));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_tin, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_tin"));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_aluminium, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_aluminium"));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_silver, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_silver"));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_lead, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_lead"));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_nickel, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_nickel"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_copper, new Item.Properties().group(ModdedItemGroups.metals)).setRegistryName("enginemachining:ore_copper"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_tin, new Item.Properties().group(ModdedItemGroups.metals)).setRegistryName("enginemachining:ore_tin"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_aluminium, new Item.Properties().group(ModdedItemGroups.metals)).setRegistryName("enginemachining:ore_aluminium"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_silver, new Item.Properties().group(ModdedItemGroups.metals)).setRegistryName("enginemachining:ore_silver"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_lead, new Item.Properties().group(ModdedItemGroups.metals)).setRegistryName("enginemachining:ore_lead"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_nickel, new Item.Properties().group(ModdedItemGroups.metals)).setRegistryName("enginemachining:ore_nickel"));
 
             itemsRegistryEvent.getRegistry().register(new IngotCopper());
             itemsRegistryEvent.getRegistry().register(new IngotAluminium());

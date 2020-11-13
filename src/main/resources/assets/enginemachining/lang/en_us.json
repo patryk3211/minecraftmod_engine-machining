@@ -5,7 +5,7 @@
   "block.enginemachining.ore_nickel": "Nickel Ore",
   "block.enginemachining.ore_silver": "Silver Ore",
   "block.enginemachining.ore_lead": "Lead Ore",
-  "itemGroup.itemgroup.enginemachining.ores": "Machines Ores",
+  "itemGroup.enginemachining.ores": "Machines Ores",
   "item.enginemachining.ingot_copper": "Copper Ingot",
   "item.enginemachining.ingot_lead": "Lead Ingot",
   "item.enginemachining.ingot_nickel": "Nickel Ingot",

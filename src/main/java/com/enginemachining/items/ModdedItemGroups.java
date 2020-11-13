@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 public class ModdedItemGroups {
-    public static ItemGroup ores = new ItemGroup("itemgroup.enginemachining.ores") {
+    public static ItemGroup metals = new ItemGroup("enginemachining.metals") {
         @Override
         public ItemStack createIcon() {
             return new ItemStack(ModdedBlocks.ore_copper);
@@ -29,4 +29,16 @@ public class ModdedItemGroups {
             //super.fill(items);
         }
     };
+
+    /*public static ItemGroup tools = new ItemGroup("enginemachining.tools") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(ModdedItems.pickaxe_copper);
+        }
+
+        @Override
+        public void fill(NonNullList<ItemStack> items) {
+            super.fill(items);
+        }
+    };*/
 }

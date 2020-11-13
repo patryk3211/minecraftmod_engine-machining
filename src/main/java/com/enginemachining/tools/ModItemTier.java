@@ -1,22 +1,23 @@
 package com.enginemachining.tools;
 
+import com.enginemachining.items.ModdedItems;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
 
 import java.util.function.Supplier;
 
-public enum ModItemTier implements IItemTier {;
+public enum ModItemTier implements IItemTier {
 
-    //COPPER(2, 200, 5.0F, 3.0F, 9, repairMaterial)
+    copper(2, 200, 5.0f, 3.0f, 9, Ingredient.fromItems(ModdedItems.ingot_copper));
 
     private final int harvestLevel;
-    private  final  int maxUses;
-    private  final float efficiency;
-    private  final float attackDamage;
-    private  final int enchantability;
-    private  final Supplier<Ingredient> repairMaterial;
+    private final int maxUses;
+    private final float efficiency;
+    private final float attackDamage;
+    private final int enchantability;
+    private final Ingredient repairMaterial;
 
-    ModItemTier(int harvestLevel, int maxUses, float efficiency, float attackDamage, int enchantability, Supplier<Ingredient> repairMaterial) {
+    ModItemTier(int harvestLevel, int maxUses, float efficiency, float attackDamage, int enchantability, Ingredient repairMaterial) {
         this.harvestLevel = harvestLevel;
         this.maxUses = maxUses;
         this.efficiency = efficiency;
@@ -27,31 +28,31 @@ public enum ModItemTier implements IItemTier {;
 
     @Override
     public int getMaxUses() {
-        return 0;
+        return maxUses;
     }
 
     @Override
     public float getEfficiency() {
-        return 0;
+        return efficiency;
     }
 
     @Override
     public float getAttackDamage() {
-        return 0;
+        return attackDamage;
     }
 
     @Override
     public int getHarvestLevel() {
-        return 0;
+        return harvestLevel;
     }
 
     @Override
     public int getEnchantability() {
-        return 0;
+        return enchantability;
     }
 
     @Override
     public Ingredient getRepairMaterial() {
-        return null;
+        return repairMaterial;
     }
 }
