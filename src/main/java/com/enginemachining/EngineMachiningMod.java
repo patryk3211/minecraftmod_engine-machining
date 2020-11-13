@@ -92,8 +92,8 @@ public class EngineMachiningMod
         @SubscribeEvent
         public static void onItemsRegistry(final RegistryEvent.Register<Item> itemsRegistryEvent) {
             LOGGER.info("Starting Item Registry...");
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_copper, new Item.Properties()));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_tin, new Item.Properties()));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_copper, new Item.Properties()).setRegistryName("enginemachining:ore_copper"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_tin, new Item.Properties()).setRegistryName("enginemachining:ore_tin"));
             LOGGER.info("Item registry finished!");
 
         }
