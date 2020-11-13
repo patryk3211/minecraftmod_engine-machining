@@ -1,1 +1,17 @@
-{"type":"minecraft:block","pools":[{"rolls":1,"entries":[{"type":"minecraft:item","functions":[{"function":"minecraft:copy_nbt","source":"block_entity","ops":[{"source":"componentSecurity.owner","target":"data.owner","op":"replace"},{"source":"componentSecurity.securityMode","target":"data.securityMode","op":"replace"},{"source":"componentUpgrade","target":"data.componentUpgrade","op":"replace"},{"source":"componentConfig","target":"data.componentConfig","op":"replace"},{"source":"componentEjector","target":"data.componentEjector","op":"replace"},{"source":"controlType","target":"data.controlType","op":"replace"},{"source":"EnergyContainers","target":"data.EnergyContainers","op":"replace"},{"source":"Items","target":"data.Items","op":"replace"}]}],"name":"enginemachining:crusher"}],"conditions":[{"condition":"minecraft:survives_explosion"}]}]}
+{
+  "type":"minecraft:block",
+  "pools": [
+    {
+      "rolls":1,
+      "entries": [
+        {
+          "type":"minecraft:item",
+          "name":"enginemachining:crusher"
+        }
+      ],
+      "conditions": [
+        { "condition":"minecraft:survives_explosion" }
+      ]
+    }
+  ]
+}
