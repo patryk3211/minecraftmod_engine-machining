@@ -5,18 +5,24 @@
   "block.enginemachining.ore_nickel": "Nickel Ore",
   "block.enginemachining.ore_silver": "Silver Ore",
   "block.enginemachining.ore_lead": "Lead Ore",
-  "itemGroup.enginemachining.ores": "Machines Ores",
+
+  "itemGroup.enginemachining.metals": "Machines Metals",
+  "itemGroup.enginemachining.tools": "Machines Tools",
+
   "item.enginemachining.ingot_copper": "Copper Ingot",
   "item.enginemachining.ingot_lead": "Lead Ingot",
   "item.enginemachining.ingot_nickel": "Nickel Ingot",
   "item.enginemachining.ingot_tin": "Tin Ingot",
   "item.enginemachining.ingot_aluminium": "Aluminium Ingot",
   "item.enginemachining.ingot_silver": "Silver Ingot",
+
   "item.enginemachining.dust_copper": "Copper Dust",
   "item.enginemachining.dust_aluminium": "Aluminium Dust",
   "item.enginemachining.dust_silver": "Silver Dust",
   "item.enginemachining.dust_tin": "Tin Dust",
   "item.enginemachining.dust_lead": "Lead Dust",
-  "item.enginemachining.dust_nickel": "Nickel Dust"
+  "item.enginemachining.dust_nickel": "Nickel Dust",
+
+  "item.enginemachining.pickaxe_copper": "Copper Pickaxe"
 }
 
