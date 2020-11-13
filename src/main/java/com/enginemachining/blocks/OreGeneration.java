@@ -11,6 +11,7 @@ import net.minecraft.world.biome.BiomeGenerationSettings;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.FeatureSpread;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import net.minecraft.world.gen.feature.template.RuleTest;
 import net.minecraft.world.gen.placement.Placement;
@@ -30,12 +31,31 @@ public class OreGeneration {
 
     public static final int maxAluminiumGenSize = 4;
     public static final int minAluminiumHeight = 7;
-    public static final int maxAluminiumHeight = 25;
+    public static final int maxAluminiumHeight = 30;
+
+    public static final int maxLeadGenSize = 4;
+    public static final int minLeadHeight = 4;
+    public static final int maxLeadHeight = 20;
+
+    public static final int maxNickelGenSize = 6;
+    public static final int minNickelHeight = 11;
+    public static final int maxNickelHeight = 35;
+
+    public static final int maxTinGenSize = 8;
+    public static final int minTinHeight = 10;
+    public static final int maxTinHeight = 64;
+
+    public static final int maxSilverGenSize = 5;
+    public static final int minSilverHeight = 4;
+    public static final int maxSilverHeight = 20;
 
     public static void SetupFeatureGeneration() {
         RegisterOreGenFeature(ModdedBlocks.ore_copper, maxCopperGenSize, minCopperHeight, maxCopperHeight);
         RegisterOreGenFeature(ModdedBlocks.ore_aluminium, maxAluminiumGenSize, minAluminiumHeight, maxAluminiumHeight);
-
+        RegisterOreGenFeature(ModdedBlocks.ore_tin, maxTinGenSize, minTinHeight, maxTinHeight);
+        RegisterOreGenFeature(ModdedBlocks.ore_lead, maxLeadGenSize, minLeadHeight, maxLeadHeight);
+        RegisterOreGenFeature(ModdedBlocks.ore_nickel, maxNickelGenSize, minNickelHeight, maxNickelHeight);
+        RegisterOreGenFeature(ModdedBlocks.ore_silver, maxSilverGenSize, minSilverHeight, maxSilverHeight);
 
         for (Map.Entry<RegistryKey<Biome>, Biome> biome : WorldGenRegistries.BIOME.getEntries()) {
             if (!biome.getValue().getCategory().equals(Biome.Category.NETHER) && !biome.getValue().getCategory().equals(Biome.Category.THEEND)) {
@@ -45,6 +65,18 @@ public class OreGeneration {
                 AddFeature(biome.getValue(),
                         GenerationStage.Decoration.UNDERGROUND_ORES,
                         WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(ModdedBlocks.ore_aluminium.getRegistryName()));
+                AddFeature(biome.getValue(),
+                        GenerationStage.Decoration.UNDERGROUND_ORES,
+                        WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(ModdedBlocks.ore_tin.getRegistryName()));
+                AddFeature(biome.getValue(),
+                        GenerationStage.Decoration.UNDERGROUND_ORES,
+                        WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(ModdedBlocks.ore_lead.getRegistryName()));
+                AddFeature(biome.getValue(),
+                        GenerationStage.Decoration.UNDERGROUND_ORES,
+                        WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(ModdedBlocks.ore_nickel.getRegistryName()));
+                AddFeature(biome.getValue(),
+                        GenerationStage.Decoration.UNDERGROUND_ORES,
+                        WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(ModdedBlocks.ore_silver.getRegistryName()));
             }
         }
     }
@@ -74,6 +106,7 @@ public class OreGeneration {
                                 block.getDefaultState(),
                                 maxSize))
                         .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(minHeight, 0, maxHeight)))
+                        .square()
                         .func_242731_b(maxSize));
     }
 }
