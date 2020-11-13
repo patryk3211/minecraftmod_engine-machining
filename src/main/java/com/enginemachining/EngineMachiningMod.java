@@ -1,13 +1,14 @@
 package com.enginemachining;
 
 import com.enginemachining.blocks.*;
-import com.enginemachining.items.IngotCopper;
-import com.enginemachining.items.ModdedItemGroups;
+import com.enginemachining.items.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -105,6 +106,11 @@ public class EngineMachiningMod
             itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_nickel, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_nickel"));
 
             itemsRegistryEvent.getRegistry().register(new IngotCopper());
+            itemsRegistryEvent.getRegistry().register(new IngotAluminium());
+            itemsRegistryEvent.getRegistry().register(new IngotTin());
+            itemsRegistryEvent.getRegistry().register(new IngotNickel());
+            itemsRegistryEvent.getRegistry().register(new IngotLead());
+            itemsRegistryEvent.getRegistry().register(new IngotSilver());
             LOGGER.info("Item registry finished!");
         }
     }
