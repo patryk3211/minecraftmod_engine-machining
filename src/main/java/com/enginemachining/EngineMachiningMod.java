@@ -2,6 +2,7 @@ package com.enginemachining;
 
 import com.enginemachining.blocks.ModdedBlocks;
 import com.enginemachining.blocks.OreCopper;
+import com.enginemachining.blocks.OreTin;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
@@ -84,6 +85,7 @@ public class EngineMachiningMod
             // register a new block here
             LOGGER.info("Starting Block Registry...");
             blockRegistryEvent.getRegistry().register(new OreCopper());
+            blockRegistryEvent.getRegistry().register(new OreTin());
             LOGGER.info("Block registry finished!");
         }
 
@@ -91,7 +93,9 @@ public class EngineMachiningMod
         public static void onItemsRegistry(final RegistryEvent.Register<Item> itemsRegistryEvent) {
             LOGGER.info("Starting Item Registry...");
             itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_copper, new Item.Properties()));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_tin, new Item.Properties()));
             LOGGER.info("Item registry finished!");
+
         }
     }
 }
