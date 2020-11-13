@@ -1,13 +1,13 @@
-package tools;
+package com.enginemachining.tools;
 
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
 
 import java.util.function.Supplier;
 
-public enum ModItemTier implements IItemTier {
+public enum ModItemTier implements IItemTier {;
 
-    COPPER(2, 200, 5.0F, 3.0F, 9, repairMaterial)
+    //COPPER(2, 200, 5.0F, 3.0F, 9, repairMaterial)
 
     private final int harvestLevel;
     private  final  int maxUses;
