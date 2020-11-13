@@ -1,6 +1,7 @@
 package com.enginemachining;
 
 import com.enginemachining.blocks.*;
+import com.enginemachining.items.IngotCopper;
 import com.enginemachining.items.ModdedItemGroups;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -102,9 +103,9 @@ public class EngineMachiningMod
             itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_silver, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_silver"));
             itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_lead, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_lead"));
             itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_nickel, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_nickel"));
+
+            itemsRegistryEvent.getRegistry().register(new IngotCopper());
             LOGGER.info("Item registry finished!");
-
-
         }
     }
 }
