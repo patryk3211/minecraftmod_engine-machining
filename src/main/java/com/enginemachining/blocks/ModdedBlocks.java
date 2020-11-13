@@ -5,7 +5,15 @@ import net.minecraftforge.registries.ObjectHolder;
 
 public class ModdedBlocks {
     @ObjectHolder("enginemachining:ore_copper")
-    public static final OreCopper ore_copper = null;
+    public static OreCopper ore_copper ;
     @ObjectHolder("enginemachining:ore_tin")
     public static OreTin ore_tin;
+    @ObjectHolder("enginemachining:ore_aluminium")
+    public static OreAluminium ore_aluminium;
+    @ObjectHolder("enginemachining:ore_silver")
+    public static OreAluminium ore_silver;
+    @ObjectHolder("enginemachining:ore_lead")
+    public static OreAluminium ore_lead;
+    @ObjectHolder("enginemachining:ore_nickel")
+    public static OreAluminium ore_nickel;
 }

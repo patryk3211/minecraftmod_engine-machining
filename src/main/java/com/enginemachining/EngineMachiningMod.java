@@ -1,8 +1,6 @@
 package com.enginemachining;
 
-import com.enginemachining.blocks.ModdedBlocks;
-import com.enginemachining.blocks.OreCopper;
-import com.enginemachining.blocks.OreTin;
+import com.enginemachining.blocks.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
@@ -86,6 +84,10 @@ public class EngineMachiningMod
             LOGGER.info("Starting Block Registry...");
             blockRegistryEvent.getRegistry().register(new OreCopper());
             blockRegistryEvent.getRegistry().register(new OreTin());
+            blockRegistryEvent.getRegistry().register(new OreAluminium());
+            blockRegistryEvent.getRegistry().register(new OreSilver());
+            blockRegistryEvent.getRegistry().register(new OreLead());
+            blockRegistryEvent.getRegistry().register(new OreNickel());
             LOGGER.info("Block registry finished!");
         }
 
@@ -94,6 +96,10 @@ public class EngineMachiningMod
             LOGGER.info("Starting Item Registry...");
             itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_copper, new Item.Properties()).setRegistryName("enginemachining:ore_copper"));
             itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_tin, new Item.Properties()).setRegistryName("enginemachining:ore_tin"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_aluminium, new Item.Properties()).setRegistryName("enginemachining:ore_aluminium"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_silver, new Item.Properties()).setRegistryName("enginemachining:ore_silver"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_lead, new Item.Properties()).setRegistryName("enginemachining:ore_lead"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_nickel, new Item.Properties()).setRegistryName("enginemachining:ore_nickel"));
             LOGGER.info("Item registry finished!");
 
         }
