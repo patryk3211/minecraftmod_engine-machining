@@ -1,10 +1,12 @@
 package com.enginemachining;
 
 import com.enginemachining.blocks.*;
+import com.enginemachining.items.ModdedItemGroups;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -94,13 +96,14 @@ public class EngineMachiningMod
         @SubscribeEvent
         public static void onItemsRegistry(final RegistryEvent.Register<Item> itemsRegistryEvent) {
             LOGGER.info("Starting Item Registry...");
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_copper, new Item.Properties()).setRegistryName("enginemachining:ore_copper"));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_tin, new Item.Properties()).setRegistryName("enginemachining:ore_tin"));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_aluminium, new Item.Properties()).setRegistryName("enginemachining:ore_aluminium"));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_silver, new Item.Properties()).setRegistryName("enginemachining:ore_silver"));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_lead, new Item.Properties()).setRegistryName("enginemachining:ore_lead"));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_nickel, new Item.Properties()).setRegistryName("enginemachining:ore_nickel"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_copper, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_copper"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_tin, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_tin"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_aluminium, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_aluminium"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_silver, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_silver"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_lead, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_lead"));
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_nickel, new Item.Properties().group(ModdedItemGroups.ores)).setRegistryName("enginemachining:ore_nickel"));
             LOGGER.info("Item registry finished!");
+
 
         }
     }
