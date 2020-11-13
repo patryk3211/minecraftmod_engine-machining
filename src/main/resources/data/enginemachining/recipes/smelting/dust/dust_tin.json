@@ -1,7 +1,7 @@
 {
   "type": "minecraft:smelting",
   "ingredient": {
-    "item": "enginemachining:ore_tin"
+    "item": "enginemachining:dust_tin"
   },
   "result": "enginemachining:ingot_tin",
   "experience": 0.1,
