@@ -1,0 +1,15 @@
+{
+  "pools": [
+    {
+      "name": "enginemachining:ore_nickel",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "enginemachining:ore_nickel",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

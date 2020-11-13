@@ -1,0 +1,15 @@
+{
+  "pools": [
+    {
+      "name": "enginemachining:ore_lead",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "enginemachining:ore_lead",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}
