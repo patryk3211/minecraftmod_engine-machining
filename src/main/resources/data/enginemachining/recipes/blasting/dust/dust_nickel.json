@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "enginemachining:dust_nickel"
+  },
+  "result": "enginemachining:ingot_nickel",
+  "experience": 0.1,
+  "cookingtime": 100
+}

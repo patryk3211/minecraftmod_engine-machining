@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "enginemachining:dust_aluminium"
+  },
+  "result": "enginemachining:ingot_aluminium",
+  "experience": 0.1,
+  "cookingtime": 105
+}
