@@ -11,6 +11,12 @@
   "item.enginemachining.ingot_nickel": "Nickel Ingot",
   "item.enginemachining.ingot_tin": "Tin Ingot",
   "item.enginemachining.ingot_aluminium": "Aluminium Ingot",
-  "item.enginemachining.ingot_silver": "Silver Ingot"
+  "item.enginemachining.ingot_silver": "Silver Ingot",
+  "item.enginemachining.dust_copper": "Copper Dust",
+  "item.enginemachining.dust_aluminium": "Aluminium Dust",
+  "item.enginemachining.dust_silver": "Silver Dust",
+  "item.enginemachining.dust_tin": "Tin Dust",
+  "item.enginemachining.dust_lead": "Lead Dust",
+  "item.enginemachining.dust_nickel": "Nickel Dust"
 }
 

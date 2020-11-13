@@ -1,5 +1,6 @@
 package com.enginemachining.items;
 
+import com.enginemachining.items.ingot.*;
 import net.minecraftforge.registries.ObjectHolder;
 
 public class ModdedItems {

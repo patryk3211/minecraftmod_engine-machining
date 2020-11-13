@@ -2,18 +2,30 @@ package com.enginemachining;
 
 import com.enginemachining.blocks.*;
 import com.enginemachining.items.*;
+import com.enginemachining.items.dust.*;
+import com.enginemachining.items.ingot.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("enginemachining")
@@ -102,6 +114,13 @@ public class EngineMachiningMod
             itemsRegistryEvent.getRegistry().register(new IngotLead());
             itemsRegistryEvent.getRegistry().register(new IngotSilver());
             LOGGER.info("Item registry finished!");
+            //proszki
+            itemsRegistryEvent.getRegistry().register(new DustCopper());
+            itemsRegistryEvent.getRegistry().register(new DustAluminium());
+            itemsRegistryEvent.getRegistry().register(new DustTin());
+            itemsRegistryEvent.getRegistry().register(new DustNickel());
+            itemsRegistryEvent.getRegistry().register(new DustSilver());
+            itemsRegistryEvent.getRegistry().register(new DustLead());
         }
     }
 }
