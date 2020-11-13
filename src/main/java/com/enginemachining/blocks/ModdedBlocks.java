@@ -11,9 +11,9 @@ public class ModdedBlocks {
     @ObjectHolder("enginemachining:ore_aluminium")
     public static OreAluminium ore_aluminium;
     @ObjectHolder("enginemachining:ore_silver")
-    public static OreAluminium ore_silver;
+    public static OreSilver ore_silver;
     @ObjectHolder("enginemachining:ore_lead")
-    public static OreAluminium ore_lead;
+    public static OreLead ore_lead;
     @ObjectHolder("enginemachining:ore_nickel")
-    public static OreAluminium ore_nickel;
+    public static OreNickel ore_nickel;
 }
