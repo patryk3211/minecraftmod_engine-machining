@@ -39,7 +39,6 @@ import net.minecraftforge.fml.network.IContainerFactory;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sun.security.mscapi.CPublicKey;
 
 import java.util.function.Supplier;
 
@@ -145,6 +144,8 @@ public class EngineMachiningMod
             itemsRegistryEvent.getRegistry().register(new HoeCopper());
 
             itemsRegistryEvent.getRegistry().register(new BatteryDisposable());
+
+            ModdedItemTags.InitTags();
 
             ModdedItemGroups.InitItemGroups();
             LOGGER.info("Item registry finished!");

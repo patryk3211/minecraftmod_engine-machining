@@ -14,7 +14,9 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
@@ -30,12 +32,22 @@ public class CrusherContainer extends Container {
 
     private IWorldPosCallable callable;
 
+    public IIntArray trackedArray;
+
     public CrusherContainer(int id, PlayerInventory inv, CrusherTile tile) {
         super(ModdedContainers.crusher, id);
         this.inv = inv;
         this.tileEntity = tile;
 
         callable = IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos());
+
+        trackedArray = new IntArray(4);
+
+        if(!tileEntity.getWorld().isRemote) {
+            trackedArray = tileEntity.trackedData;
+        }
+
+        trackIntArray(trackedArray);
 
         LayoutInventory();
 
@@ -85,7 +97,6 @@ public class CrusherContainer extends Container {
 
     @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-        System.out.println(index);
         return ItemStack.EMPTY;
     }
 }

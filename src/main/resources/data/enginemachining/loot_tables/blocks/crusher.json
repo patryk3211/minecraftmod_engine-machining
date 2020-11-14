@@ -6,7 +6,24 @@
       "entries": [
         {
           "type":"minecraft:item",
-          "name":"enginemachining:crusher"
+          "name":"enginemachining:crusher",
+          "functions": [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "op": "replace",
+                  "source": "energy",
+                  "target": "BlockEntityTag.energy"
+                }
+              ]
+            }
+          ]
         }
       ],
       "conditions": [
