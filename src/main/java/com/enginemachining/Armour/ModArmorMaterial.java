@@ -17,7 +17,7 @@ public enum ModArmorMaterial implements IArmorMaterial {
     copper("enginemachining:copper", 25, new int[] { 2, 5, 6, 2 }, 9,
             SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F, () -> { return Ingredient.fromItems(ModdedItems.ingot_copper); });
 
-    private static final int[] MAX_DAMAGE_ARRAY = new int[] { 11, 16, 15, 13 }
+    private static final int[] MAX_DAMAGE_ARRAY = new int[] { 11, 16, 15, 13 };
     private final String name;
     private final int maxDamageFactor;
     private final int[] damageReductionAmountArray;
@@ -61,7 +61,7 @@ public enum ModArmorMaterial implements IArmorMaterial {
 
     @Override
     public Ingredient getRepairMaterial() {
-        return this.repairMaterial;
+        return this.repairMaterial.get();
     }
 
     @Override
