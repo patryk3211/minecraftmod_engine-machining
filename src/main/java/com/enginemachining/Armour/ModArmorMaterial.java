@@ -1,15 +1,18 @@
 package com.enginemachining.Armour;
 
+import com.enginemachining.EngineMachiningMod;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 
 import java.util.function.Supplier;
 
 public enum ModArmorMaterial implements IArmorMaterial {
 
-    copper(.MOD_ID + "copper", )
+    copper("enginemachining:copper", 25, new int[] { 2, 5, 6, 2 }, 9,
+            SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F, () -> { return Ingredient.fromItems(EngineMachiningMod.) })
 
     private static final int[] MAX_DAMAGE_ARRAY = new int[] { 11, 16, 15, 13 }
     private final String name;
