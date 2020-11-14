@@ -4,10 +4,14 @@ import com.enginemachining.blocks.*;
 import com.enginemachining.items.*;
 import com.enginemachining.items.dust.*;
 import com.enginemachining.items.ingot.*;
+import com.enginemachining.tileentities.CrusherTile;
 import com.enginemachining.tools.PickaxeCopper;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,6 +20,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.function.Supplier;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("enginemachining")
@@ -73,7 +79,6 @@ public class EngineMachiningMod
     public static class RegistryEvents {
         @SubscribeEvent
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
-            // register a new block here
             LOGGER.info("Starting Block Registry...");
             blockRegistryEvent.getRegistry().register(new OreCopper());
             blockRegistryEvent.getRegistry().register(new OreTin());
@@ -81,6 +86,8 @@ public class EngineMachiningMod
             blockRegistryEvent.getRegistry().register(new OreSilver());
             blockRegistryEvent.getRegistry().register(new OreLead());
             blockRegistryEvent.getRegistry().register(new OreNickel());
+
+            blockRegistryEvent.getRegistry().register(new Crusher());
             LOGGER.info("Block registry finished!");
         }
 
@@ -108,8 +115,15 @@ public class EngineMachiningMod
             itemsRegistryEvent.getRegistry().register(new DustLead());
             itemsRegistryEvent.getRegistry().register(new DustSilver());
 
+            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.crusher, new Item.Properties().group(ItemGroup.MISC)).setRegistryName("enginemachining:crusher"));
+
             itemsRegistryEvent.getRegistry().register(new PickaxeCopper());
             LOGGER.info("Item registry finished!");
+        }
+
+        @SubscribeEvent
+        public static void onTileRegistry(RegistryEvent.Register<TileEntityType<?>> tileEntityRegistry) {
+            tileEntityRegistry.getRegistry().register(TileEntityType.Builder.create((Supplier<TileEntity>) CrusherTile::new, ModdedBlocks.crusher).build(null).setRegistryName("enginemachining:crusher"));
         }
     }
 }

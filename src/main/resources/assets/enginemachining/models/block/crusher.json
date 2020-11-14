@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "enginemachining:block/ore_aluminium",
+    "south": "enginemachining:block/ore_tin",
+    "north": "enginemachining:block/ore_copper",
+    "east": "enginemachining:item/ingot_lead"
+  }
+}
