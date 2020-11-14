@@ -1,0 +1,28 @@
+{
+  "block.enginemachining.ore_copper": "Ruda Miedzi",
+  "block.enginemachining.ore_tin": "Ruda Cyny",
+  "block.enginemachining.ore_aluminium": "Ruda Aluminium",
+  "block.enginemachining.ore_nickel": "Ruda Niklu",
+  "block.enginemachining.ore_silver": "Ruda Srebra",
+  "block.enginemachining.ore_lead": "Ruda Ołowiu",
+
+  "itemGroup.enginemachining.metals": "Machines Metals",
+  "itemGroup.enginemachining.tools": "Machines Tools",
+
+  "item.enginemachining.ingot_copper": "Sztabka Miedzi",
+  "item.enginemachining.ingot_lead": "Sztabka Ołowiu",
+  "item.enginemachining.ingot_nickel": "Sztabka Niklu",
+  "item.enginemachining.ingot_tin": "Sztabka Cyny",
+  "item.enginemachining.ingot_aluminium": "Sztabka Aluminium",
+  "item.enginemachining.ingot_silver": "Sztabka Srebra",
+
+  "item.enginemachining.dust_copper": "Sproszkowana Miedź",
+  "item.enginemachining.dust_aluminium": "Sproszkowane Aluminium",
+  "item.enginemachining.dust_silver": "Sproszkowane Srebro",
+  "item.enginemachining.dust_tin": "Sproszkowana Cyna",
+  "item.enginemachining.dust_lead": "Sproszkowany Ołów",
+  "item.enginemachining.dust_nickel": "Sproszkowany Nikiel",
+
+  "item.enginemachining.pickaxe_copper": "Miedziany Kilof"
+}
+
