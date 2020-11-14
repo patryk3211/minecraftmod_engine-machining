@@ -135,6 +135,8 @@ public class EngineMachiningMod
 
             itemsRegistryEvent.getRegistry().register(new AxeCopper());
             itemsRegistryEvent.getRegistry().register(new PickaxeCopper());
+
+            itemsRegistryEvent.getRegistry().register(new BatteryDisposable());
             LOGGER.info("Item registry finished!");
         }
 

@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.Property;
@@ -56,7 +57,19 @@ public class Crusher extends Block {
                 NetworkHooks.openGui((ServerPlayerEntity)player, (CrusherTile)te, pos);
                 return ActionResultType.SUCCESS;
             }
+        } else {
+            return ActionResultType.SUCCESS;
         }
         return ActionResultType.FAIL;
+    }
+
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        if(state.getBlock() != newState.getBlock()) {
+            TileEntity te = worldIn.getTileEntity(pos);
+            if(te instanceof CrusherTile) {
+                InventoryHelper.dropInventoryItems(worldIn, pos, ((CrusherTile) te).blockInventory);
+            }
+        }
     }
 }

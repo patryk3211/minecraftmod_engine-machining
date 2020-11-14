@@ -36,4 +36,7 @@ public class ModdedItems {
     public static PickaxeCopper pickaxe_copper;
     @ObjectHolder("enginemachining:axe_copper")
     public static PickaxeCopper axe_copper;
+
+    @ObjectHolder("enginemachining:battery_disposable")
+    public static BatteryDisposable battery_disposable;
 }

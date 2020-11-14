@@ -38,6 +38,10 @@ public class CrusherContainer extends Container {
         callable = IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos());
 
         LayoutInventory();
+
+        addSlot(new Slot(tileEntity.blockInventory, 0, 45, 34));
+        addSlot(new Slot(tileEntity.blockInventory, 1, 114, 34));
+        addSlot(new Slot(tileEntity.blockInventory, 2, 146, 61));
     }
 
     public CrusherContainer(int id, PlayerInventory inv, PacketBuffer data) {
@@ -48,7 +52,6 @@ public class CrusherContainer extends Container {
         Objects.requireNonNull(inv, "Player Inventory cannot be null");
         Objects.requireNonNull(data, "Data cannot be null");
 
-        System.out.println(data);
         TileEntity tileAtPos = inv.player.world.getTileEntity(data.readBlockPos());
         if(tileAtPos instanceof CrusherTile) {
             return (CrusherTile)tileAtPos;
@@ -57,25 +60,20 @@ public class CrusherContainer extends Container {
         return null;
     }
 
-    /*public CrusherContainer(int id, PlayerInventory inv, PacketBuffer buf) {
-        super(ModdedContainers.crusher, id);
-        this.inv = inv;
-    }*/
-
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
         return isWithinUsableDistance(callable, playerIn, ModdedBlocks.crusher);
     }
 
     private void LayoutInventory() {
-        AddRange(7, 83, 9, 3, 9, inv);
+        AddRange(8, 84, 9, 3, 9, inv);
 
-        AddBar(7, 141, 9, 0, inv);
+        AddBar(8, 142, 9, 0, inv);
     }
 
     private void AddRange(int xPos, int yPos, int horizontalCount, int verticalCount, int index, IInventory inventory) {
         for(int i = 0; i < verticalCount; i++) {
-            AddBar(xPos, yPos+i*18, horizontalCount, i*verticalCount+index, inventory);
+            AddBar(xPos, yPos+i*18, horizontalCount, i*horizontalCount+index, inventory);
         }
     }
 
@@ -87,6 +85,7 @@ public class CrusherContainer extends Container {
 
     @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+        System.out.println(index);
         return ItemStack.EMPTY;
     }
 }
