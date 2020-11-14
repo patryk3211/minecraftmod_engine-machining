@@ -139,6 +139,8 @@ public class EngineMachiningMod
             itemsRegistryEvent.getRegistry().register(new SwordCopper());
 
             itemsRegistryEvent.getRegistry().register(new BatteryDisposable());
+
+            ModdedItemGroups.InitItemGroups();
             LOGGER.info("Item registry finished!");
         }
 
