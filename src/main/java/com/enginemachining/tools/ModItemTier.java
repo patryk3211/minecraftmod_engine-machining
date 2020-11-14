@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 public enum ModItemTier implements IItemTier {
 
-    copper(2, 200, 5.0f, 3.0f, 9, Ingredient.fromItems(ModdedItems.ingot_copper));
+    copper(2, 200, 5.0f, 1.0f, 9, Ingredient.fromItems(ModdedItems.ingot_copper));
 
     private final int harvestLevel;
     private final int maxUses;

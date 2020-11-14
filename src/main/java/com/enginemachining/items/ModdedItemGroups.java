@@ -51,6 +51,7 @@ public class ModdedItemGroups {
         @Override
         public void fill(NonNullList<ItemStack> items) {
             items.add(new ItemStack(ModdedItems.pickaxe_copper));
+            items.add(new ItemStack(ModdedItems.axe_copper));
         }
     };
 }

@@ -8,6 +8,7 @@ import com.enginemachining.items.dust.*;
 import com.enginemachining.items.ingot.*;
 import com.enginemachining.screens.CrusherScreen;
 import com.enginemachining.tileentities.CrusherTile;
+import com.enginemachining.tools.AxeCopper;
 import com.enginemachining.tools.PickaxeCopper;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.ScreenManager;
@@ -132,6 +133,7 @@ public class EngineMachiningMod
 
             itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.crusher, new Item.Properties().group(ItemGroup.MISC)).setRegistryName("enginemachining:crusher"));
 
+            itemsRegistryEvent.getRegistry().register(new AxeCopper());
             itemsRegistryEvent.getRegistry().register(new PickaxeCopper());
             LOGGER.info("Item registry finished!");
         }
