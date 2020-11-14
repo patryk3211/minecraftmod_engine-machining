@@ -20,7 +20,4 @@ public class ModdedBlocks {
 
     @ObjectHolder("enginemachining:crusher")
     public static Crusher crusher;
-
-    @ObjectHolder("enginemachining:crusher")
-    public static TileEntityType<?> crusher_tile;
 }

@@ -7,7 +7,7 @@ import net.minecraft.tileentity.TileEntityType;
 
 public class CrusherTile extends TileEntity implements ITickableTileEntity {
     public CrusherTile() {
-        super(ModdedBlocks.crusher_tile);
+        super(ModdedTileEntities.crusher);
     }
 
     @Override
@@ -16,4 +16,6 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity {
             System.out.println("Tick");
         }
     }
+
+
 }
