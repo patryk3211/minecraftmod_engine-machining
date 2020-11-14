@@ -1,6 +1,7 @@
 package com.enginemachining.Armour;
 
 import com.enginemachining.EngineMachiningMod;
+import com.enginemachining.items.ModdedItems;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.crafting.Ingredient;
@@ -12,7 +13,7 @@ import java.util.function.Supplier;
 public enum ModArmorMaterial implements IArmorMaterial {
 
     copper("enginemachining:copper", 25, new int[] { 2, 5, 6, 2 }, 9,
-            SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F, () -> { return Ingredient.fromItems(EngineMachiningMod.) })
+            SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F, () -> { return Ingredient.fromItems(ModdedItems.ingot_copper); });
 
     private static final int[] MAX_DAMAGE_ARRAY = new int[] { 11, 16, 15, 13 }
     private final String name;
@@ -38,37 +39,37 @@ public enum ModArmorMaterial implements IArmorMaterial {
 
     @Override
     public int getDurability(EquipmentSlotType slotIn) {
-        return 0;
+        return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this.maxDamageFactor;
     }
 
     @Override
     public int getDamageReductionAmount(EquipmentSlotType slotIn) {
-        return 0;
+        return this.damageReductionAmountArray[slotIn.getIndex()];
     }
 
     @Override
     public int getEnchantability() {
-        return 0;
+        return this.enchantability;
     }
 
     @Override
     public SoundEvent getSoundEvent() {
-        return null;
+        return this.soundEvent;
     }
 
     @Override
     public Ingredient getRepairMaterial() {
-        return null;
+        return this.repairMaterial;
     }
 
     @Override
     public String getName() {
-        return null;
+        return this.name;
     }
 
     @Override
     public float getToughness() {
-        return 0;
+        return this.toughness;
     }
 
     @Override
