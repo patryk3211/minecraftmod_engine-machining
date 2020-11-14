@@ -3,6 +3,7 @@ package com.enginemachining.items;
 import com.enginemachining.items.dust.*;
 import com.enginemachining.items.ingot.*;
 import com.enginemachining.tools.AxeCopper;
+import com.enginemachining.tools.HoeCopper;
 import com.enginemachining.tools.PickaxeCopper;
 import com.enginemachining.tools.SwordCopper;
 import net.minecraftforge.registries.ObjectHolder;
@@ -40,6 +41,8 @@ public class ModdedItems {
     public static AxeCopper axe_copper;
     @ObjectHolder("enginemachining:sword_copper")
     public static SwordCopper sword_copper;
+    @ObjectHolder("enginemachining:hoe_copper")
+    public static HoeCopper hoe_copper;
 
     @ObjectHolder("enginemachining:battery_disposable")
     public static BatteryDisposable battery_disposable;

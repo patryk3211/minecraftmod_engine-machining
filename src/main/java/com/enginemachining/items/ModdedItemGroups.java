@@ -57,6 +57,7 @@ public class ModdedItemGroups {
                 items.add(new ItemStack(ModdedItems.pickaxe_copper));
                 items.add(new ItemStack(ModdedItems.axe_copper));
                 items.add(new ItemStack(ModdedItems.sword_copper));
+                items.add(new ItemStack(ModdedItems.hoe_copper));
             }
         };
     }
