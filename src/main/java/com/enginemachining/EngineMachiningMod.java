@@ -1,23 +1,36 @@
 package com.enginemachining;
 
 import com.enginemachining.blocks.*;
+import com.enginemachining.containers.CrusherContainer;
+import com.enginemachining.containers.ModdedContainers;
 import com.enginemachining.items.*;
 import com.enginemachining.items.dust.*;
 import com.enginemachining.items.ingot.*;
+import com.enginemachining.screens.CrusherScreen;
 import com.enginemachining.tileentities.CrusherTile;
 import com.enginemachining.tools.PickaxeCopper;
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.network.IContainerFactory;
+import net.minecraftforge.fml.network.NetworkRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,6 +59,8 @@ public class EngineMachiningMod
 
     private void setup(final FMLCommonSetupEvent event) {
         OreGeneration.SetupFeatureGeneration();
+
+
     }
 
     /*private void doClientStuff(final FMLClientSetupEvent event) {
@@ -123,7 +138,12 @@ public class EngineMachiningMod
 
         @SubscribeEvent
         public static void onTileRegistry(RegistryEvent.Register<TileEntityType<?>> tileEntityRegistry) {
-            tileEntityRegistry.getRegistry().register(TileEntityType.Builder.create((Supplier<TileEntity>) CrusherTile::new, ModdedBlocks.crusher).build(null).setRegistryName("enginemachining:crusher"));
+            tileEntityRegistry.getRegistry().register(TileEntityType.Builder.create(CrusherTile::new, ModdedBlocks.crusher).build(null).setRegistryName("enginemachining:crusher"));
+        }
+
+        @SubscribeEvent
+        public static void onContainerRegistry(RegistryEvent.Register<ContainerType<?>> containerRegistry) {
+            containerRegistry.getRegistry().register(IForgeContainerType.create(CrusherContainer::new).setRegistryName("enginemachining:crusher"));
         }
     }
 }

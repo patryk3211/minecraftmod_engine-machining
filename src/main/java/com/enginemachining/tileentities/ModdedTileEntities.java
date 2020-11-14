@@ -5,5 +5,5 @@ import net.minecraftforge.registries.ObjectHolder;
 
 public class ModdedTileEntities {
     @ObjectHolder("enginemachining:crusher")
-    public static TileEntityType<?> crusher;
+    public static TileEntityType<CrusherTile> crusher;
 }
