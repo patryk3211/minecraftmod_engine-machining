@@ -52,6 +52,7 @@ public class ModdedItemGroups {
         public void fill(NonNullList<ItemStack> items) {
             items.add(new ItemStack(ModdedItems.pickaxe_copper));
             items.add(new ItemStack(ModdedItems.axe_copper));
+            items.add(new ItemStack(ModdedItems.sword_copper));
         }
     };
 }

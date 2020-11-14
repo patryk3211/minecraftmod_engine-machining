@@ -10,6 +10,7 @@ import com.enginemachining.screens.CrusherScreen;
 import com.enginemachining.tileentities.CrusherTile;
 import com.enginemachining.tools.AxeCopper;
 import com.enginemachining.tools.PickaxeCopper;
+import com.enginemachining.tools.SwordCopper;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.gui.screen.Screen;
@@ -135,6 +136,7 @@ public class EngineMachiningMod
 
             itemsRegistryEvent.getRegistry().register(new AxeCopper());
             itemsRegistryEvent.getRegistry().register(new PickaxeCopper());
+            itemsRegistryEvent.getRegistry().register(new SwordCopper());
 
             itemsRegistryEvent.getRegistry().register(new BatteryDisposable());
             LOGGER.info("Item registry finished!");

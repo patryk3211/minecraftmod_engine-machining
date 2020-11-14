@@ -23,6 +23,8 @@
   "item.enginemachining.dust_lead": "Lead Dust",
   "item.enginemachining.dust_nickel": "Nickel Dust",
 
-  "item.enginemachining.pickaxe_copper": "Copper Pickaxe"
+  "item.enginemachining.pickaxe_copper": "Copper Pickaxe",
+  "item.enginemachining.axe_copper": "Copper Axe",
+  "item.enginemachining.sword_copper": "Copper Sword"
 }
 

@@ -23,6 +23,8 @@
   "item.enginemachining.dust_lead": "Sproszkowany Ołów",
   "item.enginemachining.dust_nickel": "Sproszkowany Nikiel",
 
-  "item.enginemachining.pickaxe_copper": "Miedziany Kilof"
+  "item.enginemachining.pickaxe_copper": "Miedziany Kilof",
+  "item.enginemachining.sword_copper": "Miedziany Miecz",
+  "item.enginemachining.axe_copper": "Miedziana Siekiera"
 }
 
