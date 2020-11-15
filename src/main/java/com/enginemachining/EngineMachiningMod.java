@@ -11,6 +11,7 @@ import com.enginemachining.items.*;
 import com.enginemachining.items.Nuggetsy.*;
 import com.enginemachining.items.dust.*;
 import com.enginemachining.items.ingot.*;
+import com.enginemachining.recipes.ModdedRecipeSerializers;
 import com.enginemachining.screens.CrusherScreen;
 import com.enginemachining.tileentities.CrusherTile;
 import com.enginemachining.tools.AxeCopper;
@@ -27,9 +28,11 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Tags;
@@ -175,6 +178,11 @@ public class EngineMachiningMod
         @SubscribeEvent
         public static void onContainerRegistry(RegistryEvent.Register<ContainerType<?>> containerRegistry) {
             containerRegistry.getRegistry().register(IForgeContainerType.create(CrusherContainer::new).setRegistryName("enginemachining:crusher"));
+        }
+
+        @SubscribeEvent
+        public static void onRecipeSerializerRegistry(RegistryEvent.Register<IRecipeSerializer<?>> recipeSerializerRegistry) {
+            recipeSerializerRegistry.getRegistry().register(ModdedRecipeSerializers.crusherRecipeSerializer.setRegistryName(new ResourceLocation("enginemachining:crushing")));
         }
     }
 }

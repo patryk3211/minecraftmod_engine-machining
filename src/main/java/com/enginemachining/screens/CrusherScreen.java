@@ -2,20 +2,31 @@ package com.enginemachining.screens;
 
 import com.enginemachining.containers.CrusherContainer;
 import com.enginemachining.containers.ModdedContainers;
+import com.enginemachining.tileentities.CrusherTile;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Constants;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.system.CallbackI;
 
 @OnlyIn(Dist.CLIENT)
 public class CrusherScreen extends ContainerScreen<CrusherContainer> implements IHasContainer<CrusherContainer> {
     public static final ResourceLocation textureLocation = new ResourceLocation("enginemachining:textures/gui/crusher.png");
+
+    int xOrigin;
+    int yOrigin;
 
     public CrusherScreen(CrusherContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -24,7 +35,39 @@ public class CrusherScreen extends ContainerScreen<CrusherContainer> implements 
         guiTop = 0;
         xSize = 175;
         ySize = 165;
+
+        xOrigin = (this.width - this.xSize) / 2;
+        yOrigin = (this.height - this.ySize) / 2;
     }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if(button == 0) {
+            int onButtonOriginX = xOrigin + 14;
+            int onButtonOriginY = yOrigin + 32;
+            int offButtonOriginX = xOrigin + 14;
+            int offButtonOriginY = yOrigin + 42;
+            int buttonWidth = 17;
+            int buttonHeight = 9;
+            if (mouseX > onButtonOriginX && mouseX < onButtonOriginX + buttonWidth && mouseY > onButtonOriginY && mouseY < onButtonOriginY + buttonHeight) {
+                container.trackedArray.set(2, 1);
+                container.tileEntity.getWorld().notifyBlockUpdate(container.tileEntity.getPos(), container.tileEntity.getBlockState(), container.tileEntity.getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+            }
+            if (mouseX > offButtonOriginX && mouseX < offButtonOriginX + buttonWidth && mouseY > offButtonOriginY && mouseY < offButtonOriginY + buttonHeight) {
+                container.trackedArray.set(2, 0);
+                container.tileEntity.getWorld().notifyBlockUpdate(container.tileEntity.getPos(), container.tileEntity.getBlockState(), container.tileEntity.getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    /*@Override
+    public void mouseMoved(double mouseX, double mouseY) {
+        if(mouseX > xOrigin && mouseX < xOrigin+20 && mouseY > yOrigin && mouseY < yOrigin+20) {
+            RenderSystem.color4f(1.0f, 1.0f, 1.0f, 0.5f);
+            System.out.println("Hover");
+        } else RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+    }*/
 
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
@@ -37,11 +80,20 @@ public class CrusherScreen extends ContainerScreen<CrusherContainer> implements 
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         minecraft.getTextureManager().bindTexture(textureLocation);
-        int x = (this.width - this.xSize) / 2;
-        int y = (this.height - this.ySize) / 2;
-        this.blit(matrixStack, x, y, 0, 0, this.xSize, this.ySize);
+        xOrigin = (this.width - this.xSize) / 2;
+        yOrigin = (this.height - this.ySize) / 2;
+        this.blit(matrixStack, xOrigin, yOrigin, 0, 0, this.xSize, this.ySize);
 
-        float ratio = (float)container.trackedArray.get(0) / (float)container.trackedArray.get(1);
-        this.blit(matrixStack, x+164, y+8, 176, 0, 5, (int)(ratio*69));
+        float ratioEnergyBar = (float)container.trackedArray.get(0) / (float)container.trackedArray.get(1);
+        int barHeight = (int)(ratioEnergyBar * 69);
+        this.blit(matrixStack, xOrigin+164, yOrigin+8+(69-barHeight), 176, 69 - barHeight, 5, barHeight);
+
+        if(container.trackedArray.get(2) == 1) {
+            this.blit(matrixStack, xOrigin+13, yOrigin+31, 181, 49, 19, 21);
+        }
+
+        float ratioPowerBar = (float)container.trackedArray.get(3) / (float)CrusherTile.HEAT_MAX;
+        int powerBarHeight = (int)(ratioPowerBar * 11);
+        this.blit(matrixStack, xOrigin+47, yOrigin+53+(11-barHeight), 176, 79 + (11 - barHeight), 11, powerBarHeight);
     }
 }

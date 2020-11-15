@@ -30,7 +30,16 @@ public class EnergyReceiverHandler implements IEnergyStorage, INBTSerializable<C
 
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
-        return 0;
+        if(!canExtract()) return 0;
+
+        if(currentEnergy < maxExtract) {
+            int ret = currentEnergy;
+            if(!simulate) currentEnergy = 0;
+            return ret;
+        }
+
+        if(!simulate) currentEnergy -= maxExtract;
+        return maxExtract;
     }
 
     @Override
@@ -45,7 +54,7 @@ public class EnergyReceiverHandler implements IEnergyStorage, INBTSerializable<C
 
     @Override
     public boolean canExtract() {
-        return false;
+        return currentEnergy > 0;
     }
 
     @Override
