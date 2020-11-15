@@ -27,6 +27,7 @@ public class ModdedItemGroups {
                 items.add(new ItemStack(ModdedItems.ingot_copper));
                 items.add(new ItemStack(ModdedItems.dust_copper));
                 items.add(new ItemStack(ModdedBlocks.ore_copper));
+                items.add(new ItemStack(ModdedItems.nugget_copper));
 
                 items.add(new ItemStack(ModdedItems.ingot_tin));
                 items.add(new ItemStack(ModdedItems.dust_tin));
@@ -35,6 +36,7 @@ public class ModdedItemGroups {
                 items.add(new ItemStack(ModdedItems.ingot_aluminium));
                 items.add(new ItemStack(ModdedItems.dust_aluminium));
                 items.add(new ItemStack(ModdedBlocks.ore_aluminium));
+                items.add(new ItemStack(ModdedItems.nugget_aluminium));
 
                 items.add(new ItemStack(ModdedItems.ingot_nickel));
                 items.add(new ItemStack(ModdedItems.dust_nickel));
@@ -43,10 +45,12 @@ public class ModdedItemGroups {
                 items.add(new ItemStack(ModdedItems.ingot_lead));
                 items.add(new ItemStack(ModdedItems.dust_lead));
                 items.add(new ItemStack(ModdedBlocks.ore_lead));
+                items.add(new ItemStack(ModdedItems.nugget_lead));
 
                 items.add(new ItemStack(ModdedItems.ingot_silver));
                 items.add(new ItemStack(ModdedItems.dust_silver));
                 items.add(new ItemStack(ModdedBlocks.ore_silver));
+
             }
         };
 
@@ -65,6 +69,7 @@ public class ModdedItemGroups {
                 items.add(new ItemStack(ModdedItems.helmet_copper));
                 items.add(new ItemStack(ModdedItems.chestplate_copper));
                 items.add(new ItemStack(ModdedItems.leggins_copper));
+                items.add(new ItemStack(ModdedItems.boots_copper));
             }
         };
 

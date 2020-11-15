@@ -1,11 +1,16 @@
 package com.enginemachining;
 
+import com.enginemachining.Armour.BootsCopper;
 import com.enginemachining.Armour.ChestplateCopper;
 import com.enginemachining.Armour.HelmetCopper;
+import com.enginemachining.Armour.LegginsCopper;
 import com.enginemachining.blocks.*;
 import com.enginemachining.containers.CrusherContainer;
 import com.enginemachining.containers.ModdedContainers;
 import com.enginemachining.items.*;
+import com.enginemachining.items.Nuggetsy.NuggetAluminium;
+import com.enginemachining.items.Nuggetsy.NuggetCopper;
+import com.enginemachining.items.Nuggetsy.NuggetLead;
 import com.enginemachining.items.dust.*;
 import com.enginemachining.items.ingot.*;
 import com.enginemachining.screens.CrusherScreen;
@@ -138,6 +143,10 @@ public class EngineMachiningMod
             itemsRegistryEvent.getRegistry().register(new DustLead());
             itemsRegistryEvent.getRegistry().register(new DustSilver());
 
+            itemsRegistryEvent.getRegistry().register(new NuggetAluminium());
+            itemsRegistryEvent.getRegistry().register(new NuggetCopper());
+            itemsRegistryEvent.getRegistry().register(new NuggetLead());
+
             itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.crusher, new Item.Properties().group(ItemGroup.MISC)).setRegistryName("enginemachining:crusher"));
 
             itemsRegistryEvent.getRegistry().register(new AxeCopper());
@@ -146,6 +155,8 @@ public class EngineMachiningMod
             itemsRegistryEvent.getRegistry().register(new HoeCopper());
             itemsRegistryEvent.getRegistry().register(new HelmetCopper());
             itemsRegistryEvent.getRegistry().register(new ChestplateCopper());
+            itemsRegistryEvent.getRegistry().register(new LegginsCopper());
+            itemsRegistryEvent.getRegistry().register(new BootsCopper());
 
             itemsRegistryEvent.getRegistry().register(new BatteryDisposable());
 

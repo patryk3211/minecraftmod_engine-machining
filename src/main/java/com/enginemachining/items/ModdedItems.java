@@ -1,5 +1,12 @@
 package com.enginemachining.items;
 
+import com.enginemachining.Armour.BootsCopper;
+import com.enginemachining.Armour.ChestplateCopper;
+import com.enginemachining.Armour.HelmetCopper;
+import com.enginemachining.Armour.LegginsCopper;
+import com.enginemachining.items.Nuggetsy.NuggetAluminium;
+import com.enginemachining.items.Nuggetsy.NuggetCopper;
+import com.enginemachining.items.Nuggetsy.NuggetLead;
 import com.enginemachining.items.dust.*;
 import com.enginemachining.items.ingot.*;
 import com.enginemachining.tools.AxeCopper;
@@ -7,6 +14,8 @@ import com.enginemachining.tools.HoeCopper;
 import com.enginemachining.tools.PickaxeCopper;
 import com.enginemachining.tools.SwordCopper;
 import net.minecraftforge.registries.ObjectHolder;
+
+import javax.swing.event.ChangeEvent;
 
 public class ModdedItems {
     @ObjectHolder("enginemachining:ingot_copper")
@@ -44,11 +53,20 @@ public class ModdedItems {
     @ObjectHolder("enginemachining:hoe_copper")
     public static HoeCopper hoe_copper;
     @ObjectHolder("enginemachining:helmet_copper")
-    public static HoeCopper helmet_copper;
+    public static HelmetCopper helmet_copper;
     @ObjectHolder("enginemachining:chestplate_copper")
-    public static HoeCopper chestplate_copper;
+    public static ChestplateCopper chestplate_copper;
     @ObjectHolder("enginemachining:leggins_copper")
-    public static HoeCopper leggins_copper;
+    public static LegginsCopper leggins_copper;
+    @ObjectHolder("enginemachining:boots_copper")
+    public static BootsCopper boots_copper;
+
+    @ObjectHolder("enginemachining:nugget_aluminium")
+    public static NuggetAluminium nugget_aluminium;
+    @ObjectHolder("enginemachining:nugget_copper")
+    public static NuggetCopper nugget_copper;
+    @ObjectHolder("enginemachining:nugget_lead")
+    public static NuggetLead nugget_lead;
 
     @ObjectHolder("enginemachining:battery_disposable")
     public static BatteryDisposable battery_disposable;

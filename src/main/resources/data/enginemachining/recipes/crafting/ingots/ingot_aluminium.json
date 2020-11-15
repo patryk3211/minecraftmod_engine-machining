@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "ingot_aluminium",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "enginemachining:nugget_aluminium"
+    }
+  },
+  "result": {
+    "item": "enginemachining:ingot_aluminium"
+  }
+}

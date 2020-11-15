@@ -23,6 +23,10 @@
   "item.enginemachining.dust_lead": "Lead Dust",
   "item.enginemachining.dust_nickel": "Nickel Dust",
 
+  "item.enginemachining.nugget_aluminium": "Aluminium Nugget",
+  "item.enginemachining.nugget_copper": "Copper Nugget",
+  "item.enginemachining.nugget_lead": "Lead Nugget",
+
   "item.enginemachining.pickaxe_copper": "Copper Pickaxe",
   "item.enginemachining.axe_copper": "Copper Axe",
   "item.enginemachining.sword_copper": "Copper Sword",

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "ingot_lead",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "enginemachining:nugget_lead"
+    }
+  },
+  "result": {
+    "item": "enginemachining:ingot_lead"
+  }
+}
