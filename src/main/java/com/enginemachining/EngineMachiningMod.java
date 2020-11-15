@@ -1,5 +1,7 @@
 package com.enginemachining;
 
+import com.enginemachining.Armour.ChestplateCopper;
+import com.enginemachining.Armour.HelmetCopper;
 import com.enginemachining.blocks.*;
 import com.enginemachining.containers.CrusherContainer;
 import com.enginemachining.containers.ModdedContainers;
@@ -142,6 +144,8 @@ public class EngineMachiningMod
             itemsRegistryEvent.getRegistry().register(new PickaxeCopper());
             itemsRegistryEvent.getRegistry().register(new SwordCopper());
             itemsRegistryEvent.getRegistry().register(new HoeCopper());
+            itemsRegistryEvent.getRegistry().register(new HelmetCopper());
+            itemsRegistryEvent.getRegistry().register(new ChestplateCopper());
 
             itemsRegistryEvent.getRegistry().register(new BatteryDisposable());
 

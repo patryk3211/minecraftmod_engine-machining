@@ -43,6 +43,12 @@ public class ModdedItems {
     public static SwordCopper sword_copper;
     @ObjectHolder("enginemachining:hoe_copper")
     public static HoeCopper hoe_copper;
+    @ObjectHolder("enginemachining:helmet_copper")
+    public static HoeCopper helmet_copper;
+    @ObjectHolder("enginemachining:chestplate_copper")
+    public static HoeCopper chestplate_copper;
+    @ObjectHolder("enginemachining:leggins_copper")
+    public static HoeCopper leggins_copper;
 
     @ObjectHolder("enginemachining:battery_disposable")
     public static BatteryDisposable battery_disposable;
