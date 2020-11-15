@@ -4,12 +4,16 @@ import com.enginemachining.blocks.ModdedBlocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.StringTextComponent;
 
 public class ModdedItemGroups {
     public static ItemGroup metals;
 
     public static ItemGroup tools;
+
+    public static ItemGroup misc;
 
     public static void InitItemGroups() {
         metals = new ItemGroup("enginemachining.metals") {
@@ -58,6 +62,29 @@ public class ModdedItemGroups {
                 items.add(new ItemStack(ModdedItems.axe_copper));
                 items.add(new ItemStack(ModdedItems.sword_copper));
                 items.add(new ItemStack(ModdedItems.hoe_copper));
+            }
+        };
+
+        misc = new ItemGroup("enginemachining.misc") {
+            @Override
+            public ItemStack createIcon() {
+                return new ItemStack(ModdedItems.battery_disposable);
+            }
+
+            @Override
+            public void fill(NonNullList<ItemStack> items) {
+                ItemStack battery_disposable = new ItemStack(ModdedItems.battery_disposable);
+
+                CompoundNBT nbt = battery_disposable.getTag();
+                if(nbt == null) nbt = new CompoundNBT();
+                CompoundNBT energyTag = new CompoundNBT();
+                energyTag.putInt("charge", 1000);
+                energyTag.putInt("maxCharge", 1000);
+                energyTag.putInt("maxDischargeSpeed", 10);
+                nbt.put("energy", energyTag);
+                battery_disposable.setTag(nbt);
+
+                items.add(battery_disposable);
             }
         };
     }

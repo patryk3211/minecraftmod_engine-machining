@@ -42,6 +42,6 @@ public class CrusherScreen extends ContainerScreen<CrusherContainer> implements 
         this.blit(matrixStack, x, y, 0, 0, this.xSize, this.ySize);
 
         float ratio = (float)container.trackedArray.get(0) / (float)container.trackedArray.get(1);
-        this.blit(matrixStack, x+164, y+8, 176, 0, 5, (int)(ratio*68));
+        this.blit(matrixStack, x+164, y+8, 176, 0, 5, (int)(ratio*69));
     }
 }

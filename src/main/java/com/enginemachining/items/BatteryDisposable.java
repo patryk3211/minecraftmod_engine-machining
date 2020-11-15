@@ -1,5 +1,6 @@
 package com.enginemachining.items;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,24 +10,28 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class BatteryDisposable extends Item {
     public BatteryDisposable() {
         super(new Item.Properties()
                 .maxStackSize(1)
-                .group(ItemGroup.MISC));
+                .group(ModdedItemGroups.misc));
         setRegistryName("enginemachining:battery_disposable");
     }
 
     @Override
-    public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         CompoundNBT nbt = stack.getTag();
-        CompoundNBT energyTag = new CompoundNBT();
-        energyTag.putInt("charge", 1000);
-        energyTag.putInt("maxCharge", 1000);
-        energyTag.putInt("maxDischargeSpeed", 10);
-        nbt.put("energy", energyTag);
-        stack.setTag(nbt);
+        if(nbt == null) return;
+        CompoundNBT energyTag = nbt.getCompound("energy");
+        int charge = energyTag.getInt("charge");
+        int maxCharge = energyTag.getInt("maxCharge");
+        tooltip.add(new StringTextComponent(charge + "/" + maxCharge + "FE"));
     }
 }

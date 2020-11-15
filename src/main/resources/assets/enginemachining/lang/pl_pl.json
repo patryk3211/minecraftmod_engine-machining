@@ -25,6 +25,8 @@
 
   "item.enginemachining.pickaxe_copper": "Miedziany Kilof",
   "item.enginemachining.sword_copper": "Miedziany Miecz",
-  "item.enginemachining.axe_copper": "Miedziana Siekiera"
+  "item.enginemachining.axe_copper": "Miedziana Siekiera",
+
+  "item.enginemachining.battery_disposable": "Bateria Jednorazowa"
 }
 
