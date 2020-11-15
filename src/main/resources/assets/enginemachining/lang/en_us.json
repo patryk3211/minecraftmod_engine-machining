@@ -26,6 +26,9 @@
   "item.enginemachining.nugget_aluminium": "Aluminium Nugget",
   "item.enginemachining.nugget_copper": "Copper Nugget",
   "item.enginemachining.nugget_lead": "Lead Nugget",
+  "item.enginemachining.nugget_nickel": "Nickel Nugget",
+  "item.enginemachining.nugget_silver": "Silver Nugget",
+  "item.enginemachining.nugget_tin": "Tin Nugget",
 
   "item.enginemachining.pickaxe_copper": "Copper Pickaxe",
   "item.enginemachining.axe_copper": "Copper Axe",

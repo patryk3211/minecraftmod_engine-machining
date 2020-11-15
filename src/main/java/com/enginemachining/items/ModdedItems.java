@@ -4,9 +4,7 @@ import com.enginemachining.Armour.BootsCopper;
 import com.enginemachining.Armour.ChestplateCopper;
 import com.enginemachining.Armour.HelmetCopper;
 import com.enginemachining.Armour.LegginsCopper;
-import com.enginemachining.items.Nuggetsy.NuggetAluminium;
-import com.enginemachining.items.Nuggetsy.NuggetCopper;
-import com.enginemachining.items.Nuggetsy.NuggetLead;
+import com.enginemachining.items.Nuggetsy.*;
 import com.enginemachining.items.dust.*;
 import com.enginemachining.items.ingot.*;
 import com.enginemachining.tools.AxeCopper;
@@ -67,6 +65,12 @@ public class ModdedItems {
     public static NuggetCopper nugget_copper;
     @ObjectHolder("enginemachining:nugget_lead")
     public static NuggetLead nugget_lead;
+    @ObjectHolder("enginemachining:nugget_nickel")
+    public static NuggetNickel nugget_nickel;
+    @ObjectHolder("enginemachining:nugget_tin")
+    public static NuggetTin nugget_tin;
+    @ObjectHolder("enginemachining:nugget_silver")
+    public static NuggetSilver nugget_silver;
 
     @ObjectHolder("enginemachining:battery_disposable")
     public static BatteryDisposable battery_disposable;

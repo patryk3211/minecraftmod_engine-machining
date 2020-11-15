@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "ingot_tin",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "enginemachining:nugget_tin"
+    }
+  },
+  "result": {
+    "item": "enginemachining:ingot_tin"
+  }
+}

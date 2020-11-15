@@ -32,6 +32,7 @@ public class ModdedItemGroups {
                 items.add(new ItemStack(ModdedItems.ingot_tin));
                 items.add(new ItemStack(ModdedItems.dust_tin));
                 items.add(new ItemStack(ModdedBlocks.ore_tin));
+                items.add(new ItemStack(ModdedItems.nugget_tin));
 
                 items.add(new ItemStack(ModdedItems.ingot_aluminium));
                 items.add(new ItemStack(ModdedItems.dust_aluminium));
@@ -41,6 +42,7 @@ public class ModdedItemGroups {
                 items.add(new ItemStack(ModdedItems.ingot_nickel));
                 items.add(new ItemStack(ModdedItems.dust_nickel));
                 items.add(new ItemStack(ModdedBlocks.ore_nickel));
+                items.add(new ItemStack(ModdedItems.nugget_nickel));
 
                 items.add(new ItemStack(ModdedItems.ingot_lead));
                 items.add(new ItemStack(ModdedItems.dust_lead));
@@ -50,6 +52,7 @@ public class ModdedItemGroups {
                 items.add(new ItemStack(ModdedItems.ingot_silver));
                 items.add(new ItemStack(ModdedItems.dust_silver));
                 items.add(new ItemStack(ModdedBlocks.ore_silver));
+                items.add(new ItemStack(ModdedItems.nugget_silver));
 
             }
         };

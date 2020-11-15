@@ -8,9 +8,7 @@ import com.enginemachining.blocks.*;
 import com.enginemachining.containers.CrusherContainer;
 import com.enginemachining.containers.ModdedContainers;
 import com.enginemachining.items.*;
-import com.enginemachining.items.Nuggetsy.NuggetAluminium;
-import com.enginemachining.items.Nuggetsy.NuggetCopper;
-import com.enginemachining.items.Nuggetsy.NuggetLead;
+import com.enginemachining.items.Nuggetsy.*;
 import com.enginemachining.items.dust.*;
 import com.enginemachining.items.ingot.*;
 import com.enginemachining.screens.CrusherScreen;
@@ -146,6 +144,9 @@ public class EngineMachiningMod
             itemsRegistryEvent.getRegistry().register(new NuggetAluminium());
             itemsRegistryEvent.getRegistry().register(new NuggetCopper());
             itemsRegistryEvent.getRegistry().register(new NuggetLead());
+            itemsRegistryEvent.getRegistry().register(new NuggetNickel());
+            itemsRegistryEvent.getRegistry().register(new NuggetTin());
+            itemsRegistryEvent.getRegistry().register(new NuggetSilver());
 
             itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.crusher, new Item.Properties().group(ItemGroup.MISC)).setRegistryName("enginemachining:crusher"));
 
