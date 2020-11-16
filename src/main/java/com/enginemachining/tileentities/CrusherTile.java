@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -57,6 +58,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     });
 
     boolean enabled;
+    boolean readyToRun;
 
     int power;
     public static final int HEAT_MAX = 1000;
@@ -218,9 +220,18 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                     int availableChange = energyUsage / ENERGY_PER_POWER;
                     handler.extractEnergy(availableChange * ENERGY_PER_POWER, false);
                     power += availableChange;
+                    if(HEAT_MAX - power == 0) readyToRun = true;
                     if(availableChange > 0) markdirty.set(true);
-                }
+                } else readyToRun = false;
             });
+
+            if(readyToRun) {
+                CrusherRecipe rec = GetRecipe(blockInventory.getStackInSlot(0));
+                if(rec != null) {
+
+                }
+            }
+
             if(markdirty.get()) markDirty();
         }
     }
@@ -245,6 +256,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
             }
         });
         enabled = nbt.getBoolean("enabled");
+        readyToRun = nbt.getBoolean("ready");
         power = Math.min(nbt.getInt("power"), HEAT_MAX);
         super.read(state, nbt);
     }
@@ -259,6 +271,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
             }
         });
         compound.putBoolean("enabled", enabled);
+        compound.putBoolean("ready", readyToRun);
         compound.putInt("power", power);
         return super.write(compound);
     }
@@ -291,14 +304,16 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
 
     @Nullable
     private CrusherRecipe GetRecipe(ItemStack input) {
-        if(input != null) {
+        if(input == null) {
             return null;
         }
 
         Set<IRecipe<?>> recipes = findRecipeByType(ModdedRecipeTypes.crushing, this.world);
         for(IRecipe<?> recipe : recipes) {
             CrusherRecipe cr = (CrusherRecipe)recipe;
-            if(cr.getIngredients().get(0).test(input)) return cr;
+            for(Ingredient in : cr.getIngredients()) {
+                if(in.test(input)) return cr;
+            }
         }
 
         return null;

@@ -1,5 +1,6 @@
 package com.enginemachining.blocks;
 
+import com.enginemachining.EngineMachiningMod;
 import com.enginemachining.items.ModdedItems;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
@@ -9,15 +10,16 @@ import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeGenerationSettings;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.FeatureSpread;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.template.RuleTest;
+import net.minecraft.world.gen.placement.ConfiguredPlacement;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.placement.TopSolidRangeConfig;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +51,30 @@ public class OreGeneration {
     public static final int minSilverHeight = 4;
     public static final int maxSilverHeight = 20;
 
-    public static void SetupFeatureGeneration() {
-        RegisterOreGenFeature(ModdedBlocks.ore_copper, maxCopperGenSize, minCopperHeight, maxCopperHeight);
+    public static void SetupFeatures() {
+
+    }
+
+    public static void SetupBiomeGeneration(BiomeLoadingEvent biomeEvent) {
+        EngineMachiningMod.LOGGER.info("Setting up biome generation...");
+        if(biomeEvent.getCategory() != Biome.Category.NETHER && biomeEvent.getCategory() != Biome.Category.THEEND) {
+
+        }
+        EngineMachiningMod.LOGGER.info("Biome generation setup complete!");
+        /*for(Biome biome : ForgeRegistries.BIOMES) {
+            ConfiguredPlacement placement = Placement.RANGE.configure(new TopSolidRangeConfig(minCopperHeight, 0, maxCopperHeight)).square();
+            ConfiguredFeature<?, ?> feature = new ConfiguredFeature(
+                    Feature.ORE,
+                    new OreFeatureConfig(
+                            OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
+                            ModdedBlocks.ore_copper.getDefaultState(),
+                            maxCopperGenSize))
+                    .withPlacement(placement);
+            List<Supplier<ConfiguredFeature<?, ?>>> list = new ArrayList<>();
+            list.add(() -> feature);
+            biome.getGenerationSettings().getFeatures().add(list);
+        }*/
+        /*RegisterOreGenFeature(ModdedBlocks.ore_copper, maxCopperGenSize, minCopperHeight, maxCopperHeight);
         RegisterOreGenFeature(ModdedBlocks.ore_aluminium, maxAluminiumGenSize, minAluminiumHeight, maxAluminiumHeight);
         RegisterOreGenFeature(ModdedBlocks.ore_tin, maxTinGenSize, minTinHeight, maxTinHeight);
         RegisterOreGenFeature(ModdedBlocks.ore_lead, maxLeadGenSize, minLeadHeight, maxLeadHeight);
@@ -78,10 +102,10 @@ public class OreGeneration {
                         GenerationStage.Decoration.UNDERGROUND_ORES,
                         WorldGenRegistries.CONFIGURED_FEATURE.getOrDefault(ModdedBlocks.ore_silver.getRegistryName()));
             }
-        }
+        }*/
     }
 
-    public static void AddFeature(Biome biome, GenerationStage.Decoration decoration, ConfiguredFeature<?, ?> feature) {
+    /*public static void AddFeature(Biome biome, GenerationStage.Decoration decoration, ConfiguredFeature<?, ?> feature) {
         List<List<Supplier<ConfiguredFeature<?, ?>>>> biomeFeatures = new ArrayList<>(
                 biome.getGenerationSettings().getFeatures()
         );
@@ -93,6 +117,8 @@ public class OreGeneration {
         List<Supplier<ConfiguredFeature<?, ?>>> features = new ArrayList<>(biomeFeatures.get(decoration.ordinal()));
         features.add(() -> feature);
         biomeFeatures.set(decoration.ordinal(), features);
+
+
 
         //ObfuscationReflectionHelper.setPrivateValue(BiomeGenerationSettings.class, biome.getGenerationSettings(), biomeFeatures, "features");
     }
@@ -108,5 +134,5 @@ public class OreGeneration {
                         .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(minHeight, 0, maxHeight)))
                         .square()
                         .func_242731_b(maxSize));
-    }
+    }*/
 }

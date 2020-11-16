@@ -112,7 +112,7 @@ public class ModdedItemGroups {
                 energyTag2.putInt("maxCharge", 1000000);
                 energyTag2.putInt("maxDischargeSpeed", 1000);
                 nbt2.put("energy", energyTag2);
-                battery_disposable.setTag(nbt2);
+                battery_creative.setTag(nbt2);
 
                 items.add(battery_creative);
             }

@@ -15,6 +15,10 @@ import com.enginemachining.recipes.ModdedRecipeSerializers;
 import com.enginemachining.tileentities.CrusherTile;
 import com.enginemachining.tools.copper.*;
 import com.enginemachining.tools.silver.*;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
@@ -23,9 +27,15 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.feature.template.RuleTest;
+import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.placement.TopSolidRangeConfig;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -38,26 +48,21 @@ import org.apache.logging.log4j.Logger;
 public class EngineMachiningMod
 {
     // Directly reference a log4j logger.
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
     public EngineMachiningMod() {
-        // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        /*// Register the enqueueIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        // Register the processIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
-        // Register the doClientStuff method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);*/
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        OreGeneration.SetupFeatureGeneration();
-
+        LOGGER.info("Creating biome features...");
+        OreGeneration.SetupFeatures();
+        LOGGER.info("Registering Network Packets...");
         EngineMachiningPacketHandler.registerPacketType(CrusherTileMessage.class, CrusherTileMessage::encode, CrusherTileMessage::decode, CrusherTileMessage::handle);
+        LOGGER.info("Setup Complete!");
     }
 
     /*private void doClientStuff(final FMLClientSetupEvent event) {
@@ -162,17 +167,42 @@ public class EngineMachiningMod
 
         @SubscribeEvent
         public static void onTileRegistry(RegistryEvent.Register<TileEntityType<?>> tileEntityRegistry) {
+            LOGGER.info("Registering tile entities...");
             tileEntityRegistry.getRegistry().register(TileEntityType.Builder.create(CrusherTile::new, ModdedBlocks.crusher).build(null).setRegistryName("enginemachining:crusher"));
+            LOGGER.info("Tile entities registered!");
         }
 
         @SubscribeEvent
         public static void onContainerRegistry(RegistryEvent.Register<ContainerType<?>> containerRegistry) {
+            LOGGER.info("Registering containers...");
             containerRegistry.getRegistry().register(IForgeContainerType.create(CrusherContainer::new).setRegistryName("enginemachining:crusher"));
+            LOGGER.info("Containers registered!");
         }
 
         @SubscribeEvent
         public static void onRecipeSerializerRegistry(RegistryEvent.Register<IRecipeSerializer<?>> recipeSerializerRegistry) {
+            LOGGER.info("Registering recipe serializers");
             recipeSerializerRegistry.getRegistry().register(ModdedRecipeSerializers.crusherRecipeSerializer.setRegistryName(new ResourceLocation("enginemachining:crushing")));
+            LOGGER.info("Recipe serializers registered!");
+        }
+
+        @SubscribeEvent
+        public static void onBiomeRegistry(RegistryEvent.Register<Feature<?>> event) {
+            /*LOGGER.info("Registering biomes...");
+            //OreFeature feature = new OreFeature()
+            ConfiguredFeature feature = Feature.ORE.withConfiguration(
+                    new OreFeatureConfig(
+                            OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
+                            ModdedBlocks.ore_copper.getDefaultState(),
+                            8))
+                    .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(10, 0, 80)))
+                    .square()
+                    .func_242731_b(8);
+            //feature.feature.setRegistryName("enginemachining:ore_copper");
+            //event.getRegistry().register(feature.feature);
+
+            //OreGeneration.SetupBiomeGeneration();
+            LOGGER.info("Biomes registered!");*/
         }
     }
 }
