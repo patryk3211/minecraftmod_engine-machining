@@ -94,7 +94,7 @@ public class OreGeneration {
         features.add(() -> feature);
         biomeFeatures.set(decoration.ordinal(), features);
 
-        ObfuscationReflectionHelper.setPrivateValue(BiomeGenerationSettings.class, biome.getGenerationSettings(), biomeFeatures, "features");
+        //ObfuscationReflectionHelper.setPrivateValue(BiomeGenerationSettings.class, biome.getGenerationSettings(), biomeFeatures, "features");
     }
 
     public static void RegisterOreGenFeature(Block block, int maxSize, int minHeight, int maxHeight) {
