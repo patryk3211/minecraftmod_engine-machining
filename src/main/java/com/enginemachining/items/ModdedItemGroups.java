@@ -69,10 +69,16 @@ public class ModdedItemGroups {
                 items.add(new ItemStack(ModdedItems.axe_copper));
                 items.add(new ItemStack(ModdedItems.sword_copper));
                 items.add(new ItemStack(ModdedItems.hoe_copper));
+                items.add(new ItemStack(ModdedItems.shovel_copper));
                 items.add(new ItemStack(ModdedItems.helmet_copper));
                 items.add(new ItemStack(ModdedItems.chestplate_copper));
                 items.add(new ItemStack(ModdedItems.leggins_copper));
                 items.add(new ItemStack(ModdedItems.boots_copper));
+                items.add(new ItemStack(ModdedItems.pickaxe_silver));
+                items.add(new ItemStack(ModdedItems.axe_silver));
+                items.add(new ItemStack(ModdedItems.sword_silver));
+                items.add(new ItemStack(ModdedItems.hoe_silver));
+                items.add(new ItemStack(ModdedItems.shovel_silver));
             }
         };
 

@@ -6,49 +6,31 @@ import com.enginemachining.Armour.HelmetCopper;
 import com.enginemachining.Armour.LegginsCopper;
 import com.enginemachining.blocks.*;
 import com.enginemachining.containers.CrusherContainer;
-import com.enginemachining.containers.ModdedContainers;
 import com.enginemachining.items.*;
 import com.enginemachining.items.Nuggetsy.*;
 import com.enginemachining.items.dust.*;
 import com.enginemachining.items.ingot.*;
 import com.enginemachining.recipes.ModdedRecipeSerializers;
-import com.enginemachining.screens.CrusherScreen;
 import com.enginemachining.tileentities.CrusherTile;
-import com.enginemachining.tools.AxeCopper;
-import com.enginemachining.tools.HoeCopper;
-import com.enginemachining.tools.PickaxeCopper;
-import com.enginemachining.tools.SwordCopper;
+import com.enginemachining.tools.copper.*;
+import com.enginemachining.tools.silver.*;
 import net.minecraft.block.Block;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.IContainerFactory;
-import net.minecraftforge.fml.network.NetworkRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.function.Supplier;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("enginemachining")
@@ -156,11 +138,18 @@ public class EngineMachiningMod
             itemsRegistryEvent.getRegistry().register(new AxeCopper());
             itemsRegistryEvent.getRegistry().register(new PickaxeCopper());
             itemsRegistryEvent.getRegistry().register(new SwordCopper());
+            itemsRegistryEvent.getRegistry().register(new ShovelCopper());
             itemsRegistryEvent.getRegistry().register(new HoeCopper());
             itemsRegistryEvent.getRegistry().register(new HelmetCopper());
             itemsRegistryEvent.getRegistry().register(new ChestplateCopper());
             itemsRegistryEvent.getRegistry().register(new LegginsCopper());
             itemsRegistryEvent.getRegistry().register(new BootsCopper());
+
+            itemsRegistryEvent.getRegistry().register(new AxeSilver());
+            itemsRegistryEvent.getRegistry().register(new PickaxeSilver());
+            itemsRegistryEvent.getRegistry().register(new SwordSilver());
+            itemsRegistryEvent.getRegistry().register(new ShovelSilver());
+            itemsRegistryEvent.getRegistry().register(new HoeSilver());
 
             itemsRegistryEvent.getRegistry().register(new BatteryDisposable());
 

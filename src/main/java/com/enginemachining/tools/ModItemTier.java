@@ -4,11 +4,10 @@ import com.enginemachining.items.ModdedItems;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
 
-import java.util.function.Supplier;
-
 public enum ModItemTier implements IItemTier {
 
-    copper(2, 200, 5.0f, 1.0f, 9, Ingredient.fromItems(ModdedItems.ingot_copper));
+    copper(2, 200, 5.0f, 1.0f, 9, Ingredient.fromItems(ModdedItems.ingot_copper)),
+    silver(2, 100, 9.0f, 1.0f, 22, Ingredient.fromItems(ModdedItems.ingot_silver));
 
     private final int harvestLevel;
     private final int maxUses;
@@ -55,4 +54,5 @@ public enum ModItemTier implements IItemTier {
     public Ingredient getRepairMaterial() {
         return repairMaterial;
     }
+
 }

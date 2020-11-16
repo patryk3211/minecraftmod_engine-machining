@@ -1,8 +1,8 @@
-package com.enginemachining.tools;
+package com.enginemachining.tools.copper;
 
 import com.enginemachining.items.ModdedItemGroups;
+import com.enginemachining.tools.ModItemTier;
 import net.minecraft.item.HoeItem;
-import net.minecraft.item.IItemTier;
 
 public class HoeCopper extends HoeItem {
     public HoeCopper() {

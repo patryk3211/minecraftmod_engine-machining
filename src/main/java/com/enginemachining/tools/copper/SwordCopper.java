@@ -1,7 +1,7 @@
-package com.enginemachining.tools;
+package com.enginemachining.tools.copper;
 
 import com.enginemachining.items.ModdedItemGroups;
-import net.minecraft.item.IItemTier;
+import com.enginemachining.tools.ModItemTier;
 import net.minecraft.item.SwordItem;
 
 public class SwordCopper extends SwordItem {

@@ -7,13 +7,9 @@ import com.enginemachining.Armour.LegginsCopper;
 import com.enginemachining.items.Nuggetsy.*;
 import com.enginemachining.items.dust.*;
 import com.enginemachining.items.ingot.*;
-import com.enginemachining.tools.AxeCopper;
-import com.enginemachining.tools.HoeCopper;
-import com.enginemachining.tools.PickaxeCopper;
-import com.enginemachining.tools.SwordCopper;
+import com.enginemachining.tools.copper.*;
+import com.enginemachining.tools.silver.*;
 import net.minecraftforge.registries.ObjectHolder;
-
-import javax.swing.event.ChangeEvent;
 
 public class ModdedItems {
     @ObjectHolder("enginemachining:ingot_copper")
@@ -50,6 +46,8 @@ public class ModdedItems {
     public static SwordCopper sword_copper;
     @ObjectHolder("enginemachining:hoe_copper")
     public static HoeCopper hoe_copper;
+    @ObjectHolder("enginemachining:shovel_copper")
+    public static ShovelCopper shovel_copper;
     @ObjectHolder("enginemachining:helmet_copper")
     public static HelmetCopper helmet_copper;
     @ObjectHolder("enginemachining:chestplate_copper")
@@ -58,6 +56,17 @@ public class ModdedItems {
     public static LegginsCopper leggins_copper;
     @ObjectHolder("enginemachining:boots_copper")
     public static BootsCopper boots_copper;
+
+    @ObjectHolder("enginemachining:pickaxe_silver")
+    public static PickaxeSilver pickaxe_silver;
+    @ObjectHolder("enginemachining:axe_silver")
+    public static AxeSilver axe_silver;
+    @ObjectHolder("enginemachining:sword_silver")
+    public static SwordSilver sword_silver;
+    @ObjectHolder("enginemachining:hoe_silver")
+    public static HoeSilver hoe_silver;
+    @ObjectHolder("enginemachining:shovel_silver")
+    public static ShovelSilver shovel_silver;
 
     @ObjectHolder("enginemachining:nugget_aluminium")
     public static NuggetAluminium nugget_aluminium;
