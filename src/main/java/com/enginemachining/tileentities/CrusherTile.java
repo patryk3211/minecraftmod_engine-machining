@@ -1,14 +1,10 @@
 package com.enginemachining.tileentities;
 
-import com.enginemachining.blocks.Crusher;
-import com.enginemachining.blocks.ModdedBlocks;
 import com.enginemachining.containers.CrusherContainer;
 import com.enginemachining.handlers.EnergyReceiverHandler;
-import com.enginemachining.items.ModdedItemTags;
 import com.enginemachining.items.ModdedItems;
 import com.enginemachining.recipes.CrusherRecipe;
 import com.enginemachining.recipes.ModdedRecipeTypes;
-import com.sun.jna.platform.unix.X11;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
@@ -23,18 +19,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
@@ -46,13 +35,13 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -201,6 +190,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     @Override
     public void tick() {
         if (!world.isRemote) {
+            AtomicBoolean markdirty = new AtomicBoolean(false);
             if(power > 0) {
                 power -= COOLDOWN_PER_TICK;
             }
@@ -218,6 +208,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
 
                     if(received > 0) {
                         slots.get(2).getTag().getCompound("energy").putInt("charge", energyLeft - received);
+                        markdirty.set(true);
                     }
                 }
                 if(enabled) {
@@ -227,8 +218,10 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                     int availableChange = energyUsage / ENERGY_PER_POWER;
                     handler.extractEnergy(availableChange * ENERGY_PER_POWER, false);
                     power += availableChange;
+                    if(availableChange > 0) markdirty.set(true);
                 }
             });
+            if(markdirty.get()) markDirty();
         }
     }
 

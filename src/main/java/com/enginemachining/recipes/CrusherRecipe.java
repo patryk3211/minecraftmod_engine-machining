@@ -97,12 +97,12 @@ public class CrusherRecipe implements IRecipe<IInventory> {
         @Override
         public CrusherRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
             //throw new UnsupportedOperationException("Reading a recipe from a PacketBuffer is currently not supported.");
-            ItemStack input = buffer.readItemStack();
+            /*ItemStack input = buffer.readItemStack();
             ItemStack output = buffer.readItemStack();
             int time = buffer.readInt();
-            return new CrusherRecipe(recipeId, "", Ingredient.fromStacks(input), output, time);
+            return new CrusherRecipe(recipeId, "", Ingredient.fromStacks(input), output, time);*/
             //System.out.println("hellohere2");
-            //return new CrusherRecipe(recipeId, "", Ingredient.fromItems(ModdedItems.ingot_lead), new ItemStack(ModdedItems.dust_lead), 100);
+            return new CrusherRecipe(recipeId, "", Ingredient.fromItems(ModdedItems.ingot_lead), new ItemStack(ModdedItems.dust_lead), 100);
         }
 
         @Override

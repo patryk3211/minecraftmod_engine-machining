@@ -36,6 +36,7 @@ public class CrusherTileMessage {
                     CrusherTile ct = (CrusherTile)te;
                     ct.trackedData.set(2, msg.enabled ? 1 : 0);
                     ct.getWorld().notifyBlockUpdate(ct.getPos(), ct.getBlockState(), ct.getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+                    ct.markDirty();
                 }
             }
         });
