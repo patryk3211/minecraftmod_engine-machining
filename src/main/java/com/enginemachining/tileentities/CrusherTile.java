@@ -71,8 +71,9 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
 
     int power;
     public static final int HEAT_MAX = 1000;
-    static final int ENERGY_PER_POWER = 10;
-    static final int COOLDOWN_PER_TICK = 1;
+    static final int ENERGY_PER_POWER = 1;
+    static final int COOLDOWN_PER_TICK = 10;
+    static final int MAX_POWER_CHANGE = 100;
 
     public IIntArray trackedData = new IIntArray() {
         @Override
@@ -221,7 +222,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                 }
                 if(enabled) {
                     int powerToMax = HEAT_MAX - power;
-                    int wantedChange = Math.min(powerToMax, 10);
+                    int wantedChange = Math.min(powerToMax, MAX_POWER_CHANGE);
                     int energyUsage = handler.extractEnergy(wantedChange * ENERGY_PER_POWER, true);
                     int availableChange = energyUsage / ENERGY_PER_POWER;
                     handler.extractEnergy(availableChange * ENERGY_PER_POWER, false);
@@ -269,7 +270,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
         return super.write(compound);
     }
 
-    @Override
+    /*@Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         System.out.println("packet");
     }
@@ -281,7 +282,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
         nbt.putBoolean("enabled", enabled);
         SUpdateTileEntityPacket packet = new SUpdateTileEntityPacket(pos, -1, nbt);
         return packet;
-    }
+    }*/
 
     @NotNull
     @Override

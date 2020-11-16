@@ -10,6 +10,7 @@ import com.enginemachining.items.*;
 import com.enginemachining.items.Nuggetsy.*;
 import com.enginemachining.items.dust.*;
 import com.enginemachining.items.ingot.*;
+import com.enginemachining.messages.CrusherTileMessage;
 import com.enginemachining.recipes.ModdedRecipeSerializers;
 import com.enginemachining.tileentities.CrusherTile;
 import com.enginemachining.tools.copper.*;
@@ -56,7 +57,7 @@ public class EngineMachiningMod
     private void setup(final FMLCommonSetupEvent event) {
         OreGeneration.SetupFeatureGeneration();
 
-
+        EngineMachiningPacketHandler.registerPacketType(CrusherTileMessage.class, CrusherTileMessage::encode, CrusherTileMessage::decode, CrusherTileMessage::handle);
     }
 
     /*private void doClientStuff(final FMLClientSetupEvent event) {

@@ -102,6 +102,19 @@ public class ModdedItemGroups {
                 battery_disposable.setTag(nbt);
 
                 items.add(battery_disposable);
+
+                ItemStack battery_creative = new ItemStack(ModdedItems.battery_disposable);
+
+                CompoundNBT nbt2 = battery_creative.getTag();
+                if(nbt2 == null) nbt2 = new CompoundNBT();
+                CompoundNBT energyTag2 = new CompoundNBT();
+                energyTag2.putInt("charge", 1000000);
+                energyTag2.putInt("maxCharge", 1000000);
+                energyTag2.putInt("maxDischargeSpeed", 1000);
+                nbt2.put("energy", energyTag2);
+                battery_disposable.setTag(nbt2);
+
+                items.add(battery_creative);
             }
         };
     }

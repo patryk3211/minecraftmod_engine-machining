@@ -1,7 +1,9 @@
 package com.enginemachining.screens;
 
+import com.enginemachining.EngineMachiningPacketHandler;
 import com.enginemachining.containers.CrusherContainer;
 import com.enginemachining.containers.ModdedContainers;
+import com.enginemachining.messages.CrusherTileMessage;
 import com.enginemachining.tileentities.CrusherTile;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -13,11 +15,13 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.network.PacketDistributor;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.CallbackI;
 
@@ -50,12 +54,12 @@ public class CrusherScreen extends ContainerScreen<CrusherContainer> implements 
             int buttonWidth = 17;
             int buttonHeight = 9;
             if (mouseX > onButtonOriginX && mouseX < onButtonOriginX + buttonWidth && mouseY > onButtonOriginY && mouseY < onButtonOriginY + buttonHeight) {
-                container.trackedArray.set(2, 1);
-                container.tileEntity.getWorld().notifyBlockUpdate(container.tileEntity.getPos(), container.tileEntity.getBlockState(), container.tileEntity.getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+                //container.trackedArray.set(2, 1);
+                if(container.trackedArray.get(2) == 0) EngineMachiningPacketHandler.INSTANCE.sendToServer(new CrusherTileMessage(container.tileEntity.getPos(), true));
             }
             if (mouseX > offButtonOriginX && mouseX < offButtonOriginX + buttonWidth && mouseY > offButtonOriginY && mouseY < offButtonOriginY + buttonHeight) {
-                container.trackedArray.set(2, 0);
-                container.tileEntity.getWorld().notifyBlockUpdate(container.tileEntity.getPos(), container.tileEntity.getBlockState(), container.tileEntity.getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+                //container.trackedArray.set(2, 0);
+                if(container.trackedArray.get(2) == 1) EngineMachiningPacketHandler.INSTANCE.sendToServer(new CrusherTileMessage(container.tileEntity.getPos(), false));
             }
         }
         return super.mouseClicked(mouseX, mouseY, button);
@@ -94,6 +98,6 @@ public class CrusherScreen extends ContainerScreen<CrusherContainer> implements 
 
         float ratioPowerBar = (float)container.trackedArray.get(3) / (float)CrusherTile.HEAT_MAX;
         int powerBarHeight = (int)(ratioPowerBar * 11);
-        this.blit(matrixStack, xOrigin+47, yOrigin+53+(11-barHeight), 176, 79 + (11 - barHeight), 11, powerBarHeight);
+        this.blit(matrixStack, xOrigin+47, yOrigin+53+(11-powerBarHeight), 176, 79 + (11 - powerBarHeight), 11, powerBarHeight);
     }
 }
