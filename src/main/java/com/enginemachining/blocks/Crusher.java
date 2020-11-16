@@ -19,13 +19,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class Crusher extends Block {
 
     public Crusher() {
         super(Properties.create(Material.IRON)
-                .hardnessAndResistance(5.0f, 3.0f));
+                .hardnessAndResistance(5.0f, 3.0f)
+                .harvestTool(ToolType.PICKAXE)
+                .harvestLevel(1)
+                .setRequiresTool());
         setRegistryName("enginemachining:crusher");
     }
 
