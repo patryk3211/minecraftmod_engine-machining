@@ -2,11 +2,12 @@ package com.enginemachining.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraftforge.common.ToolType;
 
 public class OreAluminium extends Block {
     public OreAluminium() {
-        super(Properties.create(Material.ROCK)
-                .hardnessAndResistance( 3.5f, 3.5f).harvestLevel(3));
+        super(Properties.create(Material.IRON)
+                .hardnessAndResistance( 3.5f, 3.5f).harvestLevel(1).harvestTool(ToolType.PICKAXE));
         setRegistryName("enginemachining:ore_aluminium");
     }
 }
