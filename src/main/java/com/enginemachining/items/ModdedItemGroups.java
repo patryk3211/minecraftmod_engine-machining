@@ -79,6 +79,10 @@ public class ModdedItemGroups {
                 items.add(new ItemStack(ModdedItems.sword_silver));
                 items.add(new ItemStack(ModdedItems.hoe_silver));
                 items.add(new ItemStack(ModdedItems.shovel_silver));
+                items.add(new ItemStack(ModdedItems.helmet_silver));
+                items.add(new ItemStack(ModdedItems.chestplate_silver));
+                items.add(new ItemStack(ModdedItems.leggins_silver));
+                items.add(new ItemStack(ModdedItems.boots_silver));
             }
         };
 

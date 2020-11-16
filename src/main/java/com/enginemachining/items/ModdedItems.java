@@ -1,9 +1,6 @@
 package com.enginemachining.items;
 
-import com.enginemachining.Armour.BootsCopper;
-import com.enginemachining.Armour.ChestplateCopper;
-import com.enginemachining.Armour.HelmetCopper;
-import com.enginemachining.Armour.LegginsCopper;
+import com.enginemachining.Armour.*;
 import com.enginemachining.items.Nuggetsy.*;
 import com.enginemachining.items.dust.*;
 import com.enginemachining.items.ingot.*;
@@ -67,6 +64,14 @@ public class ModdedItems {
     public static HoeSilver hoe_silver;
     @ObjectHolder("enginemachining:shovel_silver")
     public static ShovelSilver shovel_silver;
+    @ObjectHolder("enginemachining:helmet_silver")
+    public static HelmetSilver helmet_silver;
+    @ObjectHolder("enginemachining:chestplate_silver")
+    public static ChestplateSilver chestplate_silver;
+    @ObjectHolder("enginemachining:leggins_silver")
+    public static LegginsSilver leggins_silver;
+    @ObjectHolder("enginemachining:boots_silver")
+    public static BootsSilver boots_silver;
 
     @ObjectHolder("enginemachining:nugget_aluminium")
     public static NuggetAluminium nugget_aluminium;

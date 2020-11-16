@@ -1,21 +1,20 @@
 package com.enginemachining.Armour;
 
-import com.enginemachining.EngineMachiningMod;
 import com.enginemachining.items.ModdedItems;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.function.Supplier;
 
 public enum ModArmorMaterial implements IArmorMaterial {
 
     copper("enginemachining:copper", 25, new int[] { 2, 5, 6, 2 }, 9,
-            SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F, () -> { return Ingredient.fromItems(ModdedItems.ingot_copper); });
+            SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F, () -> { return Ingredient.fromItems(ModdedItems.ingot_copper); }),
+    silver("enginemachining:silver", 25, new int[] { 2, 6, 5, 2 }, 22,
+            SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F, () -> { return  Ingredient.fromItems(ModdedItems.ingot_silver); });
 
     private static final int[] MAX_DAMAGE_ARRAY = new int[] { 11, 16, 15, 13 };
     private final String name;
