@@ -1,4 +1,5 @@
 {
+  "type":"minecraft:block",
   "pools": [
     {
       "name": "enginemachining:ore_lead",
