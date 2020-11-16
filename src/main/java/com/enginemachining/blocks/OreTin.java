@@ -6,7 +6,7 @@ import net.minecraft.block.material.Material;
 public class OreTin extends Block {
     public OreTin() {
         super(Properties.create(Material.ROCK)
-                .hardnessAndResistance(2.9f, 2.9f));
+                .hardnessAndResistance(2.9f, 2.9f).harvestLevel(1));
         setRegistryName("enginemachining:ore_tin");
     }
 }
