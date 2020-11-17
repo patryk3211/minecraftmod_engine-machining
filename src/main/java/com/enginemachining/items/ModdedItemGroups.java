@@ -102,9 +102,9 @@ public class ModdedItemGroups {
                 CompoundNBT nbt = battery_disposable.getTag();
                 if(nbt == null) nbt = new CompoundNBT();
                 CompoundNBT energyTag = new CompoundNBT();
-                energyTag.putInt("charge", 1000);
-                energyTag.putInt("maxCharge", 1000);
-                energyTag.putInt("maxDischargeSpeed", 10);
+                energyTag.putInt("charge", 26000);
+                energyTag.putInt("maxCharge", 26000);
+                energyTag.putInt("maxDischargeSpeed", 100);
                 nbt.put("energy", energyTag);
                 battery_disposable.setTag(nbt);
 
@@ -115,8 +115,8 @@ public class ModdedItemGroups {
                 CompoundNBT nbt2 = battery_creative.getTag();
                 if(nbt2 == null) nbt2 = new CompoundNBT();
                 CompoundNBT energyTag2 = new CompoundNBT();
-                energyTag2.putInt("charge", 1000000);
-                energyTag2.putInt("maxCharge", 1000000);
+                energyTag2.putInt("charge", 10000000);
+                energyTag2.putInt("maxCharge", 10000000);
                 energyTag2.putInt("maxDischargeSpeed", 1000);
                 nbt2.put("energy", energyTag2);
                 battery_creative.setTag(nbt2);
