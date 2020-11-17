@@ -47,6 +47,8 @@ public class CrusherRecipe implements IRecipe<IInventory> {
         return ingredients.get(0).test(inv.getStackInSlot(0));
     }
 
+    public int getTime() { return time; }
+
     @Override
     public ItemStack getCraftingResult(IInventory inv) {
         return result.copy();

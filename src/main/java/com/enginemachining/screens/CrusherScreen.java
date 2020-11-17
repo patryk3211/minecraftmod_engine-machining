@@ -54,11 +54,9 @@ public class CrusherScreen extends ContainerScreen<CrusherContainer> implements 
             int buttonWidth = 17;
             int buttonHeight = 9;
             if (mouseX > onButtonOriginX && mouseX < onButtonOriginX + buttonWidth && mouseY > onButtonOriginY && mouseY < onButtonOriginY + buttonHeight) {
-                //container.trackedArray.set(2, 1);
                 if(container.trackedArray.get(2) == 0) EngineMachiningPacketHandler.INSTANCE.sendToServer(new CrusherTileMessage(container.tileEntity.getPos(), true));
             }
             if (mouseX > offButtonOriginX && mouseX < offButtonOriginX + buttonWidth && mouseY > offButtonOriginY && mouseY < offButtonOriginY + buttonHeight) {
-                //container.trackedArray.set(2, 0);
                 if(container.trackedArray.get(2) == 1) EngineMachiningPacketHandler.INSTANCE.sendToServer(new CrusherTileMessage(container.tileEntity.getPos(), false));
             }
         }
@@ -99,5 +97,9 @@ public class CrusherScreen extends ContainerScreen<CrusherContainer> implements 
         float ratioPowerBar = (float)container.trackedArray.get(3) / (float)CrusherTile.HEAT_MAX;
         int powerBarHeight = (int)(ratioPowerBar * 11);
         this.blit(matrixStack, xOrigin+47, yOrigin+53+(11-powerBarHeight), 176, 79 + (11 - powerBarHeight), 11, powerBarHeight);
+
+        float ratioProgressArrow = (float)container.trackedArray.get(4) / (float)container.trackedArray.get(5);
+        int ratioBarWidth = (int)(ratioProgressArrow * 39);
+        this.blit(matrixStack, xOrigin+68, yOrigin+37, 176, 70, ratioBarWidth, 9);
     }
 }

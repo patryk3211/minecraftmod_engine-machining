@@ -2,6 +2,7 @@ package com.enginemachining.containers;
 
 import com.enginemachining.blocks.Crusher;
 import com.enginemachining.blocks.ModdedBlocks;
+import com.enginemachining.items.ModdedItems;
 import com.enginemachining.screens.CrusherScreen;
 import com.enginemachining.tileentities.CrusherTile;
 import net.minecraft.client.gui.ScreenManager;
@@ -41,7 +42,7 @@ public class CrusherContainer extends Container {
 
         callable = IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos());
 
-        trackedArray = new IntArray(4);
+        trackedArray = new IntArray(tileEntity.trackedData.size());
 
         if(!tileEntity.getWorld().isRemote) {
             trackedArray = tileEntity.trackedData;
@@ -52,8 +53,30 @@ public class CrusherContainer extends Container {
         LayoutInventory();
 
         addSlot(new Slot(tileEntity.blockInventory, 0, 45, 34));
-        addSlot(new Slot(tileEntity.blockInventory, 1, 114, 34));
-        addSlot(new Slot(tileEntity.blockInventory, 2, 146, 61));
+        addSlot(new OutputSlot(tileEntity.blockInventory, 1, 114, 34));
+        addSlot(new BatterySlot(tileEntity.blockInventory, 2, 146, 61));
+    }
+
+    private static class BatterySlot extends Slot {
+        public BatterySlot(IInventory inv, int index, int xPos, int yPos) {
+            super(inv, index, xPos, yPos);
+        }
+
+        @Override
+        public boolean isItemValid(ItemStack stack) {
+            return stack.getItem() == ModdedItems.battery_disposable;
+        }
+    }
+
+    private static class OutputSlot extends Slot {
+        public OutputSlot(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+            super(inventoryIn, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean isItemValid(ItemStack stack) {
+            return false;
+        }
     }
 
     public CrusherContainer(int id, PlayerInventory inv, PacketBuffer data) {

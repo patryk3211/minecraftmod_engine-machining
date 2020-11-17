@@ -60,6 +60,9 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     boolean enabled;
     boolean readyToRun;
 
+    int burnTime;
+    int maxBurnTime;
+
     int power;
     public static final int HEAT_MAX = 1000;
     static final int ENERGY_PER_POWER = 1;
@@ -87,6 +90,10 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                     return enabled ? 1 : 0;
                 case 3:
                     return power;
+                case 4:
+                    return burnTime;
+                case 5:
+                    return maxBurnTime;
                 default:
                     return -1;
             }
@@ -105,7 +112,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
 
         @Override
         public int size() {
-            return 4;
+            return 6;
         }
     };
 
@@ -187,6 +194,8 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
         itemHandlers = SidedInvWrapper.create(blockInventory, Direction.NORTH);
         enabled = false;
         power = 0;
+        burnTime = 0;
+        maxBurnTime = 0;
     }
 
     @Override
@@ -214,6 +223,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                     }
                 }
                 if(enabled) {
+                    //The crusher is enabled so it should draw power to heat up.
                     int powerToMax = HEAT_MAX - power;
                     int wantedChange = Math.min(powerToMax, MAX_POWER_CHANGE);
                     int energyUsage = handler.extractEnergy(wantedChange * ENERGY_PER_POWER, true);
@@ -222,13 +232,36 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                     power += availableChange;
                     if(HEAT_MAX - power == 0) readyToRun = true;
                     if(availableChange > 0) markdirty.set(true);
-                } else readyToRun = false;
+                } else {
+                    if(HEAT_MAX - power > HEAT_MAX * 0.10f) readyToRun = false;
+                }
             });
 
             if(readyToRun) {
-                CrusherRecipe rec = GetRecipe(blockInventory.getStackInSlot(0));
-                if(rec != null) {
-
+                CrusherRecipe rec = GetRecipe(slots.get(0));
+                //If recipe is valid and slot is able to accept the result then proceed with the recipe.
+                if(rec != null && (slots.get(1).isEmpty() || (slots.get(1).getItem() == rec.getRecipeOutput().getItem() && slots.get(1).getCount() < slots.get(1).getMaxStackSize()))) {
+                    maxBurnTime = rec.getTime();
+                    if(burnTime < maxBurnTime) {
+                        burnTime++;
+                    }
+                    else {
+                        //Time completed. Take 1 item out, and spawn another.
+                        ItemStack inputStack = slots.get(0);
+                        if(inputStack.getCount() > 1) {
+                            inputStack.setCount(inputStack.getCount() - 1);
+                        } else {
+                            slots.set(0, ItemStack.EMPTY);
+                        }
+                        ItemStack outputStack = slots.get(1);
+                        if(outputStack.isEmpty()) {
+                            outputStack = rec.getCraftingResult(blockInventory);
+                        } else {
+                            outputStack.setCount(outputStack.getCount() + 1);
+                        }
+                    }
+                } else {
+                    if(burnTime > 0) burnTime--;
                 }
             }
 
@@ -258,6 +291,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
         enabled = nbt.getBoolean("enabled");
         readyToRun = nbt.getBoolean("ready");
         power = Math.min(nbt.getInt("power"), HEAT_MAX);
+        burnTime = nbt.getInt("burnTime");
         super.read(state, nbt);
     }
 
@@ -273,6 +307,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
         compound.putBoolean("enabled", enabled);
         compound.putBoolean("ready", readyToRun);
         compound.putInt("power", power);
+        compound.putInt("burnTime", burnTime);
         return super.write(compound);
     }
 
