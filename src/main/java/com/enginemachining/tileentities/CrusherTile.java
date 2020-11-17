@@ -236,9 +236,8 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                     power += availableChange;
                     if(HEAT_MAX - power == 0) readyToRun = true;
                     if(availableChange > 0) markdirty.set(true);
-                } else {
-                    if(HEAT_MAX - power > HEAT_MAX * 0.10f) readyToRun = false;
                 }
+                if(HEAT_MAX - power > HEAT_MAX * 0.10f) readyToRun = false;
             });
 
             if(readyToRun) {
@@ -266,7 +265,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                         if(outputStack.isEmpty()) {
                             slots.set(1, rec.getCraftingResult(blockInventory));
                         } else {
-                            outputStack.setCount(outputStack.getCount() + 1);
+                            outputStack.setCount(outputStack.getCount() + rec.getRecipeOutput().getCount());
                         }
                         burnTime = 0;
                         markdirty.set(true);
