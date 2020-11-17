@@ -1,0 +1,10 @@
+{
+  "type": "enginemachining:crushing",
+  "input": {
+    "item": "enginemachining:ingot_tin"
+  },
+  "result": {
+    "item": "enginemachining:dust_tin"
+  },
+  "time": 200
+}

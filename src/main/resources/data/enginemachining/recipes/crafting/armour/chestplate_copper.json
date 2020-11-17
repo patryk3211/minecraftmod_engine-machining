@@ -1,19 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "X",
-    "X",
-    "#"
+    "X X",
+    "XXX",
+    "XXX"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:stick"
-    },
     "X": {
       "item": "enginemaching:ingot_copper"
     }
   },
   "result": {
-    "item": "enginemaching:sword_copper"
+    "item": "enginemaching:chestplate_copper"
   }
 }
