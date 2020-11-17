@@ -10,10 +10,10 @@
       "item": "minecraft:stick"
     },
     "X": {
-      "item": "enginemaching:ingot_silver"
+      "item": "enginemachining:ingot_silver"
     }
   },
   "result": {
-    "item": "enginemaching:hoe_silver"
+    "item": "enginemachining:hoe_silver"
   }
 }

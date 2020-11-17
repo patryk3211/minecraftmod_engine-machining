@@ -6,10 +6,10 @@
   ],
   "key": {
     "X": {
-      "item": "enginemaching:ingot_copper"
+      "item": "enginemachining:ingot_copper"
     }
   },
   "result": {
-    "item": "enginemaching:boots_copper"
+    "item": "enginemachining:boots_copper"
   }
 }

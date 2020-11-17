@@ -10,10 +10,10 @@
       "item": "minecraft:stick"
     },
     "X": {
-      "item": "enginemaching:ingot_copper"
+      "item": "enginemachining:ingot_copper"
     }
   },
   "result": {
-    "item": "enginemaching:sword_copper"
+    "item": "enginemachining:sword_copper"
   }
 }

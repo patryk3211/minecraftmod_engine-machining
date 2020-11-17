@@ -7,10 +7,10 @@
   ],
   "key": {
     "X": {
-      "item": "enginemaching:ingot_silver"
+      "item": "enginemachining:ingot_silver"
     }
   },
   "result": {
-    "item": "enginemaching:leggins_silver"
+    "item": "enginemachining:leggins_silver"
   }
 }
