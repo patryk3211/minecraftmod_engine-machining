@@ -1,0 +1,10 @@
+{
+  "type": "enginemachining:crushing",
+  "input": {
+    "item": "enginemachining:ingot_copper"
+  },
+  "result": {
+    "item": "enginemachining:dust_copper"
+  },
+  "time": 200
+}

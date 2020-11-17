@@ -1,12 +1,10 @@
 package com.enginemachining.items;
 
 import com.enginemachining.blocks.ModdedBlocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.StringTextComponent;
 
 public class ModdedItemGroups {
     public static ItemGroup metals;
