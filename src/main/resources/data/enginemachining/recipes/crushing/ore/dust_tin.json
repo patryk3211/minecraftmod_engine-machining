@@ -1,10 +1,10 @@
 {
   "type": "enginemachining:crushing",
   "input": {
-    "item": "enginemachining:ore_nickel"
+    "item": "enginemachining:ore_tin"
   },
   "result": {
-    "item": "enginemachining:dust_nickel",
+    "item": "enginemachining:dust_tin",
     "count": 2
   },
   "time": 400
