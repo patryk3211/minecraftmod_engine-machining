@@ -1,0 +1,10 @@
+{
+  "type": "enginemachining:crushing",
+  "input": {
+    "item": "enginemachining:ingot_lead"
+  },
+  "result": {
+    "item": "enginemachining:dust_lead"
+  },
+  "time": 200
+}

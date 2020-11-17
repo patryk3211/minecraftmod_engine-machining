@@ -1,0 +1,11 @@
+{
+  "type": "enginemachining:crushing",
+  "input": {
+    "item": "enginemachining:ore_lead"
+  },
+  "result": {
+    "item": "enginemachining:dust_lead",
+    "count": 2
+  },
+  "time": 400
+}

@@ -1,0 +1,10 @@
+{
+  "type": "enginemachining:crushing",
+  "input": {
+    "item": "minecraft:gold_ingot"
+  },
+  "result": {
+    "item": "enginemachining:dust_gold"
+  },
+  "time": 200
+}

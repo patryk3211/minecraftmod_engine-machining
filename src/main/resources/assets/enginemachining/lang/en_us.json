@@ -22,6 +22,10 @@
   "item.enginemachining.dust_tin": "Tin Dust",
   "item.enginemachining.dust_lead": "Lead Dust",
   "item.enginemachining.dust_nickel": "Nickel Dust",
+  "item.enginemachining.dust_coal": "Coal Dust",
+  "item.enginemachining.dust_iron": "Iron Dust",
+  "item.enginemachining.dust_lapis": "Lapis Dust",
+  "item.enginemachining.dust_gold": "Gold Dust",
 
   "item.enginemachining.nugget_aluminium": "Aluminium Nugget",
   "item.enginemachining.nugget_copper": "Copper Nugget",

@@ -1,0 +1,11 @@
+{
+  "type": "enginemachining:crushing",
+  "input": {
+    "item": "minecraft:coal_ore"
+  },
+  "result": {
+    "item": "enginemachining:dust_coal",
+    "count": 2
+  },
+  "time": 400
+}

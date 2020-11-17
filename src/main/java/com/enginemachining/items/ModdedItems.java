@@ -34,6 +34,14 @@ public class ModdedItems {
     public static DustNickel dust_nickel;
     @ObjectHolder("enginemachining:dust_lead")
     public static DustLead dust_lead;
+    @ObjectHolder("enginemachining:dust_lapis")
+    public static DustLapis dust_lapis;
+    @ObjectHolder("enginemachining:dust_gold")
+    public static DustGold dust_gold;
+    @ObjectHolder("enginemachining:dust_coal")
+    public static DustCoal dust_coal;
+    @ObjectHolder("enginemachining:dust_iron")
+    public static DustIron dust_iron;
 
     @ObjectHolder("enginemachining:pickaxe_copper")
     public static PickaxeCopper pickaxe_copper;

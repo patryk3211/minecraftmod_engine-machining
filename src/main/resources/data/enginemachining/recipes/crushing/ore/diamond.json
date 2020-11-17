@@ -1,0 +1,11 @@
+{
+  "type": "enginemachining:crushing",
+  "input": {
+    "item": "minecraft:diamond_ore"
+  },
+  "result": {
+    "item": "minecraft:diamond",
+    "count": 2
+  },
+  "time": 400
+}

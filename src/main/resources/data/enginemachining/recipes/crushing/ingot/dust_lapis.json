@@ -1,0 +1,10 @@
+{
+  "type": "enginemachining:crushing",
+  "input": {
+    "item": "minecraft:lapis_lazuli"
+  },
+  "result": {
+    "item": "enginemachining:dust_lapis"
+  },
+  "time": 200
+}

@@ -1,10 +1,10 @@
 {
   "type": "enginemachining:crushing",
   "input": {
-    "item": "enginemachining:ingot_tin"
+    "item": "enginemachining:ingot_nickel"
   },
   "result": {
-    "item": "enginemachining:dust_tin"
+    "item": "enginemachining:dust_nickel"
   },
   "time": 200
 }
