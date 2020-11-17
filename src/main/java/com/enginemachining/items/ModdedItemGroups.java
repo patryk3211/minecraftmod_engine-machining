@@ -53,9 +53,9 @@ public class ModdedItemGroups {
                 items.add(new ItemStack(ModdedItems.nugget_silver));
 
                 items.add(new ItemStack(ModdedItems.dust_coal));
+                items.add(new ItemStack(ModdedItems.dust_lapis));
                 items.add(new ItemStack(ModdedItems.dust_gold));
                 items.add(new ItemStack(ModdedItems.dust_iron));
-                items.add(new ItemStack(ModdedItems.dust_gold));
 
             }
         };

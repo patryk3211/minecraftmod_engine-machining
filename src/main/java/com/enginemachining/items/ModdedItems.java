@@ -40,7 +40,7 @@ public class ModdedItems {
     public static DustGold dust_gold;
     @ObjectHolder("enginemachining:dust_coal")
     public static DustCoal dust_coal;
-    @ObjectHolder("enginemachining:dust_iron")
+    @ObjectHolder("enginemachining:iron_dust")
     public static DustIron dust_iron;
 
     @ObjectHolder("enginemachining:pickaxe_copper")

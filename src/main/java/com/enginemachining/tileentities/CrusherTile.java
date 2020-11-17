@@ -197,7 +197,10 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
         power = 0;
         burnTime = 0;
         maxBurnTime = 0;
+        prevRecipe = null;
     }
+
+    private CrusherRecipe prevRecipe;
 
     @Override
     public void tick() {
@@ -242,6 +245,10 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                 CrusherRecipe rec = GetRecipe(slots.get(0));
                 //If recipe is valid and slot is able to accept the result then proceed with the recipe.
                 if(rec != null && (slots.get(1).isEmpty() || (slots.get(1).getItem() == rec.getRecipeOutput().getItem() && slots.get(1).getCount() < slots.get(1).getMaxStackSize()))) {
+                    if(prevRecipe != rec) {
+                        burnTime = 0;
+                        prevRecipe = rec;
+                    }
                     maxBurnTime = rec.getTime();
                     if(burnTime < maxBurnTime) {
                         power -= POWER_PER_BURNTICK;

@@ -128,10 +128,10 @@ public class EngineMachiningMod
             itemsRegistryEvent.getRegistry().register(new DustNickel());
             itemsRegistryEvent.getRegistry().register(new DustLead());
             itemsRegistryEvent.getRegistry().register(new DustSilver());
-            itemsRegistryEvent.getRegistry().register(new DustIron());
             itemsRegistryEvent.getRegistry().register(new DustLapis());
             itemsRegistryEvent.getRegistry().register(new DustGold());
             itemsRegistryEvent.getRegistry().register(new DustCoal());
+            itemsRegistryEvent.getRegistry().register(new DustIron());
 
             itemsRegistryEvent.getRegistry().register(new NuggetAluminium());
             itemsRegistryEvent.getRegistry().register(new NuggetCopper());
