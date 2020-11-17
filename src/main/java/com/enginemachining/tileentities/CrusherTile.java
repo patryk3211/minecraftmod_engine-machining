@@ -68,6 +68,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     static final int ENERGY_PER_POWER = 1;
     static final int COOLDOWN_PER_TICK = 10;
     static final int MAX_POWER_CHANGE = 100;
+    static final int POWER_PER_BURNTICK = 50;
 
     public IIntArray trackedData = new IIntArray() {
         @Override
@@ -243,6 +244,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                 if(rec != null && (slots.get(1).isEmpty() || (slots.get(1).getItem() == rec.getRecipeOutput().getItem() && slots.get(1).getCount() < slots.get(1).getMaxStackSize()))) {
                     maxBurnTime = rec.getTime();
                     if(burnTime < maxBurnTime) {
+                        power -= POWER_PER_BURNTICK;
                         burnTime++;
                     }
                     else {
@@ -255,14 +257,18 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                         }
                         ItemStack outputStack = slots.get(1);
                         if(outputStack.isEmpty()) {
-                            outputStack = rec.getCraftingResult(blockInventory);
+                            slots.set(1, rec.getCraftingResult(blockInventory));
                         } else {
                             outputStack.setCount(outputStack.getCount() + 1);
                         }
+                        burnTime = 0;
+                        markdirty.set(true);
                     }
                 } else {
                     if(burnTime > 0) burnTime--;
                 }
+            } else {
+                if(burnTime > 0) burnTime--;
             }
 
             if(markdirty.get()) markDirty();
