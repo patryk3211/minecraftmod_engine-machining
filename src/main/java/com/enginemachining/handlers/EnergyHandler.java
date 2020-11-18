@@ -5,11 +5,11 @@ import net.minecraft.nbt.INBT;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class EnergyReceiverHandler implements IEnergyStorage, INBTSerializable<CompoundNBT> {
+public class EnergyHandler implements IEnergyStorage, INBTSerializable<CompoundNBT> {
     int maxEnergy;
     int currentEnergy;
 
-    public EnergyReceiverHandler(int maxEnergy) {
+    public EnergyHandler(int maxEnergy) {
         this.maxEnergy = maxEnergy;
         currentEnergy = 0;
     }

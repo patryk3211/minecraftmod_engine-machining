@@ -1,7 +1,8 @@
 package com.enginemachining.tileentities;
 
 import com.enginemachining.containers.CrusherContainer;
-import com.enginemachining.handlers.EnergyReceiverHandler;
+import com.enginemachining.handlers.EnergyHandler;
+import com.enginemachining.handlers.IEnergyReceiver;
 import com.enginemachining.items.ModdedItems;
 import com.enginemachining.recipes.CrusherRecipe;
 import com.enginemachining.recipes.ModdedRecipeTypes;
@@ -44,16 +45,17 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-public class CrusherTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
+public class CrusherTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IEnergyReceiver {
     private CrusherContainer container;
 
     private NonNullList<ItemStack> slots = NonNullList.withSize(3, ItemStack.EMPTY);
     public ISidedInventory blockInventory;
     private LazyOptional<? extends IItemHandler>[] itemHandlers;
     private LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> {
-        EnergyReceiverHandler erh = new EnergyReceiverHandler(10000);
+        EnergyHandler erh = new EnergyHandler(10000);
         return erh;
     });
 
@@ -118,7 +120,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     };
 
     public CrusherTile() {
-        super(ModdedTileEntities.crusher);
+        super(ModdedTileEntities.crusher.get());
         blockInventory = new ISidedInventory() {
             @Override
             public int[] getSlotsForFace(Direction side) {
@@ -211,7 +213,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
             }
             energyHandler.ifPresent((handler) -> {
                 Item bat = slots.get(2).getItem();
-                if(bat == ModdedItems.battery_disposable) {
+                if(bat == ModdedItems.battery_disposable.get()) {
                     if(slots.get(2).getTag() == null || slots.get(2).getTag().getCompound("energy") == null) return;
                     CompoundNBT energyTag = slots.get(2).getTag().getCompound("energy");
                     int energyLeft = energyTag.getInt("charge");
@@ -296,8 +298,8 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     public void read(BlockState state, CompoundNBT nbt) {
         ItemStackHelper.loadAllItems(nbt, slots);
         energyHandler.ifPresent((handler) -> {
-            if(handler instanceof EnergyReceiverHandler) {
-                ((EnergyReceiverHandler) handler).deserializeNBT(nbt.getCompound("energy"));
+            if(handler instanceof EnergyHandler) {
+                ((EnergyHandler) handler).deserializeNBT(nbt.getCompound("energy"));
             }
         });
         enabled = nbt.getBoolean("enabled");
@@ -311,8 +313,8 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     public CompoundNBT write(CompoundNBT compound) {
         ItemStackHelper.saveAllItems(compound, slots, true);
         energyHandler.ifPresent((handler) -> {
-            if(handler instanceof EnergyReceiverHandler) {
-                CompoundNBT nbt = ((EnergyReceiverHandler) handler).serializeNBT();
+            if(handler instanceof EnergyHandler) {
+                CompoundNBT nbt = ((EnergyHandler) handler).serializeNBT();
                 compound.put("energy", nbt);
             }
         });
@@ -374,5 +376,12 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     public static Set<IRecipe<?>> findRecipeByType(IRecipeType<?> type) {
         ClientWorld world = Minecraft.getInstance().world;
         return world != null ? world.getRecipeManager().getRecipes().stream().filter(recipe -> recipe.getType() == type).collect(Collectors.toSet()) : Collections.emptySet();
+    }
+
+    @Override
+    public IEnergyStorage getHandler() {
+        AtomicReference<IEnergyStorage> ret = new AtomicReference<>();
+        energyHandler.ifPresent(ret::set);
+        return ret.get();
     }
 }

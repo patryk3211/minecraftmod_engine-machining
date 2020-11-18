@@ -6,6 +6,5 @@ import net.minecraft.item.Item;
 public class DustIron extends Item {
     public DustIron() {
         super(new Properties().group(ModdedItemGroups.metals));
-        setRegistryName("enginemachining:dust_iron");
     }
 }

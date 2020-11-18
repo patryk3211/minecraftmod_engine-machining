@@ -6,8 +6,8 @@ import net.minecraft.item.crafting.Ingredient;
 
 public enum ModItemTier implements IItemTier {
 
-    copper(2, 200, 5.0f, 1.0f, 9, Ingredient.fromItems(ModdedItems.ingot_copper)),
-    silver(2, 100, 9.0f, 1.0f, 22, Ingredient.fromItems(ModdedItems.ingot_silver));
+    copper(2, 200, 5.0f, 1.0f, 9, Ingredient.fromItems(ModdedItems.ingot_copper.get())),
+    silver(2, 100, 9.0f, 1.0f, 22, Ingredient.fromItems(ModdedItems.ingot_silver.get()));
 
     private final int harvestLevel;
     private final int maxUses;

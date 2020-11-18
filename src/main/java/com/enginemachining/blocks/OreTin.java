@@ -11,6 +11,5 @@ public class OreTin extends Block {
                 .harvestLevel(1)
                 .harvestTool(ToolType.PICKAXE)
                 .setRequiresTool());
-        setRegistryName("enginemachining:ore_tin");
     }
 }

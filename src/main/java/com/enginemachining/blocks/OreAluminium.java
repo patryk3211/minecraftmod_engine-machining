@@ -11,6 +11,5 @@ public class OreAluminium extends Block {
                 .harvestLevel(1)
                 .harvestTool(ToolType.PICKAXE)
                 .setRequiresTool());
-        setRegistryName("enginemachining:ore_aluminium");
     }
 }

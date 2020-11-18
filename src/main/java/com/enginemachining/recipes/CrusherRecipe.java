@@ -71,7 +71,7 @@ public class CrusherRecipe implements IRecipe<IInventory> {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return ModdedRecipeSerializers.crusherRecipeSerializer;
+        return ModdedRecipeSerializers.crusherRecipeSerializer.get();
     }
 
     @Override

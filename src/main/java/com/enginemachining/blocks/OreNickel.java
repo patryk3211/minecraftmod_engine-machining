@@ -11,6 +11,5 @@ public class OreNickel extends Block {
                 .harvestLevel(2)
                 .harvestTool(ToolType.PICKAXE)
                 .setRequiresTool());
-        setRegistryName("enginemachining:ore_nickel");
     }
 }

@@ -22,7 +22,6 @@ public class BatteryDisposable extends Item {
         super(new Item.Properties()
                 .maxStackSize(1)
                 .group(ModdedItemGroups.misc));
-        setRegistryName("enginemachining:battery_disposable");
     }
 
     @Override

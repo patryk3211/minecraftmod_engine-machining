@@ -1,56 +1,37 @@
 package com.enginemachining;
 
-import com.enginemachining.Armour.*;
 import com.enginemachining.blocks.*;
-import com.enginemachining.containers.CrusherContainer;
+import com.enginemachining.containers.ModdedContainers;
 import com.enginemachining.items.*;
-import com.enginemachining.items.Nuggetsy.*;
-import com.enginemachining.items.dust.*;
-import com.enginemachining.items.ingot.*;
 import com.enginemachining.messages.CrusherTileMessage;
 import com.enginemachining.recipes.ModdedRecipeSerializers;
-import com.enginemachining.tileentities.CrusherTile;
-import com.enginemachining.tools.copper.*;
-import com.enginemachining.tools.silver.*;
-import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.DynamicOps;
-import net.minecraft.block.Block;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.feature.template.RuleTest;
-import net.minecraft.world.gen.placement.Placement;
-import net.minecraft.world.gen.placement.TopSolidRangeConfig;
+import com.enginemachining.tileentities.ModdedTileEntities;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod("enginemachining")
 public class EngineMachiningMod
 {
-    // Directly reference a log4j logger.
+    public static final String MOD_ID = "enginemachining";
+
     public static final Logger LOGGER = LogManager.getLogger();
 
     public EngineMachiningMod() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 
-        // Register ourselves for server and other game events we are interested in
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        ModdedBlocks.BLOCKS.register(modBus);
+        ModdedItems.ITEMS.register(modBus);
+        ModdedTileEntities.TILE_ENTITIES.register(modBus);
+        ModdedContainers.CONTAINERS.register(modBus);
+        ModdedRecipeSerializers.RECIPES.register(modBus);
+
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -89,7 +70,7 @@ public class EngineMachiningMod
 
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
     // Event bus for receiving Registry Events)
-    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+    /*@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
         @SubscribeEvent
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
@@ -207,7 +188,7 @@ public class EngineMachiningMod
             //event.getRegistry().register(feature.feature);
 
             //OreGeneration.SetupBiomeGeneration();
-            LOGGER.info("Biomes registered!");*/
+            LOGGER.info("Biomes registered!");
         }
-    }
+    }*/
 }

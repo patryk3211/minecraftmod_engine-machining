@@ -6,6 +6,5 @@ import net.minecraft.item.Item;
 public class DustLapis extends Item {
     public DustLapis() {
         super(new Properties().group(ModdedItemGroups.metals));
-        setRegistryName("enginemachining:dust_lapis");
     }
 }

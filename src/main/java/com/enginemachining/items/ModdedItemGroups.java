@@ -7,122 +7,114 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 
 public class ModdedItemGroups {
-    public static ItemGroup metals;
+    public static ItemGroup metals = new ItemGroup("enginemachining.metals") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(ModdedBlocks.ore_copper.get());
+        }
 
-    public static ItemGroup tools;
+        @Override
+        public void fill(NonNullList<ItemStack> items) {
+            items.add(new ItemStack(ModdedItems.ingot_copper.get()));
+            items.add(new ItemStack(ModdedItems.dust_copper.get()));
+            items.add(new ItemStack(ModdedBlocks.ore_copper.get()));
+            items.add(new ItemStack(ModdedItems.nugget_copper.get()));
 
-    public static ItemGroup misc;
+            items.add(new ItemStack(ModdedItems.ingot_tin.get()));
+            items.add(new ItemStack(ModdedItems.dust_tin.get()));
+            items.add(new ItemStack(ModdedBlocks.ore_tin.get()));
+            items.add(new ItemStack(ModdedItems.nugget_tin.get()));
 
-    public static void InitItemGroups() {
-        metals = new ItemGroup("enginemachining.metals") {
-            @Override
-            public ItemStack createIcon() {
-                return new ItemStack(ModdedBlocks.ore_copper);
-            }
+            items.add(new ItemStack(ModdedItems.ingot_aluminium.get()));
+            items.add(new ItemStack(ModdedItems.dust_aluminium.get()));
+            items.add(new ItemStack(ModdedBlocks.ore_aluminium.get()));
+            items.add(new ItemStack(ModdedItems.nugget_aluminium.get()));
 
-            @Override
-            public void fill(NonNullList<ItemStack> items) {
-                items.add(new ItemStack(ModdedItems.ingot_copper));
-                items.add(new ItemStack(ModdedItems.dust_copper));
-                items.add(new ItemStack(ModdedBlocks.ore_copper));
-                items.add(new ItemStack(ModdedItems.nugget_copper));
+            items.add(new ItemStack(ModdedItems.ingot_nickel.get()));
+            items.add(new ItemStack(ModdedItems.dust_nickel.get()));
+            items.add(new ItemStack(ModdedBlocks.ore_nickel.get()));
+            items.add(new ItemStack(ModdedItems.nugget_nickel.get()));
 
-                items.add(new ItemStack(ModdedItems.ingot_tin));
-                items.add(new ItemStack(ModdedItems.dust_tin));
-                items.add(new ItemStack(ModdedBlocks.ore_tin));
-                items.add(new ItemStack(ModdedItems.nugget_tin));
+            items.add(new ItemStack(ModdedItems.ingot_lead.get()));
+            items.add(new ItemStack(ModdedItems.dust_lead.get()));
+            items.add(new ItemStack(ModdedBlocks.ore_lead.get()));
+            items.add(new ItemStack(ModdedItems.nugget_lead.get()));
 
-                items.add(new ItemStack(ModdedItems.ingot_aluminium));
-                items.add(new ItemStack(ModdedItems.dust_aluminium));
-                items.add(new ItemStack(ModdedBlocks.ore_aluminium));
-                items.add(new ItemStack(ModdedItems.nugget_aluminium));
+            items.add(new ItemStack(ModdedItems.ingot_silver.get()));
+            items.add(new ItemStack(ModdedItems.dust_silver.get()));
+            items.add(new ItemStack(ModdedBlocks.ore_silver.get()));
+            items.add(new ItemStack(ModdedItems.nugget_silver.get()));
 
-                items.add(new ItemStack(ModdedItems.ingot_nickel));
-                items.add(new ItemStack(ModdedItems.dust_nickel));
-                items.add(new ItemStack(ModdedBlocks.ore_nickel));
-                items.add(new ItemStack(ModdedItems.nugget_nickel));
+            items.add(new ItemStack(ModdedItems.dust_coal.get()));
+            items.add(new ItemStack(ModdedItems.dust_lapis.get()));
+            items.add(new ItemStack(ModdedItems.dust_gold.get()));
+            items.add(new ItemStack(ModdedItems.dust_iron.get()));
 
-                items.add(new ItemStack(ModdedItems.ingot_lead));
-                items.add(new ItemStack(ModdedItems.dust_lead));
-                items.add(new ItemStack(ModdedBlocks.ore_lead));
-                items.add(new ItemStack(ModdedItems.nugget_lead));
+        }
+    };
 
-                items.add(new ItemStack(ModdedItems.ingot_silver));
-                items.add(new ItemStack(ModdedItems.dust_silver));
-                items.add(new ItemStack(ModdedBlocks.ore_silver));
-                items.add(new ItemStack(ModdedItems.nugget_silver));
+    public static ItemGroup tools = new ItemGroup("enginemachining.tools") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(ModdedItems.pickaxe_copper.get());
+        }
 
-                items.add(new ItemStack(ModdedItems.dust_coal));
-                items.add(new ItemStack(ModdedItems.dust_lapis));
-                items.add(new ItemStack(ModdedItems.dust_gold));
-                items.add(new ItemStack(ModdedItems.dust_iron));
+        @Override
+        public void fill(NonNullList<ItemStack> items) {
+            items.add(new ItemStack(ModdedItems.pickaxe_copper.get()));
+            items.add(new ItemStack(ModdedItems.axe_copper.get()));
+            items.add(new ItemStack(ModdedItems.sword_copper.get()));
+            items.add(new ItemStack(ModdedItems.hoe_copper.get()));
+            items.add(new ItemStack(ModdedItems.shovel_copper.get()));
+            items.add(new ItemStack(ModdedItems.helmet_copper.get()));
+            items.add(new ItemStack(ModdedItems.chestplate_copper.get()));
+            items.add(new ItemStack(ModdedItems.leggins_copper.get()));
+            items.add(new ItemStack(ModdedItems.boots_copper.get()));
+            items.add(new ItemStack(ModdedItems.pickaxe_silver.get()));
+            items.add(new ItemStack(ModdedItems.axe_silver.get()));
+            items.add(new ItemStack(ModdedItems.sword_silver.get()));
+            items.add(new ItemStack(ModdedItems.hoe_silver.get()));
+            items.add(new ItemStack(ModdedItems.shovel_silver.get()));
+            items.add(new ItemStack(ModdedItems.helmet_silver.get()));
+            items.add(new ItemStack(ModdedItems.chestplate_silver.get()));
+            items.add(new ItemStack(ModdedItems.leggins_silver.get()));
+            items.add(new ItemStack(ModdedItems.boots_silver.get()));
+        }
+    };
 
-            }
-        };
+    public static ItemGroup misc = new ItemGroup("enginemachining.misc") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(ModdedItems.battery_disposable.get());
+        }
 
-        tools = new ItemGroup("enginemachining.tools") {
-            @Override
-            public ItemStack createIcon() {
-                return new ItemStack(ModdedItems.pickaxe_copper);
-            }
+        @Override
+        public void fill(NonNullList<ItemStack> items) {
+            ItemStack battery_disposable = new ItemStack(ModdedItems.battery_disposable.get());
 
-            @Override
-            public void fill(NonNullList<ItemStack> items) {
-                items.add(new ItemStack(ModdedItems.pickaxe_copper));
-                items.add(new ItemStack(ModdedItems.axe_copper));
-                items.add(new ItemStack(ModdedItems.sword_copper));
-                items.add(new ItemStack(ModdedItems.hoe_copper));
-                items.add(new ItemStack(ModdedItems.shovel_copper));
-                items.add(new ItemStack(ModdedItems.helmet_copper));
-                items.add(new ItemStack(ModdedItems.chestplate_copper));
-                items.add(new ItemStack(ModdedItems.leggins_copper));
-                items.add(new ItemStack(ModdedItems.boots_copper));
-                items.add(new ItemStack(ModdedItems.pickaxe_silver));
-                items.add(new ItemStack(ModdedItems.axe_silver));
-                items.add(new ItemStack(ModdedItems.sword_silver));
-                items.add(new ItemStack(ModdedItems.hoe_silver));
-                items.add(new ItemStack(ModdedItems.shovel_silver));
-                items.add(new ItemStack(ModdedItems.helmet_silver));
-                items.add(new ItemStack(ModdedItems.chestplate_silver));
-                items.add(new ItemStack(ModdedItems.leggins_silver));
-                items.add(new ItemStack(ModdedItems.boots_silver));
-            }
-        };
+            CompoundNBT nbt = battery_disposable.getTag();
+            if(nbt == null) nbt = new CompoundNBT();
+            CompoundNBT energyTag = new CompoundNBT();
+            energyTag.putInt("charge", 26000);
+            energyTag.putInt("maxCharge", 26000);
+            energyTag.putInt("maxDischargeSpeed", 100);
+            nbt.put("energy", energyTag);
+            battery_disposable.setTag(nbt);
 
-        misc = new ItemGroup("enginemachining.misc") {
-            @Override
-            public ItemStack createIcon() {
-                return new ItemStack(ModdedItems.battery_disposable);
-            }
+            items.add(battery_disposable);
 
-            @Override
-            public void fill(NonNullList<ItemStack> items) {
-                ItemStack battery_disposable = new ItemStack(ModdedItems.battery_disposable);
+            ItemStack battery_creative = new ItemStack(ModdedItems.battery_disposable.get());
 
-                CompoundNBT nbt = battery_disposable.getTag();
-                if(nbt == null) nbt = new CompoundNBT();
-                CompoundNBT energyTag = new CompoundNBT();
-                energyTag.putInt("charge", 26000);
-                energyTag.putInt("maxCharge", 26000);
-                energyTag.putInt("maxDischargeSpeed", 100);
-                nbt.put("energy", energyTag);
-                battery_disposable.setTag(nbt);
+            CompoundNBT nbt2 = battery_creative.getTag();
+            if(nbt2 == null) nbt2 = new CompoundNBT();
+            CompoundNBT energyTag2 = new CompoundNBT();
+            energyTag2.putInt("charge", 10000000);
+            energyTag2.putInt("maxCharge", 10000000);
+            energyTag2.putInt("maxDischargeSpeed", 1000);
+            nbt2.put("energy", energyTag2);
+            battery_creative.setTag(nbt2);
 
-                items.add(battery_disposable);
-
-                ItemStack battery_creative = new ItemStack(ModdedItems.battery_disposable);
-
-                CompoundNBT nbt2 = battery_creative.getTag();
-                if(nbt2 == null) nbt2 = new CompoundNBT();
-                CompoundNBT energyTag2 = new CompoundNBT();
-                energyTag2.putInt("charge", 10000000);
-                energyTag2.putInt("maxCharge", 10000000);
-                energyTag2.putInt("maxDischargeSpeed", 1000);
-                nbt2.put("energy", energyTag2);
-                battery_creative.setTag(nbt2);
-
-                items.add(battery_creative);
-            }
-        };
-    }
+            items.add(battery_creative);
+        }
+    };
 }

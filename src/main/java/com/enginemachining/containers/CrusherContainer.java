@@ -36,7 +36,7 @@ public class CrusherContainer extends Container {
     public IIntArray trackedArray;
 
     public CrusherContainer(int id, PlayerInventory inv, CrusherTile tile) {
-        super(ModdedContainers.crusher, id);
+        super(ModdedContainers.crusher.get(), id);
         this.inv = inv;
         this.tileEntity = tile;
 
@@ -64,7 +64,7 @@ public class CrusherContainer extends Container {
 
         @Override
         public boolean isItemValid(ItemStack stack) {
-            return stack.getItem() == ModdedItems.battery_disposable;
+            return stack.getItem() == ModdedItems.battery_disposable.get();
         }
     }
 
@@ -97,7 +97,7 @@ public class CrusherContainer extends Container {
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
-        return isWithinUsableDistance(callable, playerIn, ModdedBlocks.crusher);
+        return isWithinUsableDistance(callable, playerIn, ModdedBlocks.crusher.get());
     }
 
     private void LayoutInventory() {

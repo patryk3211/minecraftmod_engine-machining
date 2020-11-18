@@ -8,6 +8,5 @@ import net.minecraft.item.ShovelItem;
 public class ShovelCopper extends ShovelItem {
     public ShovelCopper() {
         super(ModItemTier.copper, 2, -3.0f, new Properties().group(ModdedItemGroups.tools));
-        setRegistryName("enginemachining:shovel_copper");
     }
 }

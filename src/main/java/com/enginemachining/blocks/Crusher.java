@@ -30,7 +30,6 @@ public class Crusher extends Block {
                 .harvestTool(ToolType.PICKAXE)
                 .harvestLevel(1)
                 .setRequiresTool());
-        setRegistryName("enginemachining:crusher");
     }
 
     @Override

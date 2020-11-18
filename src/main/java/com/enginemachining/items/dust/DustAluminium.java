@@ -6,6 +6,5 @@ import net.minecraft.item.Item;
 public class DustAluminium extends Item {
     public DustAluminium() {
         super(new Properties().group(ModdedItemGroups.metals));
-        setRegistryName("enginemachining:dust_aluminium");
     }
 }

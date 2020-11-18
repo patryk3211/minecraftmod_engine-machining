@@ -6,6 +6,5 @@ import net.minecraft.item.Item;
 public class DustCopper extends Item {
     public DustCopper() {
         super(new Properties().group(ModdedItemGroups.metals));
-        setRegistryName("enginemachining:dust_copper");
     }
 }

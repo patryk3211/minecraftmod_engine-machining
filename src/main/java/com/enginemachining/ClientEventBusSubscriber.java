@@ -15,11 +15,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-@Mod.EventBusSubscriber(modid = "enginemachining", bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = EngineMachiningMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEventBusSubscriber {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent clientSetupEvent) {
-        ScreenManager.registerFactory(ModdedContainers.crusher, CrusherScreen::new);
+        ScreenManager.registerFactory(ModdedContainers.crusher.get(), CrusherScreen::new);
         EngineMachiningMod.LOGGER.info("Screens Registered!");
     }
 }

@@ -6,6 +6,5 @@ import net.minecraft.item.Item;
 public class DustGold extends Item {
     public DustGold() {
         super(new Properties().group(ModdedItemGroups.metals));
-        setRegistryName("enginemachining:dust_gold");
     }
 }

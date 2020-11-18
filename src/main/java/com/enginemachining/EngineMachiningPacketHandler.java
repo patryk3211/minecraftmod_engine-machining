@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 public class EngineMachiningPacketHandler {
     private static final String PROTOCOL_VERSION = "0.0.1";
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation("enginemachining:main"),
+            new ResourceLocation(EngineMachiningMod.MOD_ID, "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals);
