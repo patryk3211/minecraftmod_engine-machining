@@ -345,8 +345,10 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
         if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return itemHandlers[0].cast();
         }
-        if(cap == CapabilityEnergy.ENERGY && side != Direction.NORTH) {
-            return energyHandler.cast();
+        if(cap == CapabilityEnergy.ENERGY) {
+            if(side != Direction.NORTH)
+                return energyHandler.cast();
+            else return LazyOptional.empty();
         }
         return super.getCapability(cap, side);
     }

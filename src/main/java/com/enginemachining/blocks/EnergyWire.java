@@ -1,5 +1,7 @@
 package com.enginemachining.blocks;
 
+import com.enginemachining.handlers.IEnergyReceiver;
+import com.enginemachining.handlers.IEnergySender;
 import com.enginemachining.tileentities.EnergyWireTile;
 import com.enginemachining.utils.DirectionTools;
 import net.minecraft.block.AbstractBlock;
@@ -21,6 +23,8 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
 import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
@@ -54,20 +58,35 @@ public abstract class EnergyWire extends Block {
     @Override
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         //Change block state to maybe connect to another wire
-        //System.out.println(pos);
         BlockPos deltaPos = fromPos.subtract(pos);
         Direction neighborDir = Direction.getFacingFromVector(deltaPos.getX(), deltaPos.getY(), deltaPos.getZ());
-        worldIn.setBlockState(pos, state.with(DirectionTools.DirectionToProperty(neighborDir), worldIn.getTileEntity(fromPos) instanceof EnergyWireTile));
+        TileEntity neighbor = worldIn.getTileEntity(fromPos);
+        boolean blockConnectable = neighbor instanceof EnergyWireTile ||
+                (neighbor != null && neighbor.getCapability(CapabilityEnergy.ENERGY, neighborDir).isPresent());
+        TileEntity te = worldIn.getTileEntity(pos);
+        if(blockConnectable && te instanceof EnergyWireTile && neighbor instanceof EnergyWireTile) {
+            blockConnectable = ((EnergyWireTile) te).isSideConnectable(neighborDir) && ((EnergyWireTile) neighbor).isSideConnectable(neighborDir.getOpposite());
+        }
+        worldIn.setBlockState(pos, state.with(DirectionTools.DirectionToProperty(neighborDir), blockConnectable));
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        BlockState state = getDefaultState();
         //Check if any neighbors are wires, if so connect to them
+        BlockState state = getDefaultState();
+        TileEntity te = context.getWorld().getTileEntity(context.getPos());
+        EnergyWireTile ewt = null;
+        if(te instanceof EnergyWireTile) ewt = (EnergyWireTile) te;
         for(Direction dir : Direction.values()) {
             BlockPos neighborPos = context.getPos().add(dir.getDirectionVec());
-            state = state.with(DirectionTools.DirectionToProperty(dir), context.getWorld().getTileEntity(neighborPos) instanceof EnergyWireTile);
+            TileEntity neighbor = context.getWorld().getTileEntity(neighborPos);
+            boolean blockConnectable = neighbor instanceof EnergyWireTile ||
+                    (neighbor != null && neighbor.getCapability(CapabilityEnergy.ENERGY, dir).isPresent());
+            if(neighbor instanceof EnergyWireTile) {
+                blockConnectable = ((EnergyWireTile) neighbor).isSideConnectable(dir.getOpposite());
+            }
+            state = state.with(DirectionTools.DirectionToProperty(dir), blockConnectable);
         }
         return state;
     }

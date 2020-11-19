@@ -72,6 +72,7 @@ public class Crusher extends Block {
             TileEntity te = worldIn.getTileEntity(pos);
             if(te instanceof CrusherTile) {
                 InventoryHelper.dropInventoryItems(worldIn, pos, ((CrusherTile) te).blockInventory);
+                worldIn.removeTileEntity(te.getPos());
             }
         }
     }

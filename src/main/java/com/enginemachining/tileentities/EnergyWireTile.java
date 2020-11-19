@@ -28,11 +28,11 @@ public class EnergyWireTile extends TileEntity {
         return super.write(compound);
     }
 
-    boolean isSideConnectable(Direction side) {
+    public boolean isSideConnectable(Direction side) {
         return ((disconnectMask >> side.getIndex()) & 1) == 0;
     }
 
-    void setSideConnectable(Direction side, boolean canConnect) {
+    public void setSideConnectable(Direction side, boolean canConnect) {
         disconnectMask &= ~(1 << side.getIndex());
         disconnectMask |= ((canConnect ? 0 : 1) << side.getIndex());
     }
