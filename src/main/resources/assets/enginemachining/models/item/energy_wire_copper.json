@@ -1,3 +1,6 @@
 {
-  "parent": "enginemachining:block/energy_wire_copper_center"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "enginemachining:item/energy_wire_copper"
+  }
 }
