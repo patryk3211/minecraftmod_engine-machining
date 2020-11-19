@@ -8,13 +8,15 @@ import com.enginemachining.recipes.ModdedRecipeSerializers;
 import com.enginemachining.tileentities.ModdedTileEntities;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod("enginemachining")
+@Mod(EngineMachiningMod.MOD_ID)
 public class EngineMachiningMod
 {
     public static final String MOD_ID = "enginemachining";
@@ -22,7 +24,9 @@ public class EngineMachiningMod
     public static final Logger LOGGER = LogManager.getLogger();
 
     public EngineMachiningMod() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
 
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -32,6 +36,7 @@ public class EngineMachiningMod
         ModdedContainers.CONTAINERS.register(modBus);
         ModdedRecipeSerializers.RECIPES.register(modBus);
 
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -42,153 +47,4 @@ public class EngineMachiningMod
         EngineMachiningPacketHandler.registerPacketType(CrusherTileMessage.class, CrusherTileMessage::encode, CrusherTileMessage::decode, CrusherTileMessage::handle);
         LOGGER.info("Setup Complete!");
     }
-
-    /*private void doClientStuff(final FMLClientSetupEvent event) {
-        // do something that can only be done on the client
-        LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
-    }
-
-    private void enqueueIMC(final InterModEnqueueEvent event)
-    {
-        // some example code to dispatch IMC to another mod
-        InterModComms.sendTo("examplemod", "helloworld", () -> { LOGGER.info("Hello world from the MDK"); return "Hello world";});
-    }
-
-    private void processIMC(final InterModProcessEvent event)
-    {
-        // some example code to receive and process InterModComms from other mods
-        LOGGER.info("Got IMC {}", event.getIMCStream().
-                map(m->m.getMessageSupplier().get()).
-                collect(Collectors.toList()));
-    }
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(FMLServerStartingEvent event) {
-        // do something when the server starts
-        //LOGGER.info("HELLO from server starting");
-    }*/
-
-    // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
-    // Event bus for receiving Registry Events)
-    /*@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-    public static class RegistryEvents {
-        @SubscribeEvent
-        public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
-            LOGGER.info("Starting Block Registry...");
-            blockRegistryEvent.getRegistry().register(new OreCopper());
-            blockRegistryEvent.getRegistry().register(new OreTin());
-            blockRegistryEvent.getRegistry().register(new OreAluminium());
-            blockRegistryEvent.getRegistry().register(new OreSilver());
-            blockRegistryEvent.getRegistry().register(new OreLead());
-            blockRegistryEvent.getRegistry().register(new OreNickel());
-
-            blockRegistryEvent.getRegistry().register(new Crusher());
-            LOGGER.info("Block registry finished!");
-        }
-
-        @SubscribeEvent
-        public static void onItemsRegistry(final RegistryEvent.Register<Item> itemsRegistryEvent) {
-            LOGGER.info("Starting Item Registry...");
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_copper, new Item.Properties().group(ModdedItemGroups.metals)).setRegistryName("enginemachining:ore_copper"));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_tin, new Item.Properties().group(ModdedItemGroups.metals)).setRegistryName("enginemachining:ore_tin"));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_aluminium, new Item.Properties().group(ModdedItemGroups.metals)).setRegistryName("enginemachining:ore_aluminium"));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_silver, new Item.Properties().group(ModdedItemGroups.metals)).setRegistryName("enginemachining:ore_silver"));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_lead, new Item.Properties().group(ModdedItemGroups.metals)).setRegistryName("enginemachining:ore_lead"));
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.ore_nickel, new Item.Properties().group(ModdedItemGroups.metals)).setRegistryName("enginemachining:ore_nickel"));
-
-            itemsRegistryEvent.getRegistry().register(new IngotCopper());
-            itemsRegistryEvent.getRegistry().register(new IngotAluminium());
-            itemsRegistryEvent.getRegistry().register(new IngotTin());
-            itemsRegistryEvent.getRegistry().register(new IngotNickel());
-            itemsRegistryEvent.getRegistry().register(new IngotLead());
-            itemsRegistryEvent.getRegistry().register(new IngotSilver());
-
-            itemsRegistryEvent.getRegistry().register(new DustCopper());
-            itemsRegistryEvent.getRegistry().register(new DustAluminium());
-            itemsRegistryEvent.getRegistry().register(new DustTin());
-            itemsRegistryEvent.getRegistry().register(new DustNickel());
-            itemsRegistryEvent.getRegistry().register(new DustLead());
-            itemsRegistryEvent.getRegistry().register(new DustSilver());
-            itemsRegistryEvent.getRegistry().register(new DustLapis());
-            itemsRegistryEvent.getRegistry().register(new DustGold());
-            itemsRegistryEvent.getRegistry().register(new DustCoal());
-            itemsRegistryEvent.getRegistry().register(new DustIron());
-
-            itemsRegistryEvent.getRegistry().register(new NuggetAluminium());
-            itemsRegistryEvent.getRegistry().register(new NuggetCopper());
-            itemsRegistryEvent.getRegistry().register(new NuggetLead());
-            itemsRegistryEvent.getRegistry().register(new NuggetNickel());
-            itemsRegistryEvent.getRegistry().register(new NuggetTin());
-            itemsRegistryEvent.getRegistry().register(new NuggetSilver());
-
-            itemsRegistryEvent.getRegistry().register(new BlockItem(ModdedBlocks.crusher, new Item.Properties().group(ItemGroup.MISC)).setRegistryName("enginemachining:crusher"));
-
-            itemsRegistryEvent.getRegistry().register(new AxeCopper());
-            itemsRegistryEvent.getRegistry().register(new PickaxeCopper());
-            itemsRegistryEvent.getRegistry().register(new SwordCopper());
-            itemsRegistryEvent.getRegistry().register(new ShovelCopper());
-            itemsRegistryEvent.getRegistry().register(new HoeCopper());
-            itemsRegistryEvent.getRegistry().register(new HelmetCopper());
-            itemsRegistryEvent.getRegistry().register(new ChestplateCopper());
-            itemsRegistryEvent.getRegistry().register(new LegginsCopper());
-            itemsRegistryEvent.getRegistry().register(new BootsCopper());
-
-            itemsRegistryEvent.getRegistry().register(new AxeSilver());
-            itemsRegistryEvent.getRegistry().register(new PickaxeSilver());
-            itemsRegistryEvent.getRegistry().register(new SwordSilver());
-            itemsRegistryEvent.getRegistry().register(new ShovelSilver());
-            itemsRegistryEvent.getRegistry().register(new HoeSilver());
-            itemsRegistryEvent.getRegistry().register(new HelmetSilver());
-            itemsRegistryEvent.getRegistry().register(new ChestplateSilver());
-            itemsRegistryEvent.getRegistry().register(new LegginsSilver());
-            itemsRegistryEvent.getRegistry().register(new BootsSilver());
-
-            itemsRegistryEvent.getRegistry().register(new BatteryDisposable());
-
-            ModdedItemTags.InitTags();
-
-            ModdedItemGroups.InitItemGroups();
-            LOGGER.info("Item registry finished!");
-        }
-
-        @SubscribeEvent
-        public static void onTileRegistry(RegistryEvent.Register<TileEntityType<?>> tileEntityRegistry) {
-            LOGGER.info("Registering tile entities...");
-            tileEntityRegistry.getRegistry().register(TileEntityType.Builder.create(CrusherTile::new, ModdedBlocks.crusher).build(null).setRegistryName("enginemachining:crusher"));
-            LOGGER.info("Tile entities registered!");
-        }
-
-        @SubscribeEvent
-        public static void onContainerRegistry(RegistryEvent.Register<ContainerType<?>> containerRegistry) {
-            LOGGER.info("Registering containers...");
-            containerRegistry.getRegistry().register(IForgeContainerType.create(CrusherContainer::new).setRegistryName("enginemachining:crusher"));
-            LOGGER.info("Containers registered!");
-        }
-
-        @SubscribeEvent
-        public static void onRecipeSerializerRegistry(RegistryEvent.Register<IRecipeSerializer<?>> recipeSerializerRegistry) {
-            LOGGER.info("Registering recipe serializers");
-            recipeSerializerRegistry.getRegistry().register(ModdedRecipeSerializers.crusherRecipeSerializer.setRegistryName(new ResourceLocation("enginemachining:crushing")));
-            LOGGER.info("Recipe serializers registered!");
-        }
-
-        @SubscribeEvent
-        public static void onBiomeRegistry(RegistryEvent.Register<Feature<?>> event) {
-            /*LOGGER.info("Registering biomes...");
-            //OreFeature feature = new OreFeature()
-            ConfiguredFeature feature = Feature.ORE.withConfiguration(
-                    new OreFeatureConfig(
-                            OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-                            ModdedBlocks.ore_copper.getDefaultState(),
-                            8))
-                    .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(10, 0, 80)))
-                    .square()
-                    .func_242731_b(8);
-            //feature.feature.setRegistryName("enginemachining:ore_copper");
-            //event.getRegistry().register(feature.feature);
-
-            //OreGeneration.SetupBiomeGeneration();
-            LOGGER.info("Biomes registered!");
-        }
-    }*/
 }

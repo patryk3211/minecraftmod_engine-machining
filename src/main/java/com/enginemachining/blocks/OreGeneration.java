@@ -19,6 +19,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
@@ -55,10 +56,10 @@ public class OreGeneration {
 
     }
 
-    public static void SetupBiomeGeneration(BiomeLoadingEvent biomeEvent) {
+    public static void SetupBiomeGeneration(FMLLoadCompleteEvent event) {
         EngineMachiningMod.LOGGER.info("Setting up biome generation...");
-        if(biomeEvent.getCategory() != Biome.Category.NETHER && biomeEvent.getCategory() != Biome.Category.THEEND) {
-
+        for(Biome biome : ForgeRegistries.BIOMES) {
+            
         }
         EngineMachiningMod.LOGGER.info("Biome generation setup complete!");
         /*for(Biome biome : ForgeRegistries.BIOMES) {

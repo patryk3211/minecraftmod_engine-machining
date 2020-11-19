@@ -1,0 +1,7 @@
+{
+  "parent": "enginemachining:block/pipe_2_side",
+  "textures": {
+    "center": "enginemachining:block/energy_copper_wire",
+    "side": "enginemachining:block/energy_copper_wire"
+  }
+}

@@ -20,6 +20,8 @@ public class ModdedBlocks {
 
     public static final RegistryObject<Block> crusher = BLOCKS.register("crusher", Crusher::new);
 
+    public static final RegistryObject<Block> energy_wire_copper = BLOCKS.register("energy_wire_copper", EnergyWireCopper::new);
+
     /*@ObjectHolder("enginemachining:ore_copper")
     public static OreCopper ore_copper;*/
     /*@ObjectHolder("enginemachining:ore_tin")

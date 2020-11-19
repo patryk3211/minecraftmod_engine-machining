@@ -27,7 +27,10 @@ public class BatteryDisposable extends Item {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         CompoundNBT nbt = stack.getTag();
-        if(nbt == null) return;
+        if(nbt == null || nbt.getCompound("energy").isEmpty()) {
+            tooltip.add(new StringTextComponent("Invalid tag"));
+            return;
+        }
         CompoundNBT energyTag = nbt.getCompound("energy");
         int charge = energyTag.getInt("charge");
         int maxCharge = energyTag.getInt("maxCharge");

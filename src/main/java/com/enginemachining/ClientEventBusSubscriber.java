@@ -20,6 +20,5 @@ public class ClientEventBusSubscriber {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent clientSetupEvent) {
         ScreenManager.registerFactory(ModdedContainers.crusher.get(), CrusherScreen::new);
-        EngineMachiningMod.LOGGER.info("Screens Registered!");
     }
 }
