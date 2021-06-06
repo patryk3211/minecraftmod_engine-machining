@@ -62,16 +62,6 @@ public abstract class EnergyWire extends Block {
         builder.add(BlockStateProperties.DOWN);
     }
 
-    /*@Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(BlockStateProperties.NORTH);
-        builder.add(BlockStateProperties.SOUTH);
-        builder.add(BlockStateProperties.EAST);
-        builder.add(BlockStateProperties.WEST);
-        builder.add(BlockStateProperties.UP);
-        builder.add(BlockStateProperties.DOWN);
-    }*/
-
     @Override
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         //Change block state to maybe connect to another wire
@@ -84,7 +74,7 @@ public abstract class EnergyWire extends Block {
         if(blockConnectable && te instanceof EnergyWireTile && neighbor instanceof EnergyWireTile) {
             blockConnectable = ((EnergyWireTile) te).isSideConnectable(neighborDir) && ((EnergyWireTile) neighbor).isSideConnectable(neighborDir.getOpposite());
         }
-        worldIn.setBlock(pos, state.setValue(DirectionTools.DirectionToProperty(neighborDir), blockConnectable), 1);
+        worldIn.setBlockAndUpdate(pos, state.setValue(DirectionTools.DirectionToProperty(neighborDir), blockConnectable));
     }
 
     @Nullable

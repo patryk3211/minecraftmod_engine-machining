@@ -6,6 +6,7 @@ import com.enginemachining.items.ModdedItems;
 import com.enginemachining.screens.CrusherScreen;
 import com.enginemachining.tileentities.CrusherTile;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -21,6 +22,7 @@ import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.PlayerData;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -31,16 +33,12 @@ public class CrusherContainer extends Container {
     public CrusherTile tileEntity;
     public PlayerInventory inv;
 
-    private IWorldPosCallable callable;
-
     public IIntArray trackedArray;
 
     public CrusherContainer(int id, PlayerInventory inv, CrusherTile tile) {
         super(ModdedContainers.crusher.get(), id);
         this.inv = inv;
         this.tileEntity = tile;
-
-        callable = IWorldPosCallable.create(tileEntity.getLevel(), tileEntity.getBlockPos());
 
         trackedArray = new IntArray(tileEntity.trackedData.getCount());
 
@@ -97,13 +95,9 @@ public class CrusherContainer extends Container {
 
     @Override
     public boolean stillValid(PlayerEntity playerIn) {
-        return false;
+        // TODO: Check if player is still within usable distance
+        return true;
     }
-
-    /*@Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return isWithinUsableDistance(callable, playerIn, ModdedBlocks.crusher.get());
-    }*/
 
     private void LayoutInventory() {
         AddRange(8, 84, 9, 3, 9, inv);
