@@ -1,0 +1,6 @@
+{
+  "parent": "enginemachining:block/power_limiter_base",
+  "textures": {
+    "tex": "enginemachining:block/power_limiter_copper"
+  }
+}

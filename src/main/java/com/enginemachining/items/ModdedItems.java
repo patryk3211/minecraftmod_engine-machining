@@ -29,6 +29,8 @@ public class ModdedItems {
 
     public static final RegistryObject<Item> energy_wire_copper = ITEMS.register("energy_wire_copper", () -> new BlockItem(ModdedBlocks.energy_wire_copper.get(), new Item.Properties().tab(ItemGroup.TAB_MISC)));
 
+    public static final RegistryObject<Item> power_limiter_copper = ITEMS.register("power_limiter_copper", () -> new BlockItem(ModdedBlocks.power_limiter_copper.get(), new Item.Properties().tab(ItemGroup.TAB_MISC)));
+
     public static final RegistryObject<Item> ingot_copper = ITEMS.register("ingot_copper", IngotCopper::new);
     public static final RegistryObject<Item> ingot_tin = ITEMS.register("ingot_tin", IngotTin::new);
     public static final RegistryObject<Item> ingot_aluminium = ITEMS.register("ingot_aluminium", IngotAluminium::new);

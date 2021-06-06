@@ -22,8 +22,6 @@ public class EnergyWireTile extends TileEntity {
         super.deserializeNBT(state, nbt);
     }
 
-
-
     @Override
     public CompoundNBT serializeNBT() {
         CompoundNBT compound = super.serializeNBT();
