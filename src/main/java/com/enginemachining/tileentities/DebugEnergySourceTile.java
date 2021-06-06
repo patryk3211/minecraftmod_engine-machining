@@ -29,7 +29,7 @@ public class DebugEnergySourceTile extends TileEntity implements ITickableTileEn
 
     @Override
     public void tick() {
-        if(!world.isRemote) {
+        if(!level.isClientSide) {
             PipeTracer.TraceForReceivers(this);
         }
     }

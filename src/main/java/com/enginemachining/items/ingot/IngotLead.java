@@ -5,6 +5,6 @@ import net.minecraft.item.Item;
 
 public class IngotLead extends Item {
     public IngotLead() {
-        super(new Properties().group(ModdedItemGroups.metals));
+        super(new Properties().tab(ModdedItemGroups.metals));
     }
 }

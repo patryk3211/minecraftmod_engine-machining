@@ -6,6 +6,6 @@ import net.minecraft.item.PickaxeItem;
 
 public class PickaxeCopper extends PickaxeItem {
     public PickaxeCopper() {
-        super(ModItemTier.copper, 1, -2.8f, new Properties().group(ModdedItemGroups.tools));
+        super(ModItemTier.copper, 1, -2.8f, new Properties().tab(ModdedItemGroups.tools));
     }
 }

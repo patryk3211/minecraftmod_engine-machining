@@ -6,10 +6,9 @@ import net.minecraftforge.common.ToolType;
 
 public class OreAluminium extends Block {
     public OreAluminium() {
-        super(Properties.create(Material.IRON)
-                .hardnessAndResistance( 3.5f, 3.5f)
+        super(Properties.of(Material.METAL)
+                .strength( 3.5f, 3.5f)
                 .harvestLevel(1)
-                .harvestTool(ToolType.PICKAXE)
-                .setRequiresTool());
+                .harvestTool(ToolType.PICKAXE));
     }
 }

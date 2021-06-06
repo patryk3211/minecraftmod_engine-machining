@@ -40,15 +40,15 @@ public class CrusherContainer extends Container {
         this.inv = inv;
         this.tileEntity = tile;
 
-        callable = IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos());
+        callable = IWorldPosCallable.create(tileEntity.getLevel(), tileEntity.getBlockPos());
 
-        trackedArray = new IntArray(tileEntity.trackedData.size());
+        trackedArray = new IntArray(tileEntity.trackedData.getCount());
 
-        if(!tileEntity.getWorld().isRemote) {
+        if(!tileEntity.getLevel().isClientSide) {
             trackedArray = tileEntity.trackedData;
         }
 
-        trackIntArray(trackedArray);
+        addDataSlots(trackedArray);
 
         LayoutInventory();
 
@@ -63,7 +63,7 @@ public class CrusherContainer extends Container {
         }
 
         @Override
-        public boolean isItemValid(ItemStack stack) {
+        public boolean mayPlace(ItemStack stack) {
             return stack.getItem() == ModdedItems.battery_disposable.get();
         }
     }
@@ -74,7 +74,7 @@ public class CrusherContainer extends Container {
         }
 
         @Override
-        public boolean isItemValid(ItemStack stack) {
+        public boolean mayPlace(ItemStack stack) {
             return false;
         }
     }
@@ -87,7 +87,7 @@ public class CrusherContainer extends Container {
         Objects.requireNonNull(inv, "Player Inventory cannot be null");
         Objects.requireNonNull(data, "Data cannot be null");
 
-        TileEntity tileAtPos = inv.player.world.getTileEntity(data.readBlockPos());
+        TileEntity tileAtPos = inv.player.level.getBlockEntity(data.readBlockPos());
         if(tileAtPos instanceof CrusherTile) {
             return (CrusherTile)tileAtPos;
         }
@@ -96,9 +96,14 @@ public class CrusherContainer extends Container {
     }
 
     @Override
+    public boolean stillValid(PlayerEntity playerIn) {
+        return false;
+    }
+
+    /*@Override
     public boolean canInteractWith(PlayerEntity playerIn) {
         return isWithinUsableDistance(callable, playerIn, ModdedBlocks.crusher.get());
-    }
+    }*/
 
     private void LayoutInventory() {
         AddRange(8, 84, 9, 3, 9, inv);
@@ -119,7 +124,7 @@ public class CrusherContainer extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         return ItemStack.EMPTY;
     }
 }

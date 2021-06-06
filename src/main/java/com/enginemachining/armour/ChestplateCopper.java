@@ -6,6 +6,6 @@ import net.minecraft.item.ArmorItem;
 
 public class ChestplateCopper extends ArmorItem {
     public ChestplateCopper() {
-        super(ModArmorMaterial.copper, EquipmentSlotType.CHEST, new Properties().group(ModdedItemGroups.tools));
+        super(ModArmorMaterial.copper, EquipmentSlotType.CHEST, new Properties().tab(ModdedItemGroups.tools));
     }
 }

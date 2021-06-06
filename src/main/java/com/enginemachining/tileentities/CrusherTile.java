@@ -114,7 +114,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 6;
         }
     };
@@ -128,17 +128,17 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
             }
 
             @Override
-            public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+            public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
                 return slots.get(index).isEmpty() || (slots.get(index).getCount() < 64 && slots.get(index).getItem() == itemStackIn.getItem());
             }
 
             @Override
-            public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+            public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
                 return !slots.get(index).isEmpty() && slots.get(index).getCount() >= stack.getCount() && stack.getItem() == slots.get(index).getItem();
             }
 
             @Override
-            public int getSizeInventory() {
+            public int getContainerSize() {
                 return slots.size();
             }
 
@@ -148,13 +148,15 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
             }
 
             @Override
-            public ItemStack getStackInSlot(int index) {
-                if(index >= getSizeInventory()) return null;
+            public ItemStack getItem(int index) {
+                if(index >= getContainerSize()) return null;
                 return slots.get(index);
             }
 
+
+
             @Override
-            public ItemStack decrStackSize(int index, int count) {
+            public ItemStack removeItem(int index, int count) {
                 if(slots.get(index).isEmpty()) return ItemStack.EMPTY;
                 if(slots.get(index).getCount() <= count) {
                     ItemStack ret = slots.get(index).copy();
@@ -166,29 +168,29 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
             }
 
             @Override
-            public ItemStack removeStackFromSlot(int index) {
+            public ItemStack removeItemNoUpdate(int index) {
                 ItemStack ret = slots.get(index);
                 slots.set(index, ItemStack.EMPTY);
                 return ret;
             }
 
             @Override
-            public void setInventorySlotContents(int index, ItemStack stack) {
+            public void setItem(int index, ItemStack stack) {
                 slots.set(index, stack);
             }
 
             @Override
-            public void markDirty() {
-                CrusherTile.this.markDirty();
+            public void setChanged() {
+                CrusherTile.this.setChanged();
             }
 
             @Override
-            public boolean isUsableByPlayer(PlayerEntity player) {
+            public boolean stillValid(PlayerEntity player) {
                 return true;
             }
 
             @Override
-            public void clear() {
+            public void clearContent() {
                 slots.set(0, ItemStack.EMPTY);
                 slots.set(1, ItemStack.EMPTY);
                 slots.set(2, ItemStack.EMPTY);
@@ -206,7 +208,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
 
     @Override
     public void tick() {
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             AtomicBoolean markdirty = new AtomicBoolean(false);
             if(power > 0) {
                 power -= COOLDOWN_PER_TICK;
@@ -245,7 +247,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
             if(readyToRun) {
                 CrusherRecipe rec = GetRecipe(slots.get(0));
                 //If recipe is valid and slot is able to accept the result then proceed with the recipe.
-                if(rec != null && (slots.get(1).isEmpty() || (slots.get(1).getItem() == rec.getRecipeOutput().getItem() && slots.get(1).getCount() < slots.get(1).getMaxStackSize()))) {
+                if(rec != null && (slots.get(1).isEmpty() || (slots.get(1).getItem() == rec.getResultItem().getItem() && slots.get(1).getCount() < slots.get(1).getMaxStackSize()))) {
                     if(prevRecipe != rec) {
                         burnTime = 0;
                         prevRecipe = rec;
@@ -265,9 +267,9 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                         }
                         ItemStack outputStack = slots.get(1);
                         if(outputStack.isEmpty()) {
-                            slots.set(1, rec.getCraftingResult(blockInventory));
+                            slots.set(1, rec.assemble(blockInventory));
                         } else {
-                            outputStack.setCount(outputStack.getCount() + rec.getRecipeOutput().getCount());
+                            outputStack.setCount(outputStack.getCount() + rec.getResultItem().getCount());
                         }
                         burnTime = 0;
                         markdirty.set(true);
@@ -279,7 +281,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                 if(burnTime > 0) burnTime--;
             }
 
-            if(markdirty.get()) markDirty();
+            if(markdirty.get()) setChanged();
         }
     }
 
@@ -295,7 +297,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
+    public void deserializeNBT(BlockState state, CompoundNBT nbt) {
         ItemStackHelper.loadAllItems(nbt, slots);
         energyHandler.ifPresent((handler) -> {
             if(handler instanceof EnergyHandler) {
@@ -306,38 +308,25 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
         readyToRun = nbt.getBoolean("ready");
         power = Math.min(nbt.getInt("power"), HEAT_MAX);
         burnTime = nbt.getInt("burnTime");
-        super.read(state, nbt);
+        super.deserializeNBT(state, nbt);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        ItemStackHelper.saveAllItems(compound, slots, true);
+    public CompoundNBT serializeNBT() {
+        CompoundNBT nbt = super.serializeNBT();
+        ItemStackHelper.saveAllItems(nbt, slots, true);
         energyHandler.ifPresent((handler) -> {
             if(handler instanceof EnergyHandler) {
-                CompoundNBT nbt = ((EnergyHandler) handler).serializeNBT();
-                compound.put("energy", nbt);
+                CompoundNBT compound = ((EnergyHandler) handler).serializeNBT();
+                nbt.put("energy", compound);
             }
         });
-        compound.putBoolean("enabled", enabled);
-        compound.putBoolean("ready", readyToRun);
-        compound.putInt("power", power);
-        compound.putInt("burnTime", burnTime);
-        return super.write(compound);
-    }
-
-    /*@Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        System.out.println("packet");
-    }
-
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT nbt = new CompoundNBT();
         nbt.putBoolean("enabled", enabled);
-        SUpdateTileEntityPacket packet = new SUpdateTileEntityPacket(pos, -1, nbt);
-        return packet;
-    }*/
+        nbt.putBoolean("ready", readyToRun);
+        nbt.putInt("power", power);
+        nbt.putInt("burnTime", burnTime);
+        return nbt;
+    }
 
     @NotNull
     @Override
@@ -359,7 +348,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
             return null;
         }
 
-        Set<IRecipe<?>> recipes = findRecipeByType(ModdedRecipeTypes.crushing, this.world);
+        Set<IRecipe<?>> recipes = findRecipeByType(ModdedRecipeTypes.crushing, this.level);
         for(IRecipe<?> recipe : recipes) {
             CrusherRecipe cr = (CrusherRecipe)recipe;
             for(Ingredient in : cr.getIngredients()) {
@@ -376,7 +365,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
 
     @OnlyIn(Dist.CLIENT)
     public static Set<IRecipe<?>> findRecipeByType(IRecipeType<?> type) {
-        ClientWorld world = Minecraft.getInstance().world;
+        ClientWorld world = Minecraft.getInstance().level;
         return world != null ? world.getRecipeManager().getRecipes().stream().filter(recipe -> recipe.getType() == type).collect(Collectors.toSet()) : Collections.emptySet();
     }
 

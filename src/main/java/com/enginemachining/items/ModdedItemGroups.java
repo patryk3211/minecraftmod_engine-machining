@@ -9,12 +9,12 @@ import net.minecraft.util.NonNullList;
 public class ModdedItemGroups {
     public static ItemGroup metals = new ItemGroup("enginemachining.metals") {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(ModdedBlocks.ore_copper.get());
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items) {
+        public void fillItemList(NonNullList<ItemStack> items) {
             items.add(new ItemStack(ModdedItems.ingot_copper.get()));
             items.add(new ItemStack(ModdedItems.dust_copper.get()));
             items.add(new ItemStack(ModdedBlocks.ore_copper.get()));
@@ -55,12 +55,12 @@ public class ModdedItemGroups {
 
     public static ItemGroup tools = new ItemGroup("enginemachining.tools") {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(ModdedItems.pickaxe_copper.get());
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items) {
+        public void fillItemList(NonNullList<ItemStack> items) {
             items.add(new ItemStack(ModdedItems.pickaxe_copper.get()));
             items.add(new ItemStack(ModdedItems.axe_copper.get()));
             items.add(new ItemStack(ModdedItems.sword_copper.get()));
@@ -84,12 +84,12 @@ public class ModdedItemGroups {
 
     public static ItemGroup misc = new ItemGroup("enginemachining.misc") {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(ModdedItems.battery_disposable.get());
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items) {
+        public void fillItemList(NonNullList<ItemStack> items) {
             ItemStack battery_disposable = new ItemStack(ModdedItems.battery_disposable.get());
 
             CompoundNBT nbt = battery_disposable.getTag();

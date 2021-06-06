@@ -7,6 +7,6 @@ import net.minecraft.item.ShovelItem;
 
 public class ShovelCopper extends ShovelItem {
     public ShovelCopper() {
-        super(ModItemTier.copper, 2, -3.0f, new Properties().group(ModdedItemGroups.tools));
+        super(ModItemTier.copper, 2, -3.0f, new Properties().tab(ModdedItemGroups.tools));
     }
 }

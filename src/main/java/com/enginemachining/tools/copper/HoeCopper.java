@@ -6,6 +6,6 @@ import net.minecraft.item.HoeItem;
 
 public class HoeCopper extends HoeItem {
     public HoeCopper() {
-        super(ModItemTier.copper, -1, -2,new Properties().group(ModdedItemGroups.tools));
+        super(ModItemTier.copper, -1, -2,new Properties().tab(ModdedItemGroups.tools));
     }
 }

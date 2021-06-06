@@ -5,6 +5,6 @@ import net.minecraft.item.Item;
 
 public class DustCoal extends Item {
     public DustCoal() {
-        super(new Properties().group(ModdedItemGroups.metals));
+        super(new Properties().tab(ModdedItemGroups.metals));
     }
 }

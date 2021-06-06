@@ -6,6 +6,6 @@ import net.minecraft.item.ShovelItem;
 
 public class ShovelSilver extends ShovelItem {
     public ShovelSilver() {
-        super(ModItemTier.silver, 0.5f, -3.0f, new Properties().group(ModdedItemGroups.tools));
+        super(ModItemTier.silver, 0.5f, -3.0f, new Properties().tab(ModdedItemGroups.tools));
     }
 }

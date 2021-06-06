@@ -6,6 +6,6 @@ import net.minecraft.item.SwordItem;
 
 public class SwordSilver extends SwordItem {
     public SwordSilver() {
-        super(ModItemTier.silver, 3, -2.4f, new Properties().group(ModdedItemGroups.tools));
+        super(ModItemTier.silver, 3, -2.4f, new Properties().tab(ModdedItemGroups.tools));
     }
 }

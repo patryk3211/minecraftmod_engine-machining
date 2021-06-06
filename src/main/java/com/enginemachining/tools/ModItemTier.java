@@ -6,8 +6,8 @@ import net.minecraft.item.crafting.Ingredient;
 
 public enum ModItemTier implements IItemTier {
 
-    copper(2, 200, 5.0f, 1.0f, 9, Ingredient.fromItems(ModdedItems.ingot_copper.get())),
-    silver(2, 100, 9.0f, 1.0f, 22, Ingredient.fromItems(ModdedItems.ingot_silver.get()));
+    copper(2, 200, 5.0f, 1.0f, 9, Ingredient.of(ModdedItems.ingot_copper.get())),
+    silver(2, 100, 9.0f, 1.0f, 22, Ingredient.of(ModdedItems.ingot_silver.get()));
 
     private final int harvestLevel;
     private final int maxUses;
@@ -26,33 +26,32 @@ public enum ModItemTier implements IItemTier {
     }
 
     @Override
-    public int getMaxUses() {
+    public int getUses() {
         return maxUses;
     }
 
     @Override
-    public float getEfficiency() {
+    public float getSpeed() {
         return efficiency;
     }
 
     @Override
-    public float getAttackDamage() {
+    public float getAttackDamageBonus() {
         return attackDamage;
     }
 
     @Override
-    public int getHarvestLevel() {
+    public int getLevel() {
         return harvestLevel;
     }
 
     @Override
-    public int getEnchantability() {
+    public int getEnchantmentValue() {
         return enchantability;
     }
 
     @Override
-    public Ingredient getRepairMaterial() {
+    public Ingredient getRepairIngredient() {
         return repairMaterial;
     }
-
 }

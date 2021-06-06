@@ -6,6 +6,6 @@ import net.minecraft.item.ArmorItem;
 
 public class HelmetCopper extends ArmorItem {
     public HelmetCopper() {
-        super(ModArmorMaterial.copper, EquipmentSlotType.HEAD, new Properties().group(ModdedItemGroups.tools));
+        super(ModArmorMaterial.copper, EquipmentSlotType.HEAD, new Properties().tab(ModdedItemGroups.tools));
     }
 }

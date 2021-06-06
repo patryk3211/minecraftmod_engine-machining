@@ -6,6 +6,6 @@ import net.minecraft.item.ArmorItem;
 
 public class LegginsSilver extends ArmorItem {
     public LegginsSilver() {
-        super(ModArmorMaterial.silver, EquipmentSlotType.LEGS, new Properties().group(ModdedItemGroups.tools));
+        super(ModArmorMaterial.silver, EquipmentSlotType.LEGS, new Properties().tab(ModdedItemGroups.tools));
     }
 }

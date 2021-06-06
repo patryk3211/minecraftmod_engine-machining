@@ -9,6 +9,6 @@ public class ModdedItemTags {
     public static ITag<Item> batteries;
 
     public static void InitTags() {
-        batteries = ItemTags.getCollection().getTagByID(new ResourceLocation("enginemachining:batteries"));
+        batteries = ItemTags.getAllTags().getTag(new ResourceLocation("enginemachining:batteries"));
     }
 }

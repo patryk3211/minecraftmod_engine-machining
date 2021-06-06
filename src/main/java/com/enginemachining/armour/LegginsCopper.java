@@ -6,6 +6,6 @@ import net.minecraft.item.ArmorItem;
 
 public class LegginsCopper extends ArmorItem {
     public LegginsCopper() {
-        super(ModArmorMaterial.copper, EquipmentSlotType.LEGS, new Properties().group(ModdedItemGroups.tools));
+        super(ModArmorMaterial.copper, EquipmentSlotType.LEGS, new Properties().tab(ModdedItemGroups.tools));
     }
 }

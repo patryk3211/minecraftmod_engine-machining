@@ -10,13 +10,13 @@ import net.minecraft.util.math.shapes.*;
 import net.minecraft.world.IBlockReader;
 
 public class EnergyWireCopper extends EnergyWire {
-    public static final VoxelShape center = Block.makeCuboidShape(7, 7, 7,9, 9, 9);
-    public static final VoxelShape east = Block.makeCuboidShape(9, 7, 7, 16, 9, 9);
-    public static final VoxelShape west = Block.makeCuboidShape(7, 7, 7, 0, 9, 9);
-    public static final VoxelShape up = Block.makeCuboidShape(7, 9, 7, 9, 16, 9);
-    public static final VoxelShape down = Block.makeCuboidShape(7, 7, 7, 9, 0, 9);
-    public static final VoxelShape south = Block.makeCuboidShape(7, 7, 9, 9, 9, 16);
-    public static final VoxelShape north = Block.makeCuboidShape(7, 7, 7, 9, 9, 0);
+    public static final VoxelShape center = Block.box(7, 7, 7,9, 9, 9);
+    public static final VoxelShape east = Block.box(9, 7, 7, 16, 9, 9);
+    public static final VoxelShape west = Block.box(7, 7, 7, 0, 9, 9);
+    public static final VoxelShape up = Block.box(7, 9, 7, 9, 16, 9);
+    public static final VoxelShape down = Block.box(7, 7, 7, 9, 0, 9);
+    public static final VoxelShape south = Block.box(7, 7, 9, 9, 9, 16);
+    public static final VoxelShape north = Block.box(7, 7, 7, 9, 9, 0);
 
     public EnergyWireCopper() {
         super(1000);
@@ -26,13 +26,13 @@ public class EnergyWireCopper extends EnergyWire {
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         VoxelShape ret = center;
-        if(state.get(BlockStateProperties.EAST)) ret = VoxelShapes.combine(ret, east, IBooleanFunction.OR);
-        if(state.get(BlockStateProperties.WEST)) ret = VoxelShapes.combine(ret, west, IBooleanFunction.OR);
-        if(state.get(BlockStateProperties.DOWN)) ret = VoxelShapes.combine(ret, down, IBooleanFunction.OR);
-        if(state.get(BlockStateProperties.UP)) ret = VoxelShapes.combine(ret, up, IBooleanFunction.OR);
-        if(state.get(BlockStateProperties.NORTH)) ret = VoxelShapes.combine(ret, north, IBooleanFunction.OR);
-        if(state.get(BlockStateProperties.SOUTH)) ret = VoxelShapes.combine(ret, south, IBooleanFunction.OR);
+        if(state.getValue(BlockStateProperties.EAST)) ret = VoxelShapes.join(ret, east, IBooleanFunction.OR);
+        if(state.getValue(BlockStateProperties.WEST)) ret = VoxelShapes.join(ret, west, IBooleanFunction.OR);
+        if(state.getValue(BlockStateProperties.DOWN)) ret = VoxelShapes.join(ret, down, IBooleanFunction.OR);
+        if(state.getValue(BlockStateProperties.UP)) ret = VoxelShapes.join(ret, up, IBooleanFunction.OR);
+        if(state.getValue(BlockStateProperties.NORTH)) ret = VoxelShapes.join(ret, north, IBooleanFunction.OR);
+        if(state.getValue(BlockStateProperties.SOUTH)) ret = VoxelShapes.join(ret, south, IBooleanFunction.OR);
 
-        return ret.simplify();
+        return ret.optimize();
     }
 }

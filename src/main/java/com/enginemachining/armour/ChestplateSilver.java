@@ -6,6 +6,6 @@ import net.minecraft.item.ArmorItem;
 
 public class ChestplateSilver extends ArmorItem {
     public ChestplateSilver() {
-        super(ModArmorMaterial.silver, EquipmentSlotType.CHEST, new Properties().group(ModdedItemGroups.tools));
+        super(ModArmorMaterial.silver, EquipmentSlotType.CHEST, new Properties().tab(ModdedItemGroups.tools));
     }
 }

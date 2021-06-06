@@ -19,6 +19,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientEventBusSubscriber {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent clientSetupEvent) {
-        ScreenManager.registerFactory(ModdedContainers.crusher.get(), CrusherScreen::new);
+        ScreenManager.register(ModdedContainers.crusher.get(), CrusherScreen::new);
     }
 }

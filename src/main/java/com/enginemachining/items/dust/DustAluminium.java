@@ -5,6 +5,6 @@ import net.minecraft.item.Item;
 
 public class DustAluminium extends Item {
     public DustAluminium() {
-        super(new Properties().group(ModdedItemGroups.metals));
+        super(new Properties().tab(ModdedItemGroups.metals));
     }
 }

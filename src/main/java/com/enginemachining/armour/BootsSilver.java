@@ -6,6 +6,6 @@ import net.minecraft.item.ArmorItem;
 
 public class BootsSilver extends ArmorItem {
     public BootsSilver() {
-        super(ModArmorMaterial.silver, EquipmentSlotType.FEET, new Properties().group(ModdedItemGroups.tools));
+        super(ModArmorMaterial.silver, EquipmentSlotType.FEET, new Properties().tab(ModdedItemGroups.tools));
     }
 }

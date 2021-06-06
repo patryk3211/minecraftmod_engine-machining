@@ -18,16 +18,16 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ModdedItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, EngineMachiningMod.MOD_ID);
 
-    public static final RegistryObject<Item> ore_copper = ITEMS.register("ore_copper", () -> new BlockItem(ModdedBlocks.ore_copper.get(), new Item.Properties().group(ModdedItemGroups.metals)));
-    public static final RegistryObject<Item> ore_tin = ITEMS.register("ore_tin", () -> new BlockItem(ModdedBlocks.ore_tin.get(), new Item.Properties().group(ModdedItemGroups.metals)));
-    public static final RegistryObject<Item> ore_aluminium = ITEMS.register("ore_aluminium", () -> new BlockItem(ModdedBlocks.ore_aluminium.get(), new Item.Properties().group(ModdedItemGroups.metals)));
-    public static final RegistryObject<Item> ore_silver = ITEMS.register("ore_silver", () -> new BlockItem(ModdedBlocks.ore_silver.get(), new Item.Properties().group(ModdedItemGroups.metals)));
-    public static final RegistryObject<Item> ore_nickel = ITEMS.register("ore_nickel", () -> new BlockItem(ModdedBlocks.ore_nickel.get(), new Item.Properties().group(ModdedItemGroups.metals)));
-    public static final RegistryObject<Item> ore_lead = ITEMS.register("ore_lead", () -> new BlockItem(ModdedBlocks.ore_lead.get(), new Item.Properties().group(ModdedItemGroups.metals)));
+    public static final RegistryObject<Item> ore_copper = ITEMS.register("ore_copper", () -> new BlockItem(ModdedBlocks.ore_copper.get(), new Item.Properties().tab(ModdedItemGroups.metals)));
+    public static final RegistryObject<Item> ore_tin = ITEMS.register("ore_tin", () -> new BlockItem(ModdedBlocks.ore_tin.get(), new Item.Properties().tab(ModdedItemGroups.metals)));
+    public static final RegistryObject<Item> ore_aluminium = ITEMS.register("ore_aluminium", () -> new BlockItem(ModdedBlocks.ore_aluminium.get(), new Item.Properties().tab(ModdedItemGroups.metals)));
+    public static final RegistryObject<Item> ore_silver = ITEMS.register("ore_silver", () -> new BlockItem(ModdedBlocks.ore_silver.get(), new Item.Properties().tab(ModdedItemGroups.metals)));
+    public static final RegistryObject<Item> ore_nickel = ITEMS.register("ore_nickel", () -> new BlockItem(ModdedBlocks.ore_nickel.get(), new Item.Properties().tab(ModdedItemGroups.metals)));
+    public static final RegistryObject<Item> ore_lead = ITEMS.register("ore_lead", () -> new BlockItem(ModdedBlocks.ore_lead.get(), new Item.Properties().tab(ModdedItemGroups.metals)));
 
-    public static final RegistryObject<Item> crusher = ITEMS.register("crusher", () -> new BlockItem(ModdedBlocks.crusher.get(), new Item.Properties().group(ItemGroup.MISC)));
+    public static final RegistryObject<Item> crusher = ITEMS.register("crusher", () -> new BlockItem(ModdedBlocks.crusher.get(), new Item.Properties().tab(ItemGroup.TAB_MISC)));
 
-    public static final RegistryObject<Item> energy_wire_copper = ITEMS.register("energy_wire_copper", () -> new BlockItem(ModdedBlocks.energy_wire_copper.get(), new Item.Properties().group(ItemGroup.MISC)));
+    public static final RegistryObject<Item> energy_wire_copper = ITEMS.register("energy_wire_copper", () -> new BlockItem(ModdedBlocks.energy_wire_copper.get(), new Item.Properties().tab(ItemGroup.TAB_MISC)));
 
     public static final RegistryObject<Item> ingot_copper = ITEMS.register("ingot_copper", IngotCopper::new);
     public static final RegistryObject<Item> ingot_tin = ITEMS.register("ingot_tin", IngotTin::new);

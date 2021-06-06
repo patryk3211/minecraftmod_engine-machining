@@ -25,20 +25,19 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class Crusher extends Block {
 
     public Crusher() {
-        super(Properties.create(Material.IRON)
-                .hardnessAndResistance(5.0f, 3.0f)
+        super(Properties.of(Material.METAL)
+                .strength(5.0f, 3.0f)
                 .harvestTool(ToolType.PICKAXE)
-                .harvestLevel(1)
-                .setRequiresTool());
+                .harvestLevel(1));
     }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, context.getPlacementHorizontalFacing().getOpposite());
+        return this.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(BlockStateProperties.HORIZONTAL_FACING);
     }
 
@@ -53,9 +52,9 @@ public class Crusher extends Block {
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if(!worldIn.isRemote) {
-            TileEntity te = worldIn.getTileEntity(pos);
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if(!worldIn.isClientSide) {
+            TileEntity te = worldIn.getBlockEntity(pos);
             if(te instanceof CrusherTile) {
                 NetworkHooks.openGui((ServerPlayerEntity)player, (CrusherTile)te, pos);
                 return ActionResultType.SUCCESS;
@@ -67,12 +66,12 @@ public class Crusher extends Block {
     }
 
     @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if(state.getBlock() != newState.getBlock()) {
-            TileEntity te = worldIn.getTileEntity(pos);
+            TileEntity te = worldIn.getBlockEntity(pos);
             if(te instanceof CrusherTile) {
-                InventoryHelper.dropInventoryItems(worldIn, pos, ((CrusherTile) te).blockInventory);
-                worldIn.removeTileEntity(te.getPos());
+                InventoryHelper.dropContents(worldIn, pos, ((CrusherTile) te).blockInventory);
+                worldIn.removeBlockEntity(te.getBlockPos());
             }
         }
     }

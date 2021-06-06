@@ -33,23 +33,27 @@ public abstract class EnergyWire extends Block {
     int maxFEPerTick;
 
     public EnergyWire(int maxFEPerTick) {
-        super(Properties.create(Material.IRON)
+        super(Properties.of(Material.METAL)
                 .harvestLevel(1)
-                .harvestTool(ToolType.PICKAXE)
-                .setRequiresTool()
-                );
-        setDefaultState(getDefaultState()
+                .harvestTool(ToolType.PICKAXE));
+        defaultBlockState().setValue(BlockStateProperties.NORTH, false)
+                .setValue(BlockStateProperties.SOUTH, false)
+                .setValue(BlockStateProperties.EAST, false)
+                .setValue(BlockStateProperties.WEST, false)
+                .setValue(BlockStateProperties.UP, false)
+                .setValue(BlockStateProperties.DOWN, false);
+        /*setDefaultState(getDefaultState()
                 .with(BlockStateProperties.NORTH, false)
                 .with(BlockStateProperties.SOUTH, false)
                 .with(BlockStateProperties.EAST, false)
                 .with(BlockStateProperties.WEST, false)
                 .with(BlockStateProperties.UP, false)
-                .with(BlockStateProperties.DOWN, false));
+                .with(BlockStateProperties.DOWN, false));*/
         this.maxFEPerTick = maxFEPerTick;
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(BlockStateProperties.NORTH);
         builder.add(BlockStateProperties.SOUTH);
         builder.add(BlockStateProperties.EAST);
@@ -58,44 +62,54 @@ public abstract class EnergyWire extends Block {
         builder.add(BlockStateProperties.DOWN);
     }
 
+    /*@Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(BlockStateProperties.NORTH);
+        builder.add(BlockStateProperties.SOUTH);
+        builder.add(BlockStateProperties.EAST);
+        builder.add(BlockStateProperties.WEST);
+        builder.add(BlockStateProperties.UP);
+        builder.add(BlockStateProperties.DOWN);
+    }*/
+
     @Override
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         //Change block state to maybe connect to another wire
         BlockPos deltaPos = fromPos.subtract(pos);
-        Direction neighborDir = Direction.getFacingFromVector(deltaPos.getX(), deltaPos.getY(), deltaPos.getZ());
-        TileEntity neighbor = worldIn.getTileEntity(fromPos);
+        Direction neighborDir = Direction.getNearest(deltaPos.getX(), deltaPos.getY(), deltaPos.getZ());
+        TileEntity neighbor = worldIn.getBlockEntity(fromPos);
         boolean blockConnectable = neighbor instanceof EnergyWireTile ||
                 (neighbor != null && neighbor.getCapability(CapabilityEnergy.ENERGY, neighborDir).isPresent());
-        TileEntity te = worldIn.getTileEntity(pos);
+        TileEntity te = worldIn.getBlockEntity(pos);
         if(blockConnectable && te instanceof EnergyWireTile && neighbor instanceof EnergyWireTile) {
             blockConnectable = ((EnergyWireTile) te).isSideConnectable(neighborDir) && ((EnergyWireTile) neighbor).isSideConnectable(neighborDir.getOpposite());
         }
-        worldIn.setBlockState(pos, state.with(DirectionTools.DirectionToProperty(neighborDir), blockConnectable));
+        worldIn.setBlock(pos, state.setValue(DirectionTools.DirectionToProperty(neighborDir), blockConnectable), 1);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         //Check if any neighbors are wires, if so connect to them
-        BlockState state = getDefaultState();
-        TileEntity te = context.getWorld().getTileEntity(context.getPos());
+        BlockState state = defaultBlockState();
+        TileEntity te = context.getLevel().getBlockEntity(context.getClickedPos());
         EnergyWireTile ewt = null;
         if(te instanceof EnergyWireTile) ewt = (EnergyWireTile) te;
         for(Direction dir : Direction.values()) {
-            BlockPos neighborPos = context.getPos().add(dir.getDirectionVec());
-            TileEntity neighbor = context.getWorld().getTileEntity(neighborPos);
+            BlockPos neighborPos = context.getClickedPos().offset(dir.getNormal());
+            TileEntity neighbor = context.getLevel().getBlockEntity(neighborPos);
             boolean blockConnectable = neighbor instanceof EnergyWireTile ||
                     (neighbor != null && neighbor.getCapability(CapabilityEnergy.ENERGY, dir).isPresent());
             if(neighbor instanceof EnergyWireTile) {
                 blockConnectable = ((EnergyWireTile) neighbor).isSideConnectable(dir.getOpposite());
             }
-            state = state.with(DirectionTools.DirectionToProperty(dir), blockConnectable);
+            state = state.setValue(DirectionTools.DirectionToProperty(dir), blockConnectable);
         }
         return state;
     }
 
     @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) { worldIn.removeTileEntity(pos); }
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) { worldIn.removeBlockEntity(pos); }
 
     @Override
     public boolean hasTileEntity(BlockState state) { return true; }

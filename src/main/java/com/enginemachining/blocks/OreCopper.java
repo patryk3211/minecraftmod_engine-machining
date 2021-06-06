@@ -6,10 +6,9 @@ import net.minecraftforge.common.ToolType;
 
 public class OreCopper extends Block {
     public OreCopper() {
-        super(Properties.create(Material.ROCK)
-                .hardnessAndResistance( 3.0f, 3.0f)
+        super(Properties.of(Material.STONE)
+                .strength( 3.0f, 3.0f)
                 .harvestLevel(1)
-                .harvestTool(ToolType.PICKAXE)
-                .setRequiresTool());
+                .harvestTool(ToolType.PICKAXE));
     }
 }

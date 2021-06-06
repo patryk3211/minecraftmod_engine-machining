@@ -6,6 +6,6 @@ import net.minecraft.item.AxeItem;
 
 public class AxeSilver extends AxeItem {
     public AxeSilver() {
-        super(ModItemTier.silver, 5, -3.2f, new Properties().group(ModdedItemGroups.tools));
+        super(ModItemTier.silver, 5, -3.2f, new Properties().tab(ModdedItemGroups.tools));
     }
 }

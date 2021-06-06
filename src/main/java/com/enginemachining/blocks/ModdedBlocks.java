@@ -23,20 +23,4 @@ public class ModdedBlocks {
     public static final RegistryObject<Block> energy_wire_copper = BLOCKS.register("energy_wire_copper", EnergyWireCopper::new);
 
     public static final RegistryObject<Block> debug_energy_source = BLOCKS.register("debug_energy_source", DebugEnergySource::new);
-
-    /*@ObjectHolder("enginemachining:ore_copper")
-    public static OreCopper ore_copper;*/
-    /*@ObjectHolder("enginemachining:ore_tin")
-    public static OreTin ore_tin;
-    @ObjectHolder("enginemachining:ore_aluminium")
-    public static OreAluminium ore_aluminium;
-    @ObjectHolder("enginemachining:ore_silver")
-    public static OreSilver ore_silver;
-    @ObjectHolder("enginemachining:ore_lead")
-    public static OreLead ore_lead;
-    @ObjectHolder("enginemachining:ore_nickel")
-    public static OreNickel ore_nickel;*/
-
-    /*@ObjectHolder("enginemachining:crusher")
-    public static Crusher crusher;*/
 }

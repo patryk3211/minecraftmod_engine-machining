@@ -6,6 +6,6 @@ import net.minecraft.item.SwordItem;
 
 public class SwordCopper extends SwordItem {
     public SwordCopper() {
-        super(ModItemTier.copper, 3, -2.4f, new Properties().group(ModdedItemGroups.tools));
+        super(ModItemTier.copper, 3, -2.4f, new Properties().tab(ModdedItemGroups.tools));
     }
 }

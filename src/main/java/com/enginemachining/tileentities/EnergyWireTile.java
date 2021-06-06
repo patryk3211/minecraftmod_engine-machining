@@ -17,23 +17,26 @@ public class EnergyWireTile extends TileEntity {
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
+    public void deserializeNBT(BlockState state, CompoundNBT nbt) {
         disconnectMask = nbt.getByte("disconnectSides");
-        super.read(state, nbt);
+        super.deserializeNBT(state, nbt);
     }
 
+
+
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundNBT serializeNBT() {
+        CompoundNBT compound = super.serializeNBT();
         compound.putByte("disconnectSides", disconnectMask);
-        return super.write(compound);
+        return compound;
     }
 
     public boolean isSideConnectable(Direction side) {
-        return ((disconnectMask >> side.getIndex()) & 1) == 0;
+        return ((disconnectMask >> side.get3DDataValue()) & 1) == 0;
     }
 
     public void setSideConnectable(Direction side, boolean canConnect) {
-        disconnectMask &= ~(1 << side.getIndex());
-        disconnectMask |= ((canConnect ? 0 : 1) << side.getIndex());
+        disconnectMask &= ~(1 << side.get3DDataValue());
+        disconnectMask |= ((canConnect ? 0 : 1) << side.get3DDataValue());
     }
 }

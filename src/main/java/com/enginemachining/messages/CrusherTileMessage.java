@@ -30,13 +30,13 @@ public class CrusherTileMessage {
 
     public static void handle(CrusherTileMessage msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            if(ctx.get().getSender().world.isAreaLoaded(msg.pos, 1)) {
-                TileEntity te = ctx.get().getSender().world.getTileEntity(msg.pos);
+            if(ctx.get().getSender().level.isAreaLoaded(msg.pos, 1)) {
+                TileEntity te = ctx.get().getSender().level.getBlockEntity(msg.pos);
                 if(te instanceof CrusherTile) {
                     CrusherTile ct = (CrusherTile)te;
                     ct.trackedData.set(2, msg.enabled ? 1 : 0);
-                    ct.getWorld().notifyBlockUpdate(ct.getPos(), ct.getBlockState(), ct.getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
-                    ct.markDirty();
+                    ct.getLevel().sendBlockUpdated(ct.getBlockPos(), ct.getBlockState(), ct.getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+                    ct.setChanged();
                 }
             }
         });

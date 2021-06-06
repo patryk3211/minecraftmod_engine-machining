@@ -20,12 +20,14 @@ import java.util.List;
 public class BatteryDisposable extends Item {
     public BatteryDisposable() {
         super(new Item.Properties()
-                .maxStackSize(1)
-                .group(ModdedItemGroups.misc));
+                .stacksTo(1)
+                .tab(ModdedItemGroups.misc));
     }
 
+
+
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         CompoundNBT nbt = stack.getTag();
         if(nbt == null || nbt.getCompound("energy").isEmpty()) {
             tooltip.add(new StringTextComponent("Invalid tag"));

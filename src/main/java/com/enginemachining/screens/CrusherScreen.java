@@ -35,13 +35,13 @@ public class CrusherScreen extends ContainerScreen<CrusherContainer> implements 
     public CrusherScreen(CrusherContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
 
-        guiLeft = 0;
-        guiTop = 0;
-        xSize = 175;
-        ySize = 165;
+        leftPos = 0;
+        topPos = 0;
+        imageWidth = 175;
+        imageHeight = 165;
 
-        xOrigin = (this.width - this.xSize) / 2;
-        yOrigin = (this.height - this.ySize) / 2;
+        xOrigin = (this.width - this.imageWidth) / 2;
+        yOrigin = (this.height - this.imageHeight) / 2;
     }
 
     @Override
@@ -54,10 +54,10 @@ public class CrusherScreen extends ContainerScreen<CrusherContainer> implements 
             int buttonWidth = 17;
             int buttonHeight = 9;
             if (mouseX > onButtonOriginX && mouseX < onButtonOriginX + buttonWidth && mouseY > onButtonOriginY && mouseY < onButtonOriginY + buttonHeight) {
-                if(container.trackedArray.get(2) == 0) EngineMachiningPacketHandler.INSTANCE.sendToServer(new CrusherTileMessage(container.tileEntity.getPos(), true));
+                if(menu.trackedArray.get(2) == 0) EngineMachiningPacketHandler.INSTANCE.sendToServer(new CrusherTileMessage(menu.tileEntity.getBlockPos(), true));
             }
             if (mouseX > offButtonOriginX && mouseX < offButtonOriginX + buttonWidth && mouseY > offButtonOriginY && mouseY < offButtonOriginY + buttonHeight) {
-                if(container.trackedArray.get(2) == 1) EngineMachiningPacketHandler.INSTANCE.sendToServer(new CrusherTileMessage(container.tileEntity.getPos(), false));
+                if(menu.trackedArray.get(2) == 1) EngineMachiningPacketHandler.INSTANCE.sendToServer(new CrusherTileMessage(menu.tileEntity.getBlockPos(), false));
             }
         }
         return super.mouseClicked(mouseX, mouseY, button);
@@ -75,30 +75,30 @@ public class CrusherScreen extends ContainerScreen<CrusherContainer> implements 
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        minecraft.getTextureManager().bindTexture(textureLocation);
-        xOrigin = (this.width - this.xSize) / 2;
-        yOrigin = (this.height - this.ySize) / 2;
-        this.blit(matrixStack, xOrigin, yOrigin, 0, 0, this.xSize, this.ySize);
+        minecraft.getTextureManager().bind(textureLocation);
+        xOrigin = (this.width - this.imageWidth) / 2;
+        yOrigin = (this.height - this.imageHeight) / 2;
+        this.blit(matrixStack, xOrigin, yOrigin, 0, 0, this.imageWidth, this.imageHeight);
 
-        float ratioEnergyBar = (float)container.trackedArray.get(0) / (float)container.trackedArray.get(1);
+        float ratioEnergyBar = (float)menu.trackedArray.get(0) / (float)menu.trackedArray.get(1);
         int barHeight = (int)(ratioEnergyBar * 69);
         this.blit(matrixStack, xOrigin+164, yOrigin+8+(69-barHeight), 176, 69 - barHeight, 5, barHeight);
 
-        if(container.trackedArray.get(2) == 1) {
+        if(menu.trackedArray.get(2) == 1) {
             this.blit(matrixStack, xOrigin+13, yOrigin+31, 181, 49, 19, 21);
         }
 
-        float ratioPowerBar = (float)container.trackedArray.get(3) / (float)CrusherTile.HEAT_MAX;
+        float ratioPowerBar = (float)menu.trackedArray.get(3) / (float)CrusherTile.HEAT_MAX;
         int powerBarHeight = (int)(ratioPowerBar * 11);
         this.blit(matrixStack, xOrigin+47, yOrigin+53+(11-powerBarHeight), 176, 79 + (11 - powerBarHeight), 11, powerBarHeight);
 
-        float ratioProgressArrow = (float)container.trackedArray.get(4) / (float)container.trackedArray.get(5);
+        float ratioProgressArrow = (float)menu.trackedArray.get(4) / (float)menu.trackedArray.get(5);
         int ratioBarWidth = (int)(ratioProgressArrow * 39);
         this.blit(matrixStack, xOrigin+68, yOrigin+37, 176, 70, ratioBarWidth, 9);
     }

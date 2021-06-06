@@ -19,10 +19,10 @@ public class PipeTracer {
     public static Collection<IEnergyReceiver> TraceForReceivers(IEnergySender sender) {
         List<BlockPos> traced = new ArrayList<>();
 
-        Collection<IEnergyReceiver> receivers = TraceForReceivers(sender.getTileEntity().getWorld(), sender.getTileEntity().getPos(), traced);
+        Collection<IEnergyReceiver> receivers = TraceForReceivers(sender.getTileEntity().getLevel(), sender.getTileEntity().getBlockPos(), traced);
 
         for(IEnergyReceiver rec : receivers) {
-            System.out.println(((TileEntity)rec).getPos());
+            System.out.println(((TileEntity)rec).getBlockPos());
         }
 
         return receivers;
@@ -34,12 +34,12 @@ public class PipeTracer {
         traced.add(currentPos);
 
         for(Direction dir : Direction.values()) {
-            BlockPos neighborPos = currentPos.add(dir.getDirectionVec());
-            TileEntity te = world.getTileEntity(currentPos);
+            BlockPos neighborPos = currentPos.offset(dir.getNormal());
+            TileEntity te = world.getBlockEntity(currentPos);
             if(te instanceof EnergyWireTile) {
                 if(!((EnergyWireTile) te).isSideConnectable(dir)) continue;
             }
-            TileEntity nte = world.getTileEntity(neighborPos);
+            TileEntity nte = world.getBlockEntity(neighborPos);
             if(nte instanceof EnergyWireTile) {
                 if(!((EnergyWireTile) nte).isSideConnectable(dir.getOpposite())) continue;
             }

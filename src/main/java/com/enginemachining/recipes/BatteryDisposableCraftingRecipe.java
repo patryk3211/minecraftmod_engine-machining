@@ -23,17 +23,17 @@ public class BatteryDisposableCraftingRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
+    public ItemStack assemble(CraftingInventory p_77572_1_) {
         return null;
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width >= 3 && height >= 3;
     }
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return null;//ModdedRecipeSerializers.disposableBatteryCraftingSerializer;
+        return null;
     }
 }

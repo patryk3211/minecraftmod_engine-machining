@@ -20,6 +20,8 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CrusherRecipe implements IRecipe<IInventory> {
     private ResourceLocation id;
@@ -44,23 +46,23 @@ public class CrusherRecipe implements IRecipe<IInventory> {
 
     @Override
     public boolean matches(IInventory inv, World worldIn) {
-        return ingredients.get(0).test(inv.getStackInSlot(0));
+        return ingredients.get(0).test(inv.getItem(0));
     }
 
     public int getTime() { return time; }
 
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack assemble(IInventory inv) {
         return result.copy();
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         return result;
     }
 
@@ -87,6 +89,22 @@ public class CrusherRecipe implements IRecipe<IInventory> {
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CrusherRecipe> {
 
         @Override
+        public CrusherRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+            JsonObject inputItemStack = json.getAsJsonObject("input");
+            if(inputItemStack == null) throw new JsonParseException("Crushing crafting must contain an input item");
+            JsonObject outputItemStack = json.getAsJsonObject("result");
+            if(outputItemStack == null) throw new JsonParseException("Crushing crafting must contain a result item");
+            Item inputItem = JSONUtils.getAsItem(inputItemStack, "item");
+            Item outputItem = JSONUtils.getAsItem(outputItemStack, "item");
+            int inputAmount = JSONUtils.getAsInt(inputItemStack, "count", 1);
+            int outputAmount = JSONUtils.getAsInt(outputItemStack, "count", 1);
+            int time = JSONUtils.getAsInt(json, "time", 100);
+            String group = JSONUtils.getAsString(json, "group", "");
+            ItemStack inStack = new ItemStack(inputItem, inputAmount);
+            return new CrusherRecipe(recipeId, group, Ingredient.of(inStack), new ItemStack(outputItem, outputAmount), time).setInputStack(inStack);
+        }
+
+        /*@Override
         public CrusherRecipe read(ResourceLocation recipeId, JsonObject json) {
             JsonObject inputItemStack = json.getAsJsonObject("input");
             if(inputItemStack == null) throw new JsonParseException("Crushing crafting must contain an input item");
@@ -100,26 +118,32 @@ public class CrusherRecipe implements IRecipe<IInventory> {
             String group = JSONUtils.getString(json, "group", "");
             ItemStack inStack = new ItemStack(inputItem, inputAmount);
             return new CrusherRecipe(recipeId, group, Ingredient.fromStacks(inStack), new ItemStack(outputItem, outputAmount), time).setInputStack(inStack);
-        }
+        }*/
 
         @Nullable
         @Override
-        public CrusherRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-            String group = buffer.readString();
-            ItemStack input = buffer.readItemStack();
-            ItemStack output = buffer.readItemStack();
+        public CrusherRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+            String group = buffer.readUtf();
+            ItemStack input = buffer.readItem();
+            ItemStack output = buffer.readItem();
             int time = buffer.readInt();
-            return new CrusherRecipe(recipeId, group, Ingredient.fromStacks(input), output, time);
-            //System.out.println("hellohere2");
-            //return new CrusherRecipe(recipeId, "", Ingredient.fromItems(ModdedItems.ingot_lead), new ItemStack(ModdedItems.dust_lead), 100);
+            return new CrusherRecipe(recipeId, group, Ingredient.of(input), output, time);
         }
 
         @Override
+        public void toNetwork(PacketBuffer buffer, CrusherRecipe recipe) {
+            buffer.writeUtf(recipe.group);
+            buffer.writeItem(recipe.getInputStack());
+            buffer.writeItem(recipe.getResultItem());
+            buffer.writeInt(recipe.time);
+        }
+
+        /*@Override
         public void write(PacketBuffer buffer, CrusherRecipe recipe) {
             buffer.writeString(recipe.group);
             buffer.writeItemStack(recipe.getInputStack());
             buffer.writeItemStack(recipe.getRecipeOutput());
             buffer.writeInt(recipe.time);
-        }
+        }*/
     }
 }

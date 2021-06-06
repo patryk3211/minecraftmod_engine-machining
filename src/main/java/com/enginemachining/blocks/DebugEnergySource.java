@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 
 public class DebugEnergySource extends Block {
     public DebugEnergySource() {
-        super(Properties.create(Material.IRON).hardnessAndResistance(-1f));
+        super(Properties.of(Material.METAL).strength(-1f));
     }
 
     @Override
