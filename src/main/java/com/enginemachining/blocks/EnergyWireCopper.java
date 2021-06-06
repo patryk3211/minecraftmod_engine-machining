@@ -19,6 +19,7 @@ public class EnergyWireCopper extends EnergyWire {
     public static final VoxelShape north = Block.makeCuboidShape(7, 7, 7, 9, 9, 0);
 
     public EnergyWireCopper() {
+        super(1000);
 
     }
 

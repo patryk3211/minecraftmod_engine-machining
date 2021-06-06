@@ -18,4 +18,6 @@ public class ModdedTileEntities {
 
     public static final RegistryObject<TileEntityType<CrusherTile>> crusher = TILE_ENTITIES.register("crusher", () -> TileEntityType.Builder.create(CrusherTile::new, ModdedBlocks.crusher.get()).build(null));
     public static final RegistryObject<TileEntityType<EnergyWireTile>> energy_wire = TILE_ENTITIES.register("energy_wire", () -> TileEntityType.Builder.create(EnergyWireTile::new, ModdedBlocks.energy_wire_copper.get()).build(null));
+
+    public static final RegistryObject<TileEntityType<DebugEnergySourceTile>> debug_energy_source = TILE_ENTITIES.register("debug_energy_source", () -> TileEntityType.Builder.create(DebugEnergySourceTile::new, ModdedBlocks.debug_energy_source.get()).build(null));
 }

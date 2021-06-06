@@ -30,7 +30,9 @@ import org.lwjgl.system.CallbackI;
 import javax.annotation.Nullable;
 
 public abstract class EnergyWire extends Block {
-    public EnergyWire() {
+    int maxFEPerTick;
+
+    public EnergyWire(int maxFEPerTick) {
         super(Properties.create(Material.IRON)
                 .harvestLevel(1)
                 .harvestTool(ToolType.PICKAXE)
@@ -43,6 +45,7 @@ public abstract class EnergyWire extends Block {
                 .with(BlockStateProperties.WEST, false)
                 .with(BlockStateProperties.UP, false)
                 .with(BlockStateProperties.DOWN, false));
+        this.maxFEPerTick = maxFEPerTick;
     }
 
     @Override
@@ -92,16 +95,17 @@ public abstract class EnergyWire extends Block {
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) { worldIn.removeTileEntity(pos); }
+
+    @Override
+    public boolean hasTileEntity(BlockState state) { return true; }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new EnergyWireTile();
-    }
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new EnergyWireTile(); }
 
     @Override
     public abstract VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context);
+
+    public int getMaxFEPerTick() { return maxFEPerTick; }
 }

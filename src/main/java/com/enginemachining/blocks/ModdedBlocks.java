@@ -22,6 +22,8 @@ public class ModdedBlocks {
 
     public static final RegistryObject<Block> energy_wire_copper = BLOCKS.register("energy_wire_copper", EnergyWireCopper::new);
 
+    public static final RegistryObject<Block> debug_energy_source = BLOCKS.register("debug_energy_source", DebugEnergySource::new);
+
     /*@ObjectHolder("enginemachining:ore_copper")
     public static OreCopper ore_copper;*/
     /*@ObjectHolder("enginemachining:ore_tin")
