@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "enginemachining:item/dust/dust_tin"
+    "layer0": "enginemachining:item/dust/dust_lapis"
   }
 }
