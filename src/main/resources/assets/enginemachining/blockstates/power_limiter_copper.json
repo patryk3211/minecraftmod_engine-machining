@@ -3,6 +3,8 @@
     "facing=north": { "model": "enginemachining:block/power_limiter_copper" },
     "facing=south": { "model": "enginemachining:block/power_limiter_copper", "y": 180 },
     "facing=east": { "model": "enginemachining:block/power_limiter_copper", "y": 90 },
-    "facing=west": { "model": "enginemachining:block/power_limiter_copper", "y": -90 }
+    "facing=west": { "model": "enginemachining:block/power_limiter_copper", "y": -90 },
+    "facing=up": { "model": "enginemachining:block/power_limiter_copper", "x": 90 },
+    "facing=down": { "model": "enginemachining:block/power_limiter_copper", "x": -90 }
   }
 }

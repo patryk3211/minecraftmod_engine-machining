@@ -1,11 +1,13 @@
 package com.enginemachining.blocks;
 
+import com.enginemachining.utils.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -38,13 +40,11 @@ public abstract class PowerLimiter extends Block {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        BlockState state = defaultBlockState();
-        state.setValue(BlockStateProperties.FACING, context.getClickedFace().getOpposite());
-        return state;
+        return defaultBlockState().setValue(BlockStateProperties.FACING, context.getClickedFace().getOpposite());
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
-        return SHAPE;
+        return VoxelHelper.rotateShape(Direction.NORTH, state.getValue(BlockStateProperties.FACING), SHAPE);
     }
 }
