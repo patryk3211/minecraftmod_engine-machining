@@ -308,7 +308,6 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
         readyToRun = nbt.getBoolean("ready");
         power = Math.min(nbt.getInt("power"), HEAT_MAX);
         burnTime = nbt.getInt("burnTime");
-        super.deserializeNBT(state, nbt);
         super.load(state, nbt);
     }
 
