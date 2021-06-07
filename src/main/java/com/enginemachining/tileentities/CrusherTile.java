@@ -297,7 +297,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     }
 
     @Override
-    public void deserializeNBT(BlockState state, CompoundNBT nbt) {
+    public void load(BlockState state, CompoundNBT nbt) {
         ItemStackHelper.loadAllItems(nbt, slots);
         energyHandler.ifPresent((handler) -> {
             if(handler instanceof EnergyHandler) {
@@ -309,11 +309,11 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
         power = Math.min(nbt.getInt("power"), HEAT_MAX);
         burnTime = nbt.getInt("burnTime");
         super.deserializeNBT(state, nbt);
+        super.load(state, nbt);
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT nbt = super.serializeNBT();
+    public CompoundNBT save(CompoundNBT nbt) {
         ItemStackHelper.saveAllItems(nbt, slots, true);
         energyHandler.ifPresent((handler) -> {
             if(handler instanceof EnergyHandler) {
@@ -325,7 +325,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
         nbt.putBoolean("ready", readyToRun);
         nbt.putInt("power", power);
         nbt.putInt("burnTime", burnTime);
-        return nbt;
+        return super.save(nbt);
     }
 
     @NotNull

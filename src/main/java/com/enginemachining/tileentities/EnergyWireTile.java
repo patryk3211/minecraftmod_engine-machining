@@ -3,6 +3,7 @@ package com.enginemachining.tileentities;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
@@ -17,16 +18,15 @@ public class EnergyWireTile extends TileEntity {
     }
 
     @Override
-    public void deserializeNBT(BlockState state, CompoundNBT nbt) {
+    public void load(BlockState state, CompoundNBT nbt) {
         disconnectMask = nbt.getByte("disconnectSides");
-        super.deserializeNBT(state, nbt);
+        super.load(state, nbt);
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT compound = super.serializeNBT();
-        compound.putByte("disconnectSides", disconnectMask);
-        return compound;
+    public CompoundNBT save(CompoundNBT nbt) {
+        nbt.putByte("disconnectSides", disconnectMask);
+        return super.save(nbt);
     }
 
     public boolean isSideConnectable(Direction side) {
