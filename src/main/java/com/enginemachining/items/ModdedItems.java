@@ -48,6 +48,7 @@ public class ModdedItems {
     public static final RegistryObject<Item> dust_gold = ITEMS.register("dust_gold", DustGold::new);
     public static final RegistryObject<Item> dust_coal = ITEMS.register("dust_coal", DustCoal::new);
     public static final RegistryObject<Item> dust_iron = ITEMS.register("dust_iron", DustIron::new);
+    public static final RegistryObject<Item> dust_diamond = ITEMS.register("dust_diamond", DustDiamond::new);
 
     public static final RegistryObject<Item> pickaxe_copper = ITEMS.register("pickaxe_copper", PickaxeCopper::new);
     public static final RegistryObject<Item> axe_copper = ITEMS.register("axe_copper", AxeCopper::new);

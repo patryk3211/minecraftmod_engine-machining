@@ -6,8 +6,8 @@
   "block.enginemachining.ore_silver": "Ruda Srebra",
   "block.enginemachining.ore_lead": "Ruda Ołowiu",
 
-  "itemGroup.enginemachining.metals": "Machines Metals",
-  "itemGroup.enginemachining.tools": "Machines Tools",
+  "itemGroup.enginemachining.metals": "Machines Metale",
+  "itemGroup.enginemachining.tools": "Machines Narzędzia",
 
   "item.enginemachining.ingot_copper": "Sztabka Miedzi",
   "item.enginemachining.ingot_lead": "Sztabka Ołowiu",
@@ -22,6 +22,7 @@
   "item.enginemachining.dust_tin": "Sproszkowana Cyna",
   "item.enginemachining.dust_lead": "Sproszkowany Ołów",
   "item.enginemachining.dust_nickel": "Sproszkowany Nikiel",
+  "item.enginemachining.dust_diamond": "Sproszkowany Diament",
 
   "item.enginemachining.pickaxe_copper": "Miedziany Kilof",
   "item.enginemachining.sword_copper": "Miedziany Miecz",
