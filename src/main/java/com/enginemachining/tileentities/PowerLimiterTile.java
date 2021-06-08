@@ -2,6 +2,7 @@ package com.enginemachining.tileentities;
 
 import com.enginemachining.handlers.EnergyHandler;
 import com.enginemachining.handlers.EnergyLimiterHandler;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
@@ -25,7 +26,8 @@ public class PowerLimiterTile extends TileEntity {
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if(cap == CapabilityEnergy.ENERGY) {
-            if(side != Direction.NORTH && side != Direction.SOUTH) return LazyOptional.empty();
+            Direction facing = getBlockState().getValue(BlockStateProperties.FACING);
+            if(side != facing.getOpposite() && side != facing) return LazyOptional.empty();
             return energy_handler.cast();
         }
         return super.getCapability(cap, side);

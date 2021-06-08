@@ -21,6 +21,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -334,7 +335,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
             return itemHandlers[0].cast();
         }
         if(cap == CapabilityEnergy.ENERGY) {
-            if(side != Direction.NORTH)
+            if(side != getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite())
                 return energyHandler.cast();
             else return LazyOptional.empty();
         }
