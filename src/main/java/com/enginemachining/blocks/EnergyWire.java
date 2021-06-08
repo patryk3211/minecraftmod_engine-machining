@@ -25,6 +25,7 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
@@ -66,40 +67,57 @@ public abstract class EnergyWire extends Block {
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         //Change block state to maybe connect to another wire
         BlockPos deltaPos = fromPos.subtract(pos);
+        //System.out.println(pos.toString() + ' ' + deltaPos);
         Direction neighborDir = Direction.getNearest(deltaPos.getX(), deltaPos.getY(), deltaPos.getZ());
         TileEntity neighbor = worldIn.getBlockEntity(fromPos);
+        //if(neighbor != null) System.out.println(((EnergyWireTile)neighbor).disconnectMask);
         boolean blockConnectable = neighbor instanceof EnergyWireTile ||
                 (neighbor != null && neighbor.getCapability(CapabilityEnergy.ENERGY, neighborDir).isPresent());
         TileEntity te = worldIn.getBlockEntity(pos);
         if(blockConnectable && te instanceof EnergyWireTile && neighbor instanceof EnergyWireTile) {
             blockConnectable = ((EnergyWireTile) te).isSideConnectable(neighborDir) && ((EnergyWireTile) neighbor).isSideConnectable(neighborDir.getOpposite());
         }
-        worldIn.setBlockAndUpdate(pos, state.setValue(DirectionTools.DirectionToProperty(neighborDir), blockConnectable));
+        // When setting the block a new tile entity is created
+        worldIn.setBlock(pos, state.setValue(DirectionTools.DirectionToProperty(neighborDir), blockConnectable), Constants.BlockFlags.DEFAULT);
     }
 
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        //Check if any neighbors are wires, if so connect to them
+    public BlockState createState(BlockPos pos, World level) {
         BlockState state = defaultBlockState();
-        TileEntity te = context.getLevel().getBlockEntity(context.getClickedPos());
+        TileEntity te = level.getBlockEntity(pos);
         EnergyWireTile ewt = null;
         if(te instanceof EnergyWireTile) ewt = (EnergyWireTile) te;
         for(Direction dir : Direction.values()) {
-            BlockPos neighborPos = context.getClickedPos().offset(dir.getNormal());
-            TileEntity neighbor = context.getLevel().getBlockEntity(neighborPos);
-            boolean blockConnectable = neighbor instanceof EnergyWireTile ||
-                    (neighbor != null && neighbor.getCapability(CapabilityEnergy.ENERGY, dir).isPresent());
-            if(neighbor instanceof EnergyWireTile) {
-                blockConnectable = ((EnergyWireTile) neighbor).isSideConnectable(dir.getOpposite());
+            BlockPos neighborPos = pos.offset(dir.getNormal());
+            TileEntity neighbor = level.getBlockEntity(neighborPos);
+            boolean blockConnectable = false;
+            if(ewt == null || ewt.isSideConnectable(dir)) {
+                blockConnectable = neighbor instanceof EnergyWireTile ||
+                        (neighbor != null && neighbor.getCapability(CapabilityEnergy.ENERGY, dir).isPresent());
+                if (neighbor instanceof EnergyWireTile) {
+                    blockConnectable = ((EnergyWireTile) neighbor).isSideConnectable(dir.getOpposite());
+                }
             }
             state = state.setValue(DirectionTools.DirectionToProperty(dir), blockConnectable);
         }
         return state;
     }
 
+    @Nullable
     @Override
-    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) { worldIn.removeBlockEntity(pos); }
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return defaultBlockState();
+    }
+
+    @Override
+    public void setPlacedBy(World level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        level.setBlock(pos, createState(pos, level), Constants.BlockFlags.BLOCK_UPDATE);
+    }
+
+    @Override
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        if(worldIn.isClientSide) return;
+        if(!(newState.getBlock() instanceof EnergyWire)) worldIn.removeBlockEntity(pos);
+    }
 
     @Override
     public boolean hasTileEntity(BlockState state) { return true; }
