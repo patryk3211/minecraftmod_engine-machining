@@ -47,7 +47,7 @@ public class PipeTracer {
             if(nte instanceof EnergyWireTile && !traced.contains(neighborPos)) receivers.addAll(TraceForReceivers(world, neighborPos, traced));
 
             if(nte instanceof IEnergyReceiver) {
-                if(nte.getCapability(CapabilityEnergy.ENERGY, dir.getOpposite()).isPresent()) {
+                if(nte.getCapability(CapabilityEnergy.ENERGY, dir).isPresent()) {
                     receivers.add((IEnergyReceiver)nte);
                 }
             }
