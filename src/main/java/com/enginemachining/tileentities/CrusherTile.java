@@ -6,6 +6,7 @@ import com.enginemachining.handlers.IEnergyReceiver;
 import com.enginemachining.items.ModdedItems;
 import com.enginemachining.recipes.CrusherRecipe;
 import com.enginemachining.recipes.ModdedRecipeTypes;
+import com.enginemachining.utils.PipeNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
@@ -55,9 +56,37 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     private NonNullList<ItemStack> slots = NonNullList.withSize(3, ItemStack.EMPTY);
     public ISidedInventory blockInventory;
     private LazyOptional<? extends IItemHandler>[] itemHandlers;
-    private LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> {
-        EnergyHandler erh = new EnergyHandler(10000);
-        return erh;
+    private EnergyHandler handler = new EnergyHandler(10000);
+    private LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> new IEnergyStorage() {
+        @Override
+        public int receiveEnergy(int maxReceive, boolean simulate) {
+            return handler.receiveEnergy(maxReceive, simulate);
+        }
+
+        @Override
+        public int extractEnergy(int maxExtract, boolean simulate) {
+            return 0;
+        }
+
+        @Override
+        public int getEnergyStored() {
+            return handler.getEnergyStored();
+        }
+
+        @Override
+        public int getMaxEnergyStored() {
+            return handler.getMaxEnergyStored();
+        }
+
+        @Override
+        public boolean canExtract() {
+            return false;
+        }
+
+        @Override
+        public boolean canReceive() {
+            return handler.canReceive();
+        }
     });
 
     boolean enabled;
@@ -79,17 +108,9 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
             AtomicInteger ret;
             switch (index) {
                 case 0:
-                    ret = new AtomicInteger();
-                    energyHandler.ifPresent((handler) -> {
-                        ret.set(handler.getEnergyStored());
-                    });
-                    return ret.get();
+                    return handler.getEnergyStored();
                 case 1:
-                    ret = new AtomicInteger();
-                    energyHandler.ifPresent((handler) -> {
-                        ret.set(handler.getMaxEnergyStored());
-                    });
-                    return ret.get();
+                    return handler.getMaxEnergyStored();
                 case 2:
                     return enabled ? 1 : 0;
                 case 3:
@@ -154,8 +175,6 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                 return slots.get(index);
             }
 
-
-
             @Override
             public ItemStack removeItem(int index, int count) {
                 if(slots.get(index).isEmpty()) return ItemStack.EMPTY;
@@ -214,36 +233,34 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
             if(power > 0) {
                 power -= COOLDOWN_PER_TICK;
             }
-            energyHandler.ifPresent((handler) -> {
-                Item bat = slots.get(2).getItem();
-                if(bat == ModdedItems.battery_disposable.get()) {
-                    if(slots.get(2).getTag() == null || slots.get(2).getTag().getCompound("energy") == null) return;
-                    CompoundNBT energyTag = slots.get(2).getTag().getCompound("energy");
-                    int energyLeft = energyTag.getInt("charge");
-                    int maxTransmit = energyTag.getInt("maxDischargeSpeed");
+            Item bat = slots.get(2).getItem();
+            if(bat == ModdedItems.battery_disposable.get()) {
+                if(slots.get(2).getTag() == null || slots.get(2).getTag().getCompound("energy") == null) return;
+                CompoundNBT energyTag = slots.get(2).getTag().getCompound("energy");
+                int energyLeft = energyTag.getInt("charge");
+                int maxTransmit = energyTag.getInt("maxDischargeSpeed");
 
-                    int received = 0;
-                    if(energyLeft < maxTransmit) received = handler.receiveEnergy(energyLeft, false);
-                    else received = handler.receiveEnergy(maxTransmit, false);
+                int received = 0;
+                if(energyLeft < maxTransmit) received = handler.receiveEnergy(energyLeft, false);
+                else received = handler.receiveEnergy(maxTransmit, false);
 
-                    if(received > 0) {
-                        slots.get(2).getTag().getCompound("energy").putInt("charge", energyLeft - received);
-                        markdirty.set(true);
-                    }
+                if(received > 0) {
+                    slots.get(2).getTag().getCompound("energy").putInt("charge", energyLeft - received);
+                    markdirty.set(true);
                 }
-                if(enabled) {
-                    //The crusher is enabled so it should draw power to heat up.
-                    int powerToMax = HEAT_MAX - power;
-                    int wantedChange = Math.min(powerToMax, MAX_POWER_CHANGE);
-                    int energyUsage = handler.extractEnergy(wantedChange * ENERGY_PER_POWER, true);
-                    int availableChange = energyUsage / ENERGY_PER_POWER;
-                    handler.extractEnergy(availableChange * ENERGY_PER_POWER, false);
-                    power += availableChange;
-                    if(HEAT_MAX - power == 0) readyToRun = true;
-                    if(availableChange > 0) markdirty.set(true);
-                }
-                if(HEAT_MAX - power > HEAT_MAX * 0.10f) readyToRun = false;
-            });
+            }
+            if(enabled) {
+                //The crusher is enabled so it should draw power to heat up.
+                int powerToMax = HEAT_MAX - power;
+                int wantedChange = Math.min(powerToMax, MAX_POWER_CHANGE);
+                int energyUsage = handler.extractEnergy(wantedChange * ENERGY_PER_POWER, true);
+                int availableChange = energyUsage / ENERGY_PER_POWER;
+                handler.extractEnergy(availableChange * ENERGY_PER_POWER, false);
+                power += availableChange;
+                if(HEAT_MAX - power == 0) readyToRun = true;
+                if(availableChange > 0) markdirty.set(true);
+            }
+            if(HEAT_MAX - power > HEAT_MAX * 0.10f) readyToRun = false;
 
             if(readyToRun) {
                 CrusherRecipe rec = GetRecipe(slots.get(0));
@@ -300,11 +317,9 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     @Override
     public void load(BlockState state, CompoundNBT nbt) {
         ItemStackHelper.loadAllItems(nbt, slots);
-        energyHandler.ifPresent((handler) -> {
-            if(handler instanceof EnergyHandler) {
-                ((EnergyHandler) handler).deserializeNBT(nbt.getCompound("energy"));
-            }
-        });
+        //energyHandler.ifPresent((handler) -> {
+        handler.deserializeNBT(nbt.getCompound("energy"));
+        //});
         enabled = nbt.getBoolean("enabled");
         readyToRun = nbt.getBoolean("ready");
         power = Math.min(nbt.getInt("power"), HEAT_MAX);
@@ -315,12 +330,8 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     @Override
     public CompoundNBT save(CompoundNBT nbt) {
         ItemStackHelper.saveAllItems(nbt, slots, true);
-        energyHandler.ifPresent((handler) -> {
-            if(handler instanceof EnergyHandler) {
-                CompoundNBT compound = ((EnergyHandler) handler).serializeNBT();
-                nbt.put("energy", compound);
-            }
-        });
+        CompoundNBT compound = handler.serializeNBT();
+        nbt.put("energy", compound);
         nbt.putBoolean("enabled", enabled);
         nbt.putBoolean("ready", readyToRun);
         nbt.putInt("power", power);
@@ -335,7 +346,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
             return itemHandlers[0].cast();
         }
         if(cap == CapabilityEnergy.ENERGY) {
-            if(side != getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite())
+            if(side != getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING))
                 return energyHandler.cast();
             else return LazyOptional.empty();
         }
@@ -374,5 +385,17 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
         AtomicReference<IEnergyStorage> ret = new AtomicReference<>();
         energyHandler.ifPresent(ret::set);
         return ret.get();
+    }
+
+    private PipeNetwork network;
+
+    @Override
+    public PipeNetwork getNetwork() { return network; }
+    @Override
+    public void setNetwork(PipeNetwork network) { this.network = network; }
+
+    @Override
+    public boolean canConnect(Direction side, Capability<?> capability) {
+        return getCapability(capability, side).isPresent();
     }
 }

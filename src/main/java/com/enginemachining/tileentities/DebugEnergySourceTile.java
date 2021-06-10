@@ -2,6 +2,7 @@ package com.enginemachining.tileentities;
 
 import com.enginemachining.handlers.IEnergySender;
 import com.enginemachining.handlers.InfiniteEnergySource;
+import com.enginemachining.utils.PipeNetwork;
 import com.enginemachining.utils.PipeTracer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -44,5 +45,25 @@ public class DebugEnergySourceTile extends TileEntity implements ITickableTileEn
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if(cap == CapabilityEnergy.ENERGY) return energyHandler.cast();
         return super.getCapability(cap, side);
+    }
+
+    private PipeNetwork network;
+
+    @Override
+    public PipeNetwork getNetwork() {
+        return network;
+    }
+
+    @Override
+    public void setNetwork(PipeNetwork network) {
+        this.network = network;
+    }
+
+    @Override
+    public boolean canConnect(Direction side, Capability<?> capability) {
+        if(capability == CapabilityEnergy.ENERGY) {
+            return true;
+        }
+        return false;
     }
 }

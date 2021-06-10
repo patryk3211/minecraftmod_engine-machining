@@ -3,7 +3,7 @@ package com.enginemachining.blocks;
 import com.enginemachining.handlers.IEnergyReceiver;
 import com.enginemachining.handlers.IEnergySender;
 import com.enginemachining.tileentities.EnergyWireTile;
-import com.enginemachining.utils.DirectionTools;
+import com.enginemachining.utils.*;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -92,7 +92,7 @@ public abstract class EnergyWire extends Block {
             boolean blockConnectable = false;
             if(ewt == null || ewt.isSideConnectable(dir)) {
                 blockConnectable = neighbor instanceof EnergyWireTile ||
-                        (neighbor != null && neighbor.getCapability(CapabilityEnergy.ENERGY, dir).isPresent());
+                        (neighbor != null && neighbor.getCapability(CapabilityEnergy.ENERGY, dir.getOpposite()).isPresent());
                 if (neighbor instanceof EnergyWireTile) {
                     blockConnectable = ((EnergyWireTile) neighbor).isSideConnectable(dir.getOpposite());
                 }

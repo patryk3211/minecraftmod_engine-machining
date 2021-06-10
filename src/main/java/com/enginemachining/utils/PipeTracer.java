@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 public class PipeTracer {
+
     public static Collection<IEnergyReceiver> TraceForReceivers(IEnergySender sender) {
         List<BlockPos> traced = new ArrayList<>();
 
