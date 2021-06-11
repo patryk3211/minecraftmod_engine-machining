@@ -1,0 +1,10 @@
+{
+  "type": "enginemachining:crushing",
+  "input": {
+    "item": "minecraft:diamond"
+  },
+  "result": {
+    "item": "enginemachining:dust_diamond"
+  },
+  "time": 200
+}
