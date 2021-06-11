@@ -1,16 +1,15 @@
 package com.enginemachining.tileentities;
 
+import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.handlers.IEnergySender;
-import com.enginemachining.handlers.InfiniteEnergySource;
+import com.enginemachining.handlers.energy.InfiniteEnergySource;
 import com.enginemachining.utils.PipeNetwork;
-import com.enginemachining.utils.PipeTracer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.antlr.v4.runtime.misc.NotNull;
 
@@ -31,7 +30,7 @@ public class DebugEnergySourceTile extends TileEntity implements ITickableTileEn
     @Override
     public void tick() {
         if(!level.isClientSide) {
-            PipeTracer.TraceForReceivers(this);
+
         }
     }
 
@@ -43,7 +42,7 @@ public class DebugEnergySourceTile extends TileEntity implements ITickableTileEn
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == CapabilityEnergy.ENERGY) return energyHandler.cast();
+        if(cap == ModdedCapabilities.ENERGY) return energyHandler.cast();
         return super.getCapability(cap, side);
     }
 
@@ -61,9 +60,24 @@ public class DebugEnergySourceTile extends TileEntity implements ITickableTileEn
 
     @Override
     public boolean canConnect(Direction side, Capability<?> capability) {
-        if(capability == CapabilityEnergy.ENERGY) {
+        if(capability == ModdedCapabilities.ENERGY) {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Type getSideType(Direction side) {
+        return Type.SENDER;
+    }
+
+    @Override
+    public BlockPos getPosition() {
+        return worldPosition;
+    }
+
+    @Override
+    public float getResistance() {
+        return 0;
     }
 }

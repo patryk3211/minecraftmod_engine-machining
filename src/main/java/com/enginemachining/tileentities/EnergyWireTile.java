@@ -1,21 +1,19 @@
 package com.enginemachining.tileentities;
 
-import com.enginemachining.utils.IPipeReceiver;
-import com.enginemachining.utils.IPipeSender;
+import com.enginemachining.capabilities.ModdedCapabilities;
+import com.enginemachining.handlers.IEnergyReceiver;
+import com.enginemachining.handlers.IEnergySender;
 import com.enginemachining.utils.IPipeTraceable;
 import com.enginemachining.utils.PipeNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nullable;
 
@@ -75,8 +73,23 @@ public class EnergyWireTile extends TileEntity implements IPipeTraceable, ITicka
 
     @Override
     public boolean canConnect(Direction side, Capability<?> capability) {
-        if(capability == CapabilityEnergy.ENERGY) return isSideConnectable(side);
+        if(capability == ModdedCapabilities.ENERGY) return isSideConnectable(side);
         return false;
+    }
+
+    @Override
+    public Type getSideType(Direction side) {
+        return Type.PIPE;
+    }
+
+    @Override
+    public BlockPos getPosition() {
+        return worldPosition;
+    }
+
+    @Override
+    public float getResistance() {
+        return 0;
     }
 
     @Override
@@ -84,7 +97,7 @@ public class EnergyWireTile extends TileEntity implements IPipeTraceable, ITicka
         if(firstTick) {
             if(!level.isClientSide) {
                 if(network == null) {
-                    network = new PipeNetwork(level, EnergyWireTile.class, IPipeReceiver.class, IPipeSender.class, CapabilityEnergy.ENERGY);
+                    network = new PipeNetwork(level, EnergyWireTile.class, IEnergyReceiver.class, IEnergySender.class, ModdedCapabilities.ENERGY);
                     network.traceNetwork(getBlockPos());
                     network.dump();
                 }

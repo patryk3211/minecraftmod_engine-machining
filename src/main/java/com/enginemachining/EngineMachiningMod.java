@@ -1,6 +1,7 @@
 package com.enginemachining;
 
 import com.enginemachining.blocks.*;
+import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.containers.ModdedContainers;
 import com.enginemachining.items.*;
 import com.enginemachining.messages.CrusherTileMessage;
@@ -36,15 +37,17 @@ public class EngineMachiningMod
         ModdedContainers.CONTAINERS.register(modBus);
         ModdedRecipeSerializers.RECIPES.register(modBus);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
+    private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("Creating biome features...");
         OreGeneration.SetupFeatures();
         LOGGER.info("Registering Network Packets...");
         EngineMachiningPacketHandler.registerPacketType(CrusherTileMessage.class, CrusherTileMessage::encode, CrusherTileMessage::decode, CrusherTileMessage::handle);
+        LOGGER.info("Registering Capabilities...");
+        ModdedCapabilities.register();
         LOGGER.info("Setup Complete!");
     }
 }

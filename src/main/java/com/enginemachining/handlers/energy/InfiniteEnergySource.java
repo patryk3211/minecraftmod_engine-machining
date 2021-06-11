@@ -1,4 +1,4 @@
-package com.enginemachining.handlers;
+package com.enginemachining.handlers.energy;
 
 import net.minecraftforge.energy.IEnergyStorage;
 

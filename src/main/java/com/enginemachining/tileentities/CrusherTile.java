@@ -1,7 +1,9 @@
 package com.enginemachining.tileentities;
 
+import com.enginemachining.api.energy.IEnergyHandler;
+import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.containers.CrusherContainer;
-import com.enginemachining.handlers.EnergyHandler;
+import com.enginemachining.handlers.energy.EnergyHandler;
 import com.enginemachining.handlers.IEnergyReceiver;
 import com.enginemachining.items.ModdedItems;
 import com.enginemachining.recipes.CrusherRecipe;
@@ -28,6 +30,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
@@ -35,8 +38,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
@@ -47,7 +48,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class CrusherTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IEnergyReceiver {
@@ -56,38 +56,8 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     private NonNullList<ItemStack> slots = NonNullList.withSize(3, ItemStack.EMPTY);
     public ISidedInventory blockInventory;
     private LazyOptional<? extends IItemHandler>[] itemHandlers;
-    private EnergyHandler handler = new EnergyHandler(10000);
-    private LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> new IEnergyStorage() {
-        @Override
-        public int receiveEnergy(int maxReceive, boolean simulate) {
-            return handler.receiveEnergy(maxReceive, simulate);
-        }
-
-        @Override
-        public int extractEnergy(int maxExtract, boolean simulate) {
-            return 0;
-        }
-
-        @Override
-        public int getEnergyStored() {
-            return handler.getEnergyStored();
-        }
-
-        @Override
-        public int getMaxEnergyStored() {
-            return handler.getMaxEnergyStored();
-        }
-
-        @Override
-        public boolean canExtract() {
-            return false;
-        }
-
-        @Override
-        public boolean canReceive() {
-            return handler.canReceive();
-        }
-    });
+    private final EnergyHandler handler = new EnergyHandler(10000);
+    private final LazyOptional<IEnergyHandler> energyHandler = LazyOptional.of(() -> handler);
 
     boolean enabled;
     boolean readyToRun;
@@ -108,9 +78,9 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
             AtomicInteger ret;
             switch (index) {
                 case 0:
-                    return handler.getEnergyStored();
+                    return handler.getStoredPower();
                 case 1:
-                    return handler.getMaxEnergyStored();
+                    return handler.getMaxPower();
                 case 2:
                     return enabled ? 1 : 0;
                 case 3:
@@ -241,8 +211,8 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                 int maxTransmit = energyTag.getInt("maxDischargeSpeed");
 
                 int received = 0;
-                if(energyLeft < maxTransmit) received = handler.receiveEnergy(energyLeft, false);
-                else received = handler.receiveEnergy(maxTransmit, false);
+                if(energyLeft < maxTransmit) received = handler.insertPower(energyLeft, false);
+                else received = handler.insertPower(maxTransmit, false);
 
                 if(received > 0) {
                     slots.get(2).getTag().getCompound("energy").putInt("charge", energyLeft - received);
@@ -253,9 +223,9 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                 //The crusher is enabled so it should draw power to heat up.
                 int powerToMax = HEAT_MAX - power;
                 int wantedChange = Math.min(powerToMax, MAX_POWER_CHANGE);
-                int energyUsage = handler.extractEnergy(wantedChange * ENERGY_PER_POWER, true);
+                int energyUsage = handler.extractPower(wantedChange * ENERGY_PER_POWER, true);
                 int availableChange = energyUsage / ENERGY_PER_POWER;
-                handler.extractEnergy(availableChange * ENERGY_PER_POWER, false);
+                handler.extractPower(availableChange * ENERGY_PER_POWER, false);
                 power += availableChange;
                 if(HEAT_MAX - power == 0) readyToRun = true;
                 if(availableChange > 0) markdirty.set(true);
@@ -345,7 +315,7 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
         if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return itemHandlers[0].cast();
         }
-        if(cap == CapabilityEnergy.ENERGY) {
+        if(cap == ModdedCapabilities.ENERGY) {
             if(side != getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING))
                 return energyHandler.cast();
             else return LazyOptional.empty();
@@ -381,10 +351,8 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     }
 
     @Override
-    public IEnergyStorage getHandler() {
-        AtomicReference<IEnergyStorage> ret = new AtomicReference<>();
-        energyHandler.ifPresent(ret::set);
-        return ret.get();
+    public IEnergyHandler getHandler() {
+        return handler;
     }
 
     private PipeNetwork network;
@@ -397,5 +365,20 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     @Override
     public boolean canConnect(Direction side, Capability<?> capability) {
         return getCapability(capability, side).isPresent();
+    }
+
+    @Override
+    public Type getSideType(Direction side) {
+        return getCapability(ModdedCapabilities.ENERGY, side).isPresent() ? Type.RECEIVER : Type.NONE;
+    }
+
+    @Override
+    public BlockPos getPosition() {
+        return worldPosition;
+    }
+
+    @Override
+    public float getResistance() {
+        return 0;
     }
 }

@@ -1,5 +1,6 @@
 package com.enginemachining.blocks;
 
+import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.handlers.IEnergyReceiver;
 import com.enginemachining.handlers.IEnergySender;
 import com.enginemachining.tileentities.EnergyWireTile;
@@ -72,7 +73,7 @@ public abstract class EnergyWire extends Block {
         TileEntity neighbor = worldIn.getBlockEntity(fromPos);
         //if(neighbor != null) System.out.println(((EnergyWireTile)neighbor).disconnectMask);
         boolean blockConnectable = neighbor instanceof EnergyWireTile ||
-                (neighbor != null && neighbor.getCapability(CapabilityEnergy.ENERGY, neighborDir).isPresent());
+                (neighbor != null && neighbor.getCapability(ModdedCapabilities.ENERGY, neighborDir).isPresent());
         TileEntity te = worldIn.getBlockEntity(pos);
         if(blockConnectable && te instanceof EnergyWireTile && neighbor instanceof EnergyWireTile) {
             blockConnectable = ((EnergyWireTile) te).isSideConnectable(neighborDir) && ((EnergyWireTile) neighbor).isSideConnectable(neighborDir.getOpposite());
@@ -92,7 +93,7 @@ public abstract class EnergyWire extends Block {
             boolean blockConnectable = false;
             if(ewt == null || ewt.isSideConnectable(dir)) {
                 blockConnectable = neighbor instanceof EnergyWireTile ||
-                        (neighbor != null && neighbor.getCapability(CapabilityEnergy.ENERGY, dir.getOpposite()).isPresent());
+                        (neighbor != null && neighbor.getCapability(ModdedCapabilities.ENERGY, dir.getOpposite()).isPresent());
                 if (neighbor instanceof EnergyWireTile) {
                     blockConnectable = ((EnergyWireTile) neighbor).isSideConnectable(dir.getOpposite());
                 }

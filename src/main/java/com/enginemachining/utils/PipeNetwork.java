@@ -1,6 +1,7 @@
 package com.enginemachining.utils;
 
 import com.enginemachining.EngineMachiningMod;
+import com.enginemachining.api.ITrackableHandler;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.tileentity.TileEntity;
@@ -14,30 +15,34 @@ import org.apache.logging.log4j.Logger;
 import java.util.*;
 
 public class PipeNetwork {
-    private class PipeTraceEntry {
-        IPipeTraceable pipe;
-        int useCount;
+    private static class ReceiverPath {
+        Set<BlockPos> pipes;
+        float resistance;
+    }
+    private static class ReceiverPathList {
+        List<ReceiverPath> paths;
+        float combinedResistances;
     }
 
     // Stores all pipes in the network
-    private final Set<IPipeTraceable> pipes;
+    private final Map<BlockPos, IPipeTraceable> pipes;
     // Stores all receivers in the network
-    private final Set<IPipeReceiver> receivers;
+    private final Map<BlockPos, IPipeTraceable> receivers;
     // Stores all senders and the pipes they use to get to every receiver
-    private final Set<Pair<IPipeSender, Map<BlockPos, Integer>>> senders;
+    private final Map<BlockPos, Pair<IPipeTraceable, ReceiverPathList>> senders;
 
     // Stores the level in which this network exists
     private final World level;
 
     private final Class<? extends IPipeTraceable> pipeClass;
-    private final Class<? extends IPipeReceiver> receiverClass;
-    private final Class<? extends IPipeSender> senderClass;
-    private final Capability<?> capability;
+    private final Class<? extends IPipeTraceable> receiverClass;
+    private final Class<? extends IPipeTraceable> senderClass;
+    private final Capability<? extends ITrackableHandler> capability;
 
-    public PipeNetwork(World level, Class<? extends IPipeTraceable> pipeClass, Class<? extends IPipeReceiver> receiverClass, Class<? extends IPipeSender> senderClass, Capability<?> capability) {
-        pipes = new HashSet<>();
-        receivers = new HashSet<>();
-        senders = new HashSet<>();
+    public PipeNetwork(World level, Class<? extends IPipeTraceable> pipeClass, Class<? extends IPipeTraceable> receiverClass, Class<? extends IPipeTraceable> senderClass, Capability<? extends ITrackableHandler> capability) {
+        pipes = new HashMap<>();
+        receivers = new HashMap<>();
+        senders = new HashMap<>();
 
         this.capability = capability;
         this.level = level;
@@ -58,9 +63,9 @@ public class PipeNetwork {
         IPipeTraceable traceable = (IPipeTraceable) te;
         traceable.setNetwork(this);
         traced.add(traceable);
-        if (pipeClass.isInstance(te)) pipes.add(traceable);
-        else if(receiverClass.isInstance(te)) receivers.add((IPipeReceiver) te);
-        else if(senderClass.isInstance(te)) senders.add(new Pair<>((IPipeSender) te, null));
+        if (pipeClass.isInstance(te)) pipes.put(traceStart, traceable);
+        else if(receiverClass.isInstance(te)) receivers.put(te.getBlockPos(), (IPipeTraceable) te);
+        else if(senderClass.isInstance(te)) senders.put(te.getBlockPos(), new Pair<>((IPipeTraceable) te, null));
 
         traceNetwork(traceStart, traced);
     }
@@ -78,34 +83,51 @@ public class PipeNetwork {
             if(!traceable.canConnect(d, capability) || !ntraceable.canConnect(d.getOpposite(), capability)) continue;
             if(traced.add(ntraceable)) {
                 if (pipeClass.isInstance(nte)) {
-                    pipes.add(ntraceable);
+                    pipes.put(neighbour, ntraceable);
                     traceNetwork(neighbour, traced);
                 } else if(receiverClass.isInstance(nte)) {
-                    receivers.add((IPipeReceiver) nte);
+                    receivers.put(nte.getBlockPos(), (IPipeTraceable) nte);
                 } else if(senderClass.isInstance(nte)) {
-                    senders.add(new Pair<>((IPipeSender) nte, null));
+                    senders.put(nte.getBlockPos(), new Pair<>((IPipeTraceable) nte, null));
                 }
             }
         }
     }
 
-    public Set<IPipeReceiver> getReceivers() {
-        return receivers;
+    // Traces from each receiver into every sender to find possible electricity paths
+    // We trace from each receiver to calculate the ratios of powers to transfer through each possible path.
+    // It might be slower than tracing from each sender and adding the use count of each pipe, but I hope it will be more realistic.
+    public void traceReceivers() {
+        receivers.forEach((pos, rec) -> {
+            Set<IPipeTraceable> path = new HashSet<>();
+            traceForSender(pos, path, 0);
+        });
+    }
+
+    private void traceForSender(BlockPos position, Set<IPipeTraceable> pipes, float resistance) {
+        IPipeTraceable pipe = this.pipes.get(position);
+        pipes.add(pipe);
+        for(Direction dir : Direction.values()) {
+            BlockPos neighbourPos = position.offset(dir.getNormal());
+
+            IPipeTraceable neighbour = this.pipes.get(neighbourPos);
+
+        }
+    }
+
+    public Collection<IPipeTraceable> getReceivers() {
+        return receivers.values();
     }
 
     public void dump() {
         Logger log = EngineMachiningMod.LOGGER;
         log.debug("Pipes (" + pipes.size() + "): ");
-        for(IPipeTraceable p : pipes) {
-            log.debug("\t" + ((TileEntity)p).getBlockPos());
-        }
+        pipes.forEach((pos, traceable) -> log.debug("\t" + pos));
+
         log.debug("Receivers (" + receivers.size() + "): ");
-        for(IPipeReceiver r : receivers) {
-            log.debug("\t" + ((TileEntity)r).getBlockPos());
-        }
+        receivers.forEach((pos, receiver) -> log.debug("\t" + pos));
+
         log.debug("Senders (" + senders.size() + "): ");
-        for(Pair<IPipeSender, Map<BlockPos, Integer>> s : senders) {
-            log.debug("\t" + ((TileEntity)s.getFirst()).getBlockPos());
-        }
+        senders.forEach((pos, sender) -> log.debug("\t" + pos));
     }
 }
