@@ -50,6 +50,8 @@ public class ModdedItemGroups {
             items.add(new ItemStack(ModdedItems.dust_gold.get()));
             items.add(new ItemStack(ModdedItems.dust_iron.get()));
 
+            items.add(new ItemStack(ModdedItems.dust_diamond.get()));
+
         }
     };
 
