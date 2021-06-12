@@ -13,6 +13,8 @@ public enum ModArmorMaterial implements IArmorMaterial {
 
     copper("enginemachining:copper", 25, new int[] { 2, 5, 6, 2 }, 9,
             SoundEvents.ARMOR_EQUIP_GENERIC, 0.0F, () -> { return Ingredient.of(ModdedItems.ingot_copper.get()); }),
+    aluminium("enginemachining:aluminium", 25, new int[] { 2, 5, 6, 2 }, 12,
+            SoundEvents.ARMOR_EQUIP_GENERIC, 0.0F, () -> { return Ingredient.of(ModdedItems.ingot_aluminium.get()); }),
     silver("enginemachining:silver", 25, new int[] { 2, 6, 5, 2 }, 22,
             SoundEvents.ARMOR_EQUIP_GENERIC, 0.0F, () -> { return  Ingredient.of(ModdedItems.ingot_silver.get()); });
 

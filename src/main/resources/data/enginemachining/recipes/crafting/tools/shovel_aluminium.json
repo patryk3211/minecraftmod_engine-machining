@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "X",
-    "X",
+    "#",
     "#"
   ],
   "key": {
@@ -10,10 +10,10 @@
       "item": "minecraft:stick"
     },
     "X": {
-      "item": "enginemachining:ingot_silver"
+      "item": "enginemachining:ingot_aluminium"
     }
   },
   "result": {
-    "item": "enginemachining:sword_silver"
+    "item": "enginemachining:shovel_aluminium"
   }
 }

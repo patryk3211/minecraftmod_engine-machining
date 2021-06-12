@@ -16,6 +16,6 @@ public class BootsCopper extends ArmorItem {
     @Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-        return "enginemachining:item/armor/armor_copper.png";
+        return "enginemachining:textures/item/armor/armor_copper.png";
     }
 }
