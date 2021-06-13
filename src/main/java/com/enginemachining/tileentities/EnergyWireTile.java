@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 public class EnergyWireTile extends TileEntity implements IPipeTraceable, ITickableTileEntity {
     private byte disconnectMask;
     private boolean firstTick;
-    private int powerFlow;
+    private float powerFlow;
 
     public EnergyWireTile() {
         super(ModdedTileEntities.energy_wire.get());

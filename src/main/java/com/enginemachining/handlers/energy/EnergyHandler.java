@@ -20,7 +20,6 @@ public class EnergyHandler implements IEnergyHandler, INBTSerializable<CompoundN
 
     public float insertPower(float power, boolean simulate) {
         if(!canReceive()) return 0;
-        currentEnergy = 0;
 
         float leftToFull = maxEnergy - currentEnergy;
         if(leftToFull < power) {

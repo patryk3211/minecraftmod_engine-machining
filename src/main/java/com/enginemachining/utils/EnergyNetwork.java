@@ -39,7 +39,7 @@ public class EnergyNetwork extends PipeNetwork {
     private final int id;
 
     private static final boolean NETWORK_VISUALISER_ENABLED = false;
-    private static final boolean RECEIVER_PATH_VISUALISER_ENABLED = true;
+    private static final boolean RECEIVER_PATH_VISUALISER_ENABLED = false;
 
     private static final class RenderTypes extends RenderState {
         static final RenderType MAIN = RenderType.create("display_font",
@@ -286,7 +286,7 @@ public class EnergyNetwork extends PipeNetwork {
 
         // Extract the given amount of power from each sender.
         for(IEnergySender sender : senderList.keySet()) {
-            float max_transfer = sender.getHandler().extractPower(left/count, false);
+            float max_transfer = sender.getHandler().extractPower(left/(float) count, false);
             left -= max_transfer;
             count--;
             senderList.replace(sender, max_transfer);
@@ -297,7 +297,7 @@ public class EnergyNetwork extends PipeNetwork {
 
         // Insert the given amount of power into every receiver.
         for(IEnergyReceiver receiver : receiverList.keySet()) {
-            float max_transfer = receiver.getHandler().insertPower(left/count, false);
+            float max_transfer = receiver.getHandler().insertPower(left/(float) count, false);
             left -= max_transfer;
             count--;
             receiverList.replace(receiver, max_transfer);
@@ -309,11 +309,12 @@ public class EnergyNetwork extends PipeNetwork {
             if(traceable instanceof IEnergyReceiver) {
                 IEnergyReceiver receiver = (IEnergyReceiver) traceable;
                 final float powerToReceive = receiverList.get(receiver);
+                final float powerPerSender = powerToReceive / packet.pathsList.size();
                 packet.pathsList.forEach((sender, pathList) -> {
                     for (ReceiverToSenderPathListEntry pathEntry : pathList.paths) {
                         final float powerPerWire;
-                        if(pathList.combinedResistance == 0) powerPerWire = powerToReceive/pathList.paths.size();
-                        else powerPerWire = (powerToReceive / pathList.combinedResistance) * pathEntry.pathResistance;
+                        if(pathList.combinedResistance == 0) powerPerWire = powerPerSender/pathList.paths.size();
+                        else powerPerWire = (powerPerSender / pathList.combinedResistance) * pathEntry.pathResistance;
                         for (IPipeTraceable pipe : pathEntry.pipes) {
                             if(pipe instanceof EnergyWireTile) ((EnergyWireTile) pipe).addPowerFlow(powerPerWire);
                         }
