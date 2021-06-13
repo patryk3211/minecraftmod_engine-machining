@@ -6,7 +6,7 @@ import net.minecraft.util.Direction;
 import javax.annotation.Nullable;
 
 public class DefaultEnergyHandler implements IEnergyHandler {
-    public int energy;
+    public float energy;
 
     @Override
     public boolean canSideExtract(@Nullable Direction dir) {
@@ -19,24 +19,24 @@ public class DefaultEnergyHandler implements IEnergyHandler {
     }
 
     @Override
-    public int insertPower(int power, boolean simulate) {
+    public float insertPower(float power, boolean simulate) {
         if(!simulate) energy += power;
         return power;
     }
 
     @Override
-    public int extractPower(int power, boolean simulate) {
+    public float extractPower(float power, boolean simulate) {
         if(!simulate) energy -= power;
         return power;
     }
 
     @Override
-    public int getStoredPower() {
+    public float getStoredPower() {
         return energy;
     }
 
     @Override
-    public int getMaxPower() {
+    public float getMaxPower() {
         return Integer.MAX_VALUE;
     }
 }

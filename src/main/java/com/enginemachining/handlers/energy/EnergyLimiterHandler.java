@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 
 public class EnergyLimiterHandler implements IEnergyHandler, INBTSerializable<CompoundNBT> {
     int maxEnergy;
-    int currentEnergy;
+    float currentEnergy;
 
     public EnergyLimiterHandler() {
         this.maxEnergy = 0;
@@ -22,10 +22,10 @@ public class EnergyLimiterHandler implements IEnergyHandler, INBTSerializable<Co
         if(currentEnergy > maxEnergy) currentEnergy = maxEnergy;
     }
 
-    public int insertPower(int power, boolean simulate) {
+    public float insertPower(float power, boolean simulate) {
         if(!canReceive()) return 0;
 
-        int leftToFull = maxEnergy - currentEnergy;
+        float leftToFull = maxEnergy - currentEnergy;
         if(leftToFull < power) {
             if(!simulate) currentEnergy += leftToFull;
             return leftToFull;
@@ -36,11 +36,11 @@ public class EnergyLimiterHandler implements IEnergyHandler, INBTSerializable<Co
     }
 
     @Override
-    public int extractPower(int power, boolean simulate) {
+    public float extractPower(float power, boolean simulate) {
         if(!canExtract()) return 0;
 
         if(currentEnergy < power) {
-            int ret = currentEnergy;
+            float ret = currentEnergy;
             if(!simulate) currentEnergy = 0;
             return ret;
         }
@@ -50,12 +50,12 @@ public class EnergyLimiterHandler implements IEnergyHandler, INBTSerializable<Co
     }
 
     @Override
-    public int getStoredPower() {
+    public float getStoredPower() {
         return currentEnergy;
     }
 
     @Override
-    public int getMaxPower() {
+    public float getMaxPower() {
         return maxEnergy;
     }
 
@@ -70,14 +70,14 @@ public class EnergyLimiterHandler implements IEnergyHandler, INBTSerializable<Co
     @Override
     public CompoundNBT serializeNBT() {
         CompoundNBT nbt = new CompoundNBT();
-        nbt.putInt("energyStored", currentEnergy);
+        nbt.putFloat("energyStored", currentEnergy);
         nbt.putInt("capacity", maxEnergy);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundNBT nbt) {
-        currentEnergy = nbt.getInt("energyStored");
+        currentEnergy = nbt.getFloat("energyStored");
         maxEnergy = nbt.getInt("capacity");
     }
 

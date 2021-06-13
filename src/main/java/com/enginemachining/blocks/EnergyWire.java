@@ -10,15 +10,20 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
@@ -30,6 +35,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
+import java.util.UUID;
 
 public abstract class EnergyWire extends Block {
     int maxFEPerTick;
@@ -117,7 +123,26 @@ public abstract class EnergyWire extends Block {
     @Override
     public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if(worldIn.isClientSide) return;
-        if(!(newState.getBlock() instanceof EnergyWire)) worldIn.removeBlockEntity(pos);
+        if(!(newState.getBlock() instanceof EnergyWire)) {
+            TileEntity entity = worldIn.getBlockEntity(pos);
+            PipeNetwork network = null;
+            if(entity instanceof IPipeTraceable) network = ((IPipeTraceable) entity).getNetwork();
+            worldIn.removeBlockEntity(pos);
+            PipeNetwork.removeTraceable(pos, worldIn, ModdedCapabilities.ENERGY, network, () -> new EnergyNetwork(worldIn));
+        }
+    }
+
+    @Override
+    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity user, Hand hand, BlockRayTraceResult ray) {
+        if(!level.isClientSide && hand == Hand.MAIN_HAND) {
+            TileEntity te = level.getBlockEntity(pos);
+            float powerFlow = 0;
+            if(te instanceof EnergyWireTile) {
+                powerFlow = ((EnergyWireTile) te).getPowerFlow();
+            }
+            user.sendMessage(new StringTextComponent("Power Flow: " + powerFlow + "/" + maxFEPerTick), UUID.fromString("00000000-0000-0000-0000-000000000000"));
+        }
+        return ActionResultType.PASS;
     }
 
     @Override

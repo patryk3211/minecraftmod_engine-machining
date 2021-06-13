@@ -1,8 +1,10 @@
 package com.enginemachining.tileentities;
 
+import com.enginemachining.api.energy.IEnergyHandler;
 import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.handlers.IEnergySender;
 import com.enginemachining.handlers.energy.InfiniteEnergySource;
+import com.enginemachining.utils.EnergyNetwork;
 import com.enginemachining.utils.PipeNetwork;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -16,21 +18,27 @@ import org.antlr.v4.runtime.misc.NotNull;
 import javax.annotation.Nullable;
 
 public class DebugEnergySourceTile extends TileEntity implements ITickableTileEntity, IEnergySender {
-    private LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(InfiniteEnergySource::new);
+    private IEnergyHandler handler = new InfiniteEnergySource();
+    private LazyOptional<IEnergyHandler> energyHandler = LazyOptional.of(() -> handler);
+
+    private boolean firstTick = true;
 
     public DebugEnergySourceTile() {
         super(ModdedTileEntities.debug_energy_source.get());
     }
 
     @Override
-    public IEnergyStorage getHandler() {
-        return null;
+    public IEnergyHandler getHandler() {
+        return handler;
     }
 
     @Override
     public void tick() {
         if(!level.isClientSide) {
-
+            if(firstTick) {
+                if(network == null) PipeNetwork.addTraceable(this, ModdedCapabilities.ENERGY, () -> new EnergyNetwork(level));
+                firstTick = false;
+            }
         }
     }
 
@@ -67,13 +75,15 @@ public class DebugEnergySourceTile extends TileEntity implements ITickableTileEn
     }
 
     @Override
-    public Type getSideType(Direction side) {
-        return Type.SENDER;
+    public Type getSideType(Direction side, Capability<?> capability) {
+        if(capability == ModdedCapabilities.ENERGY) return Type.SENDER;
+        return Type.NONE;
     }
 
     @Override
-    public BlockPos getPosition() {
-        return worldPosition;
+    public Type getMainType(Capability<?> capability) {
+        if(capability == ModdedCapabilities.ENERGY) return Type.SENDER;
+        return Type.NONE;
     }
 
     @Override

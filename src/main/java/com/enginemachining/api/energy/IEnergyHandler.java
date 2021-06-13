@@ -12,7 +12,7 @@ public interface IEnergyHandler extends ITrackableHandler {
      * @param simulate Should this power be inserted or only calculate the maximum amount to be inserted
      * @return The amount of power which can be inserted
      **/
-    int insertPower(int power, boolean simulate);
+    float insertPower(float power, boolean simulate);
 
     /**
      *
@@ -20,17 +20,17 @@ public interface IEnergyHandler extends ITrackableHandler {
      * @param simulate Should this power be extracted or only calculate the maximum amount to be extracted
      * @return The amount of power which can be extracted
      */
-    int extractPower(int power, boolean simulate);
+    float extractPower(float power, boolean simulate);
 
     /**
      * Get the amount of power stored.
      * @return Amount of power stored.
      */
-    int getStoredPower();
+    float getStoredPower();
 
     /**
      * Get the maximum amount of power which can be stored.
      * @return Get the maximum amount of power that can be stored.
      */
-    int getMaxPower();
+    float getMaxPower();
 }

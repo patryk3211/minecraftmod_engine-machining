@@ -3,6 +3,7 @@ package com.enginemachining.tileentities;
 import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.handlers.IEnergyReceiver;
 import com.enginemachining.handlers.IEnergySender;
+import com.enginemachining.utils.EnergyNetwork;
 import com.enginemachining.utils.IPipeTraceable;
 import com.enginemachining.utils.PipeNetwork;
 import net.minecraft.block.BlockState;
@@ -20,12 +21,14 @@ import javax.annotation.Nullable;
 public class EnergyWireTile extends TileEntity implements IPipeTraceable, ITickableTileEntity {
     private byte disconnectMask;
     private boolean firstTick;
+    private int powerFlow;
 
     public EnergyWireTile() {
         super(ModdedTileEntities.energy_wire.get());
 
         disconnectMask = 0;
         firstTick = true;
+        powerFlow = 0;
     }
 
     @Override
@@ -78,13 +81,15 @@ public class EnergyWireTile extends TileEntity implements IPipeTraceable, ITicka
     }
 
     @Override
-    public Type getSideType(Direction side) {
-        return Type.PIPE;
+    public Type getSideType(Direction side, Capability<?> capability) {
+        if(capability == ModdedCapabilities.ENERGY) return Type.PIPE;
+        return Type.NONE;
     }
 
     @Override
-    public BlockPos getPosition() {
-        return worldPosition;
+    public Type getMainType(Capability<?> capability) {
+        if(capability == ModdedCapabilities.ENERGY) return Type.PIPE;
+        return Type.NONE;
     }
 
     @Override
@@ -92,17 +97,19 @@ public class EnergyWireTile extends TileEntity implements IPipeTraceable, ITicka
         return 0;
     }
 
+    public void addPowerFlow(float power) {
+        powerFlow += power;
+    }
+    public float getPowerFlow() {
+        return powerFlow;
+    }
+
     @Override
     public void tick() {
         if(firstTick) {
-            if(!level.isClientSide) {
-                if(network == null) {
-                    network = new PipeNetwork(level, EnergyWireTile.class, IEnergyReceiver.class, IEnergySender.class, ModdedCapabilities.ENERGY);
-                    network.traceNetwork(getBlockPos());
-                    network.dump();
-                }
-            }
+            if(!level.isClientSide) PipeNetwork.addTraceable(this, ModdedCapabilities.ENERGY, () -> new EnergyNetwork(level));
             firstTick = false;
         }
+        powerFlow = 0;
     }
 }

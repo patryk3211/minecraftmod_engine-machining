@@ -8,6 +8,7 @@ import com.enginemachining.handlers.IEnergyReceiver;
 import com.enginemachining.items.ModdedItems;
 import com.enginemachining.recipes.CrusherRecipe;
 import com.enginemachining.recipes.ModdedRecipeTypes;
+import com.enginemachining.utils.EnergyNetwork;
 import com.enginemachining.utils.PipeNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -59,18 +60,20 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     private final EnergyHandler handler = new EnergyHandler(10000);
     private final LazyOptional<IEnergyHandler> energyHandler = LazyOptional.of(() -> handler);
 
-    boolean enabled;
-    boolean readyToRun;
+    private boolean enabled;
+    private boolean readyToRun;
 
-    int burnTime;
-    int maxBurnTime;
+    private int burnTime;
+    private int maxBurnTime;
 
-    int power;
+    private int power;
     public static final int HEAT_MAX = 1000;
     static final int ENERGY_PER_POWER = 1;
     static final int COOLDOWN_PER_TICK = 10;
     static final int MAX_POWER_CHANGE = 100;
     static final int POWER_PER_BURNTICK = 50;
+
+    private boolean firstTick = true;
 
     public IIntArray trackedData = new IIntArray() {
         @Override
@@ -78,9 +81,9 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
             AtomicInteger ret;
             switch (index) {
                 case 0:
-                    return handler.getStoredPower();
+                    return (int)handler.getStoredPower();
                 case 1:
-                    return handler.getMaxPower();
+                    return (int)handler.getMaxPower();
                 case 2:
                     return enabled ? 1 : 0;
                 case 3:
@@ -199,6 +202,11 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     @Override
     public void tick() {
         if (!level.isClientSide) {
+            if(firstTick) {
+                if(network == null) PipeNetwork.addTraceable(this, ModdedCapabilities.ENERGY, () -> new EnergyNetwork(level));
+                firstTick = false;
+            }
+
             AtomicBoolean markdirty = new AtomicBoolean(false);
             if(power > 0) {
                 power -= COOLDOWN_PER_TICK;
@@ -210,12 +218,12 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                 int energyLeft = energyTag.getInt("charge");
                 int maxTransmit = energyTag.getInt("maxDischargeSpeed");
 
-                int received = 0;
+                float received = 0;
                 if(energyLeft < maxTransmit) received = handler.insertPower(energyLeft, false);
                 else received = handler.insertPower(maxTransmit, false);
 
                 if(received > 0) {
-                    slots.get(2).getTag().getCompound("energy").putInt("charge", energyLeft - received);
+                    slots.get(2).getTag().getCompound("energy").putInt("charge", (int)(energyLeft - received));
                     markdirty.set(true);
                 }
             }
@@ -223,8 +231,8 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
                 //The crusher is enabled so it should draw power to heat up.
                 int powerToMax = HEAT_MAX - power;
                 int wantedChange = Math.min(powerToMax, MAX_POWER_CHANGE);
-                int energyUsage = handler.extractPower(wantedChange * ENERGY_PER_POWER, true);
-                int availableChange = energyUsage / ENERGY_PER_POWER;
+                float energyUsage = handler.extractPower(wantedChange * ENERGY_PER_POWER, true);
+                float availableChange = energyUsage / ENERGY_PER_POWER;
                 handler.extractPower(availableChange * ENERGY_PER_POWER, false);
                 power += availableChange;
                 if(HEAT_MAX - power == 0) readyToRun = true;
@@ -368,13 +376,15 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     }
 
     @Override
-    public Type getSideType(Direction side) {
-        return getCapability(ModdedCapabilities.ENERGY, side).isPresent() ? Type.RECEIVER : Type.NONE;
+    public Type getSideType(Direction side, Capability<?> capability) {
+        if(capability == ModdedCapabilities.ENERGY) return getCapability(ModdedCapabilities.ENERGY, side).isPresent() ? Type.RECEIVER : Type.NONE;
+        return Type.NONE;
     }
 
     @Override
-    public BlockPos getPosition() {
-        return worldPosition;
+    public Type getMainType(Capability<?> capability) {
+        if(capability == ModdedCapabilities.ENERGY) return Type.RECEIVER;
+        return Type.NONE;
     }
 
     @Override

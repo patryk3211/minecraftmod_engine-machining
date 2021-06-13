@@ -1,13 +1,20 @@
 package com.enginemachining.blocks;
 
+import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.tileentities.CrusherTile;
+import com.enginemachining.tileentities.EnergyWireTile;
+import com.enginemachining.utils.EnergyNetwork;
+import com.enginemachining.utils.IPipeTraceable;
+import com.enginemachining.utils.PipeNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.Property;
 import net.minecraft.state.StateContainer;
@@ -21,6 +28,8 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.network.NetworkHooks;
+
+import javax.annotation.Nullable;
 
 public class Crusher extends Block {
 
@@ -71,7 +80,11 @@ public class Crusher extends Block {
             TileEntity te = worldIn.getBlockEntity(pos);
             if(te instanceof CrusherTile) {
                 InventoryHelper.dropContents(worldIn, pos, ((CrusherTile) te).blockInventory);
+                TileEntity entity = worldIn.getBlockEntity(pos);
+                PipeNetwork network = null;
+                if(entity instanceof IPipeTraceable) network = ((IPipeTraceable) entity).getNetwork();
                 worldIn.removeBlockEntity(te.getBlockPos());
+                PipeNetwork.removeTraceable(pos, worldIn, ModdedCapabilities.ENERGY, network, () -> new EnergyNetwork(worldIn));
             }
         }
     }
