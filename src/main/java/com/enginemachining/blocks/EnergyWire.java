@@ -1,23 +1,29 @@
 package com.enginemachining.blocks;
 
+import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.handlers.IEnergyReceiver;
 import com.enginemachining.handlers.IEnergySender;
 import com.enginemachining.tileentities.EnergyWireTile;
-import com.enginemachining.utils.DirectionTools;
+import com.enginemachining.utils.*;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
@@ -29,6 +35,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
+import java.util.UUID;
 
 public abstract class EnergyWire extends Block {
     int maxFEPerTick;
@@ -72,7 +79,7 @@ public abstract class EnergyWire extends Block {
         TileEntity neighbor = worldIn.getBlockEntity(fromPos);
         //if(neighbor != null) System.out.println(((EnergyWireTile)neighbor).disconnectMask);
         boolean blockConnectable = neighbor instanceof EnergyWireTile ||
-                (neighbor != null && neighbor.getCapability(CapabilityEnergy.ENERGY, neighborDir).isPresent());
+                (neighbor != null && neighbor.getCapability(ModdedCapabilities.ENERGY, neighborDir).isPresent());
         TileEntity te = worldIn.getBlockEntity(pos);
         if(blockConnectable && te instanceof EnergyWireTile && neighbor instanceof EnergyWireTile) {
             blockConnectable = ((EnergyWireTile) te).isSideConnectable(neighborDir) && ((EnergyWireTile) neighbor).isSideConnectable(neighborDir.getOpposite());
@@ -92,7 +99,7 @@ public abstract class EnergyWire extends Block {
             boolean blockConnectable = false;
             if(ewt == null || ewt.isSideConnectable(dir)) {
                 blockConnectable = neighbor instanceof EnergyWireTile ||
-                        (neighbor != null && neighbor.getCapability(CapabilityEnergy.ENERGY, dir).isPresent());
+                        (neighbor != null && neighbor.getCapability(ModdedCapabilities.ENERGY, dir.getOpposite()).isPresent());
                 if (neighbor instanceof EnergyWireTile) {
                     blockConnectable = ((EnergyWireTile) neighbor).isSideConnectable(dir.getOpposite());
                 }
@@ -116,7 +123,26 @@ public abstract class EnergyWire extends Block {
     @Override
     public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if(worldIn.isClientSide) return;
-        if(!(newState.getBlock() instanceof EnergyWire)) worldIn.removeBlockEntity(pos);
+        if(!(newState.getBlock() instanceof EnergyWire)) {
+            TileEntity entity = worldIn.getBlockEntity(pos);
+            PipeNetwork network = null;
+            if(entity instanceof IPipeTraceable) network = ((IPipeTraceable) entity).getNetwork();
+            worldIn.removeBlockEntity(pos);
+            PipeNetwork.removeTraceable(pos, worldIn, ModdedCapabilities.ENERGY, network, () -> new EnergyNetwork(worldIn));
+        }
+    }
+
+    @Override
+    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity user, Hand hand, BlockRayTraceResult ray) {
+        if(!level.isClientSide && hand == Hand.MAIN_HAND) {
+            TileEntity te = level.getBlockEntity(pos);
+            float powerFlow = 0;
+            if(te instanceof EnergyWireTile) {
+                powerFlow = ((EnergyWireTile) te).getPowerFlow();
+            }
+            user.sendMessage(new StringTextComponent("Power Flow: " + powerFlow + "/" + maxFEPerTick), UUID.fromString("00000000-0000-0000-0000-000000000000"));
+        }
+        return ActionResultType.PASS;
     }
 
     @Override

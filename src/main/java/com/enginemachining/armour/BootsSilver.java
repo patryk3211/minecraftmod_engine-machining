@@ -8,4 +8,6 @@ public class BootsSilver extends ArmorItem {
     public BootsSilver() {
         super(ModArmorMaterial.silver, EquipmentSlotType.FEET, new Properties().tab(ModdedItemGroups.tools));
     }
+
+
 }
