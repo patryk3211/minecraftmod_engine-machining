@@ -13,9 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-
-mc_version = '1.16.5'
-version = mc_version + '-0.0.0.1'
+version = mc_version + '-' + major_mod + '.' + major_api + '.' + minor + '.' + patch
 group = 'com.enginemachining' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'enginemachining'
 
