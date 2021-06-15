@@ -9,7 +9,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import org.apache.logging.log4j.Logger;
 
-import java.nio.IntBuffer;
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -125,8 +124,8 @@ public class PipeNetwork {
         Map<PipeNetwork, int[]> networks = new HashMap<>();
         for(Direction d : Direction.values()) {
             if(!traceable.canConnect(d, capability)) continue;
-            BlockPos neighbourPos = traceable.getBlockPos().offset(d.getNormal());
-            TileEntity nte = traceable.getLevel().getBlockEntity(neighbourPos);
+            BlockPos neighbourPos = traceable.getBlockPosition().offset(d.getNormal());
+            TileEntity nte = traceable.getWorld().getBlockEntity(neighbourPos);
             if(!(nte instanceof IPipeTraceable)) continue;
             IPipeTraceable neighbour = (IPipeTraceable) nte;
             if(!neighbour.canConnect(d.getOpposite(), capability)) continue;
@@ -144,7 +143,7 @@ public class PipeNetwork {
         if(networks.size() == 0) {
             // Create a new network.
             PipeNetwork network = supplier.get();//new PipeNetwork(traceable.getLevel(), capability);
-            network.traceNetwork(traceable.getBlockPos());
+            network.traceNetwork(traceable.getBlockPosition());
             if(DEBUG_DUMP) network.dump();
             network.traceReceivers();
         } else if(networks.size() == 1) {
@@ -152,11 +151,11 @@ public class PipeNetwork {
             networks.forEach((net, useCount) -> {
                 traceable.setNetwork(net);
                 if(useCount[0] == 1) {
-                    if(type == IPipeTraceable.Type.PIPE) net.pipes.put(traceable.getBlockPos(), traceable); // We don't need to retrace a blind pipe
+                    if(type == IPipeTraceable.Type.PIPE) net.pipes.put(traceable.getBlockPosition(), traceable); // We don't need to retrace a blind pipe
                     else {
                         // For a sender or a receiver we need to retrace every receiver.
-                        if(type == IPipeTraceable.Type.RECEIVER) net.receivers.put(traceable.getBlockPos(), new ReceiverPacket(traceable));
-                        else if(type == IPipeTraceable.Type.SENDER) net.senders.put(traceable.getBlockPos(), traceable);
+                        if(type == IPipeTraceable.Type.RECEIVER) net.receivers.put(traceable.getBlockPosition(), new ReceiverPacket(traceable));
+                        else if(type == IPipeTraceable.Type.SENDER) net.senders.put(traceable.getBlockPosition(), traceable);
                         net.traceReceivers();
                     }
                     if(DEBUG_DUMP) net.dump();
@@ -164,13 +163,13 @@ public class PipeNetwork {
                     // This traceable connects to more than one point in the network. We need to retrace all receivers.
                     switch(type) {
                         case PIPE:
-                            net.pipes.put(traceable.getBlockPos(), traceable);
+                            net.pipes.put(traceable.getBlockPosition(), traceable);
                             break;
                         case RECEIVER:
-                            net.receivers.put(traceable.getBlockPos(), new ReceiverPacket(traceable));
+                            net.receivers.put(traceable.getBlockPosition(), new ReceiverPacket(traceable));
                             break;
                         case SENDER:
-                            net.senders.put(traceable.getBlockPos(), traceable);
+                            net.senders.put(traceable.getBlockPosition(), traceable);
                             break;
                     }
                     if(DEBUG_DUMP) net.dump();
@@ -209,13 +208,13 @@ public class PipeNetwork {
             traceable.setNetwork(largestNetwork[0]);
             switch(type) {
                 case PIPE:
-                    largestNetwork[0].pipes.put(traceable.getBlockPos(), traceable);
+                    largestNetwork[0].pipes.put(traceable.getBlockPosition(), traceable);
                     break;
                 case RECEIVER:
-                    largestNetwork[0].receivers.put(traceable.getBlockPos(), new ReceiverPacket(traceable));
+                    largestNetwork[0].receivers.put(traceable.getBlockPosition(), new ReceiverPacket(traceable));
                     break;
                 case SENDER:
-                    largestNetwork[0].senders.put(traceable.getBlockPos(), traceable);
+                    largestNetwork[0].senders.put(traceable.getBlockPosition(), traceable);
                     break;
             }
 
@@ -370,7 +369,7 @@ public class PipeNetwork {
                 if(DEBUG_DUMP) {
                     System.out.println("Sender: " + neighbourPos);
                     for (IPipeTraceable p : pipes) {
-                        System.out.println("\t" + p.getBlockPos());
+                        System.out.println("\t" + p.getBlockPosition());
                     }
                 }
                 continue;

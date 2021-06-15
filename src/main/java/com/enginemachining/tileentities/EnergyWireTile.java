@@ -14,6 +14,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
@@ -111,5 +112,15 @@ public class EnergyWireTile extends TileEntity implements IPipeTraceable, ITicka
             firstTick = false;
         }
         powerFlow = 0;
+    }
+
+    @Override
+    public BlockPos getBlockPosition() {
+        return worldPosition;
+    }
+
+    @Override
+    public World getWorld() {
+        return level;
     }
 }

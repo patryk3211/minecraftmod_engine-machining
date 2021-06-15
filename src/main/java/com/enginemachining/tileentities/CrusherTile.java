@@ -388,6 +388,16 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     }
 
     @Override
+    public BlockPos getBlockPosition() {
+        return worldPosition;
+    }
+
+    @Override
+    public World getWorld() {
+        return level;
+    }
+
+    @Override
     public float getResistance() {
         return 0;
     }
