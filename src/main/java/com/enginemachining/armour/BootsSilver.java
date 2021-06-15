@@ -12,6 +12,7 @@ public class BootsSilver extends ArmorItem {
     public BootsSilver() {
         super(ModArmorMaterial.silver, EquipmentSlotType.FEET, new Properties().tab(ModdedItemGroups.tools));
     }
+
     @Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {

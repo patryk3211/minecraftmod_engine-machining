@@ -1,12 +1,16 @@
-package com.enginemachining.handlers;
+package com.enginemachining.handlers.energy;
 
+import com.enginemachining.api.energy.IEnergyHandler;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class EnergyLimiterHandler implements IEnergyStorage, INBTSerializable<CompoundNBT> {
+import javax.annotation.Nullable;
+
+public class EnergyLimiterHandler implements IEnergyHandler, INBTSerializable<CompoundNBT> {
     int maxEnergy;
-    int currentEnergy;
+    float currentEnergy;
 
     public EnergyLimiterHandler() {
         this.maxEnergy = 0;
@@ -18,50 +22,47 @@ public class EnergyLimiterHandler implements IEnergyStorage, INBTSerializable<Co
         if(currentEnergy > maxEnergy) currentEnergy = maxEnergy;
     }
 
-    @Override
-    public int receiveEnergy(int maxReceive, boolean simulate) {
+    public float insertPower(float power, boolean simulate) {
         if(!canReceive()) return 0;
 
-        int leftToFull = maxEnergy - currentEnergy;
-        if(leftToFull < maxReceive) {
+        float leftToFull = maxEnergy - currentEnergy;
+        if(leftToFull < power) {
             if(!simulate) currentEnergy += leftToFull;
             return leftToFull;
         }
 
-        if(!simulate) currentEnergy += maxReceive;
-        return maxReceive;
+        if(!simulate) currentEnergy += power;
+        return power;
     }
 
     @Override
-    public int extractEnergy(int maxExtract, boolean simulate) {
+    public float extractPower(float power, boolean simulate) {
         if(!canExtract()) return 0;
 
-        if(currentEnergy < maxExtract) {
-            int ret = currentEnergy;
+        if(currentEnergy < power) {
+            float ret = currentEnergy;
             if(!simulate) currentEnergy = 0;
             return ret;
         }
 
-        if(!simulate) currentEnergy -= maxExtract;
-        return maxExtract;
+        if(!simulate) currentEnergy -= power;
+        return power;
     }
 
     @Override
-    public int getEnergyStored() {
+    public float getStoredPower() {
         return currentEnergy;
     }
 
     @Override
-    public int getMaxEnergyStored() {
+    public float getMaxPower() {
         return maxEnergy;
     }
 
-    @Override
     public boolean canExtract() {
         return currentEnergy > 0;
     }
 
-    @Override
     public boolean canReceive() {
         return maxEnergy > currentEnergy;
     }
@@ -69,14 +70,24 @@ public class EnergyLimiterHandler implements IEnergyStorage, INBTSerializable<Co
     @Override
     public CompoundNBT serializeNBT() {
         CompoundNBT nbt = new CompoundNBT();
-        nbt.putInt("energyStored", currentEnergy);
+        nbt.putFloat("energyStored", currentEnergy);
         nbt.putInt("capacity", maxEnergy);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundNBT nbt) {
-        currentEnergy = nbt.getInt("energyStored");
+        currentEnergy = nbt.getFloat("energyStored");
         maxEnergy = nbt.getInt("capacity");
+    }
+
+    @Override
+    public boolean canSideExtract(@Nullable Direction dir) {
+        return true;
+    }
+
+    @Override
+    public boolean canSideInsert(@Nullable Direction dir) {
+        return true;
     }
 }

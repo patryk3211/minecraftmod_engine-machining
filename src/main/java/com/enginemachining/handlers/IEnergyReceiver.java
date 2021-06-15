@@ -1,7 +1,8 @@
 package com.enginemachining.handlers;
 
-import net.minecraftforge.energy.IEnergyStorage;
+import com.enginemachining.api.energy.IEnergyHandler;
+import com.enginemachining.utils.IPipeTraceable;
 
-public interface IEnergyReceiver {
-    IEnergyStorage getHandler();
+public interface IEnergyReceiver extends IPipeTraceable {
+    IEnergyHandler getHandler();
 }

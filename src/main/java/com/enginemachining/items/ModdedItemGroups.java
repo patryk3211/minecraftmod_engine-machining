@@ -122,6 +122,8 @@ public class ModdedItemGroups {
             battery_creative.setTag(nbt2);
 
             items.add(battery_creative);
+
+            items.add(new ItemStack(ModdedBlocks.infinite_power_source.get()));
         }
     };
 }
