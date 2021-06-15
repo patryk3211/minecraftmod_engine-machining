@@ -67,7 +67,7 @@
 
   "block.enginemachining.crusher": "Crusher",
   "item.enginemachining.battery_disposable": "Disposable Battery",
-  "block.enginemachining.power_limiter_copper": "Copper Power Limiter"
+  "block.enginemachining.power_limiter_copper": "Copper Power Limiter",
 
   "block.enginemachining.infinite_power_source": "Infinite Power Source"
 }

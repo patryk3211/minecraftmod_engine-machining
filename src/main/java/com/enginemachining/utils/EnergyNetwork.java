@@ -17,6 +17,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.*;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.TickEvent;
@@ -41,6 +43,7 @@ public class EnergyNetwork extends PipeNetwork {
     private static final boolean NETWORK_VISUALISER_ENABLED = false;
     private static final boolean RECEIVER_PATH_VISUALISER_ENABLED = false;
 
+    /*@OnlyIn(Dist.CLIENT)
     private static final class RenderTypes extends RenderState {
         static final RenderType MAIN = RenderType.create("display_font",
                 DefaultVertexFormats.POSITION_COLOR, GL11.GL_TRIANGLES,
@@ -54,7 +57,7 @@ public class EnergyNetwork extends PipeNetwork {
         public RenderTypes(String p_i225973_1_, Runnable p_i225973_2_, Runnable p_i225973_3_) {
             super(p_i225973_1_, p_i225973_2_, p_i225973_3_);
         }
-    }
+    }*/
 
     @SubscribeEvent
     public static void tickEvent(TickEvent.ServerTickEvent event) {
@@ -65,6 +68,7 @@ public class EnergyNetwork extends PipeNetwork {
         }
     }
 
+    /*@OnlyIn(Dist.CLIENT)
     private static void drawBox(Matrix4f matrix, float r, float g, float b, BufferBuilder builder) {
         builder.vertex(matrix,-0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
         builder.vertex(matrix,0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
@@ -111,6 +115,7 @@ public class EnergyNetwork extends PipeNetwork {
 
     // Debug energy network visualiser
     @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
     public static void renderEvent(RenderWorldLastEvent event) {
         if(NETWORK_VISUALISER_ENABLED) {
             MatrixStack stack = event.getMatrixStack();
@@ -231,7 +236,7 @@ public class EnergyNetwork extends PipeNetwork {
             GlStateManager._enableTexture();
             GlStateManager._enableCull();
         }
-    }
+    }*/
 
     @SubscribeEvent
     public static void onWorldUnload(WorldEvent.Unload event) {
