@@ -6,6 +6,7 @@ import com.enginemachining.blocks.ModdedBlocks;
 import com.enginemachining.items.nuggets.*;
 import com.enginemachining.items.dust.*;
 import com.enginemachining.items.ingot.*;
+import com.enginemachining.tools.aluminium.*;
 import com.enginemachining.tools.copper.*;
 import com.enginemachining.tools.silver.*;
 import net.minecraft.item.BlockItem;
@@ -71,6 +72,12 @@ public class ModdedItems {
     public static final RegistryObject<Item> chestplate_silver = ITEMS.register("chestplate_silver", ChestplateSilver::new);
     public static final RegistryObject<Item> leggins_silver = ITEMS.register("leggins_silver", LegginsSilver::new);
     public static final RegistryObject<Item> boots_silver = ITEMS.register("boots_silver", BootsSilver::new);
+
+    public static final RegistryObject<Item> pickaxe_aluminium = ITEMS.register("pickaxe_aluminium", PickaxeAluminium::new);
+    public static final RegistryObject<Item> axe_aluminium = ITEMS.register("axe_aluminium", AxeAluminium::new);
+    public static final RegistryObject<Item> sword_aluminium = ITEMS.register("sword_aluminium", SwordAluminium::new);
+    public static final RegistryObject<Item> hoe_aluminium = ITEMS.register("hoe_aluminium", HoeAluminium::new);
+    public static final RegistryObject<Item> shovel_aluminium = ITEMS.register("shovel_saluminium", ShovelAluminium::new);
 
     public static final RegistryObject<Item> nugget_copper = ITEMS.register("nugget_copper", NuggetCopper::new);
     public static final RegistryObject<Item> nugget_tin = ITEMS.register("nugget_tin", NuggetTin::new);

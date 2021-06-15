@@ -8,14 +8,13 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 
-public class BootsSilver extends ArmorItem {
-    public BootsSilver() {
-        super(ModArmorMaterial.silver, EquipmentSlotType.FEET, new Properties().tab(ModdedItemGroups.tools));
+public class ChestplateAluminium extends ArmorItem {
+    public ChestplateAluminium() {
+        super(ModArmorMaterial.aluminium, EquipmentSlotType.CHEST, new Properties().tab(ModdedItemGroups.tools));
     }
-
     @Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-        return "enginemachining:textures/item/armor/armor_silver.png";
+        return "enginemachining:textures/item/armor/armor_aluminium.png";
     }
 }

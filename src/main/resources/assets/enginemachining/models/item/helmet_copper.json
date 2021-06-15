@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "enginemachining:items/helmet_copper"
+    "layer0": "enginemachining:item/armor/helmet_copper"
   }
 }
