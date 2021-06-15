@@ -9,6 +9,7 @@ import com.enginemachining.recipes.ModdedRecipeSerializers;
 import com.enginemachining.tileentities.ModdedTileEntities;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -39,16 +40,19 @@ public class EngineMachiningMod
         ModdedRecipeSerializers.RECIPES.register(modBus);
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
+        MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoad);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        LOGGER.info("Creating biome features...");
-        OreGeneration.SetupFeatures();
         LOGGER.info("Registering Network Packets...");
         EngineMachiningPacketHandler.registerPacketType(CrusherTileMessage.class, CrusherTileMessage::encode, CrusherTileMessage::decode, CrusherTileMessage::handle);
         LOGGER.info("Registering Capabilities...");
         ModdedCapabilities.register();
         LOGGER.info("Setup Complete!");
+    }
+
+    private void onBiomeLoad(final BiomeLoadingEvent event) {
+        OreGeneration.onBiomeLoad(event);
     }
 }
