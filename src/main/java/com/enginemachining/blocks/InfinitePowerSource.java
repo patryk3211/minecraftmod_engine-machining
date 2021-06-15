@@ -1,6 +1,6 @@
 package com.enginemachining.blocks;
 
-import com.enginemachining.tileentities.DebugEnergySourceTile;
+import com.enginemachining.tileentities.InfinitePowerSourceTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -9,8 +9,8 @@ import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 
-public class DebugEnergySource extends Block {
-    public DebugEnergySource() {
+public class InfinitePowerSource extends Block {
+    public InfinitePowerSource() {
         super(Properties.of(Material.METAL).strength(-1f));
     }
 
@@ -22,6 +22,6 @@ public class DebugEnergySource extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new DebugEnergySourceTile();
+        return new InfinitePowerSourceTile();
     }
 }
