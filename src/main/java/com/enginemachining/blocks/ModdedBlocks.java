@@ -2,11 +2,9 @@ package com.enginemachining.blocks;
 
 import com.enginemachining.EngineMachiningMod;
 import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ObjectHolder;
 
 public class ModdedBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, EngineMachiningMod.MOD_ID);
@@ -24,5 +22,5 @@ public class ModdedBlocks {
 
     public static final RegistryObject<Block> power_limiter_copper = BLOCKS.register("power_limiter_copper", PowerLimiterCopper::new);
 
-    public static final RegistryObject<Block> debug_energy_source = BLOCKS.register("debug_energy_source", DebugEnergySource::new);
+    public static final RegistryObject<Block> infinite_power_source = BLOCKS.register("infinite_power_source", InfinitePowerSource::new);
 }

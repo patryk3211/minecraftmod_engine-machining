@@ -9,22 +9,20 @@ import com.enginemachining.utils.PipeNetwork;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import javax.annotation.Nullable;
 
-public class DebugEnergySourceTile extends TileEntity implements ITickableTileEntity, IEnergySender {
+public class InfinitePowerSourceTile extends TileEntity implements ITickableTileEntity, IEnergySender {
     private IEnergyHandler handler = new InfiniteEnergySource();
     private LazyOptional<IEnergyHandler> energyHandler = LazyOptional.of(() -> handler);
 
     private boolean firstTick = true;
 
-    public DebugEnergySourceTile() {
-        super(ModdedTileEntities.debug_energy_source.get());
+    public InfinitePowerSourceTile() {
+        super(ModdedTileEntities.infinite_power_source.get());
     }
 
     @Override
