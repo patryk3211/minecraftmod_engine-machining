@@ -30,36 +30,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class OreGeneration {
-    public static final int maxCopperGenSize = 8;
-    public static final int minCopperHeight = 7;
-    public static final int maxCopperHeight = 64;
-
-    public static final int maxAluminiumGenSize = 4;
-    public static final int minAluminiumHeight = 7;
-    public static final int maxAluminiumHeight = 30;
-
-    public static final int maxLeadGenSize = 4;
-    public static final int minLeadHeight = 4;
-    public static final int maxLeadHeight = 20;
-
-    public static final int maxNickelGenSize = 6;
-    public static final int minNickelHeight = 11;
-    public static final int maxNickelHeight = 35;
-
-    public static final int maxTinGenSize = 8;
-    public static final int minTinHeight = 10;
-    public static final int maxTinHeight = 64;
-
-    public static final int maxSilverGenSize = 5;
-    public static final int minSilverHeight = 4;
-    public static final int maxSilverHeight = 20;
-
-    public static void setupFeatures() {
-        for (Ore ore : Ore.values()) {
-
-        }
-    }
-
     public static void onBiomeLoad(BiomeLoadingEvent event) {
         if(event.getCategory() != Biome.Category.NETHER && event.getCategory() != Biome.Category.THEEND) {
             for (Ore ore : Ore.values()) {
