@@ -40,24 +40,180 @@ public class EnergyNetwork extends PipeNetwork {
 
     private final int id;
 
-    private static final boolean NETWORK_VISUALISER_ENABLED = false;
-    private static final boolean RECEIVER_PATH_VISUALISER_ENABLED = false;
+    @OnlyIn(Dist.CLIENT)
+    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+    public static class EnergyNetworkDebugger {
+        private static final boolean NETWORK_VISUALISER_ENABLED = false;
+        private static final boolean RECEIVER_PATH_VISUALISER_ENABLED = false;
 
-    /*@OnlyIn(Dist.CLIENT)
-    private static final class RenderTypes extends RenderState {
-        static final RenderType MAIN = RenderType.create("display_font",
-                DefaultVertexFormats.POSITION_COLOR, GL11.GL_TRIANGLES,
-                256, false, false,
-                RenderType.State.builder()
-                        .setAlphaState(DEFAULT_ALPHA)
-                        .setWriteMaskState(COLOR_DEPTH_WRITE)
-                        .setLightmapState(NO_LIGHTMAP)
-                        .createCompositeState(false));
+        private static void drawBox(Matrix4f matrix, float r, float g, float b, BufferBuilder builder) {
+            builder.vertex(matrix,-0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,-0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,-0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
 
-        public RenderTypes(String p_i225973_1_, Runnable p_i225973_2_, Runnable p_i225973_3_) {
-            super(p_i225973_1_, p_i225973_2_, p_i225973_3_);
+            builder.vertex(matrix,-0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,-0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,-0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+
+            builder.vertex(matrix,-0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,-0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,-0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+
+            builder.vertex(matrix,-0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,-0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,-0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+
+            builder.vertex(matrix,0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+
+            builder.vertex(matrix,-0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,-0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,-0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,-0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,-0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
+            builder.vertex(matrix,-0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
         }
-    }*/
+
+        // Debug energy network visualiser
+        @SubscribeEvent
+        public static void renderEvent(RenderWorldLastEvent event) {
+            if(NETWORK_VISUALISER_ENABLED) {
+                MatrixStack stack = event.getMatrixStack();
+                stack.pushPose();
+
+                GlStateManager._disableCull();
+                for (int i = 0; i < networks.size(); i++) {
+                    EnergyNetwork network = networks.get(i);
+                    Vector3f rgb = new Vector3f((network.id % 8f) / 8f, (network.id / 8f % 8f) / 8f, (network.id / 8f / 8f % 8f) / 8f);
+                    Tessellator tessellator = Tessellator.getInstance();
+                    BufferBuilder builder = tessellator.getBuilder();
+                    builder.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
+                    for (BlockPos blockPos : network.pipes.keySet()) {
+                        stack.pushPose();
+
+                        Vector3d pp = Minecraft.getInstance().cameraEntity.getEyePosition(0);
+                        stack.translate(-(pp.x - blockPos.getX() - 0.5f), -(pp.y - blockPos.getY() - 0.5f), -(pp.z - blockPos.getZ() - 0.5f));
+
+                        stack.scale(0.2f, 0.2f, 0.2f);
+                        stack.translate(network.id % 16f / 16f, network.id / 16f % 16f / 16f, 0);
+
+                        drawBox(stack.last().pose(), rgb.x(), rgb.y(), rgb.z(), builder);
+
+                        stack.popPose();
+                    }
+
+                    for (BlockPos blockPos : network.receivers.keySet()) {
+                        stack.pushPose();
+
+                        Vector3d pp = Minecraft.getInstance().cameraEntity.getEyePosition(0);
+                        stack.translate(-(pp.x - blockPos.getX() - 0.5f), -(pp.y - blockPos.getY() - 0.5f), -(pp.z - blockPos.getZ() - 0.5f));
+
+                        stack.scale(1.1f, 1.1f, 1.1f);
+                        //stack.translate(network.id % 16f / 16f, network.id / 16f % 16f / 16f, 0);
+
+                        drawBox(stack.last().pose(), rgb.x(), rgb.y(), rgb.z(), builder);
+
+                        stack.popPose();
+                    }
+
+                    for (BlockPos blockPos : network.senders.keySet()) {
+                        stack.pushPose();
+
+                        Vector3d pp = Minecraft.getInstance().cameraEntity.getEyePosition(0);
+                        stack.translate(-(pp.x - blockPos.getX() - 0.5f), -(pp.y - blockPos.getY() - 0.5f), -(pp.z - blockPos.getZ() - 0.5f));
+
+                        stack.scale(1.1f, 1.1f, 1.1f);
+                        //stack.translate(network.id % 16f / 16f, network.id / 16f % 16f / 16f, 0);
+
+                        drawBox(stack.last().pose(), rgb.x(), rgb.y(), rgb.z(), builder);
+
+                        stack.popPose();
+                    }
+
+                    tessellator.end();
+                }
+
+                stack.popPose();
+
+                GlStateManager._enableCull();
+            }
+        }
+
+        @SubscribeEvent
+        public static void onHighlight(DrawHighlightEvent.HighlightBlock event) {
+            if(RECEIVER_PATH_VISUALISER_ENABLED) {
+                GlStateManager._disableCull();
+                GlStateManager._disableTexture();
+                MatrixStack stack = event.getMatrix();
+                stack.pushPose();
+                BlockPos pos = event.getTarget().getBlockPos();
+                Vector3d pp = Minecraft.getInstance().cameraEntity.getEyePosition(0);
+                Tessellator tessellator = Tessellator.getInstance();
+                BufferBuilder builder = tessellator.getBuilder();
+                builder.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
+                PipeNetwork net = null;
+                for (EnergyNetwork network : networks) {
+                    boolean found = false;
+                    for (BlockPos blockPos : network.receivers.keySet()) {
+                        if(blockPos.getX() == pos.getX() && blockPos.getY() == pos.getY() && blockPos.getZ() == pos.getZ()) {
+                            net = network;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(found) break;
+                }
+                if(net != null) {
+                    ReceiverPacket rec = net.receivers.get(pos);
+                    float r = 0;
+                    float g = 0;
+                    float b = 0;
+                    for (ReceiverToSenderPathList pathList : rec.pathsList.values()) {
+                        b++;
+                        for (ReceiverToSenderPathListEntry path : pathList.paths) {
+                            IPipeTraceable prev = null;
+                            for (IPipeTraceable pipe : path.pipes) {
+                                //g++;
+                                stack.pushPose();
+                                stack.translate(-(pp.x - pipe.getBlockPosition().getX() - 0.5f), -(pp.y - pipe.getBlockPosition().getY() - 0.5f), -(pp.z - pipe.getBlockPosition().getZ() - 0.5f));
+                                stack.translate(r/10f, r/10f, 0.2f);
+                                stack.scale(0.1f, 0.1f, 0.1f);
+                                if(prev != null) {
+                                    BlockPos dP = pipe.getBlockPosition().subtract(prev.getBlockPosition());
+                                    stack.scale(Math.abs(dP.getX())*3f+1f, Math.abs(dP.getY())*3f+1f, Math.abs(dP.getZ())*3f+1f);
+                                    stack.translate(-dP.getX()/2f, -dP.getY()/2f, -dP.getZ()/2f);
+                                }
+                                drawBox(stack.last().pose(), r/4f, g/32f, b/16f, builder);
+                                stack.popPose();
+                                prev = pipe;
+                            }
+                            r++;
+                        }
+                    }
+                }
+                tessellator.end();
+                stack.popPose();
+                GlStateManager._enableTexture();
+                GlStateManager._enableCull();
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void tickEvent(TickEvent.ServerTickEvent event) {
@@ -67,176 +223,6 @@ public class EnergyNetwork extends PipeNetwork {
             }
         }
     }
-
-    /*@OnlyIn(Dist.CLIENT)
-    private static void drawBox(Matrix4f matrix, float r, float g, float b, BufferBuilder builder) {
-        builder.vertex(matrix,-0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,-0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,-0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-
-        builder.vertex(matrix,-0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,-0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,-0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-
-        builder.vertex(matrix,-0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,-0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,-0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-
-        builder.vertex(matrix,-0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,-0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,-0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-
-        builder.vertex(matrix,0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-
-        builder.vertex(matrix,-0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,-0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,-0.5f, -0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,-0.5f, -0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,-0.5f, 0.5f, -0.5f).color(r, g, b, 1.0f).endVertex();
-        builder.vertex(matrix,-0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
-    }
-
-    // Debug energy network visualiser
-    @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
-    public static void renderEvent(RenderWorldLastEvent event) {
-        if(NETWORK_VISUALISER_ENABLED) {
-            MatrixStack stack = event.getMatrixStack();
-            stack.pushPose();
-
-            GlStateManager._disableCull();
-            for (int i = 0; i < networks.size(); i++) {
-                EnergyNetwork network = networks.get(i);
-                Vector3f rgb = new Vector3f((network.id % 8f) / 8f, (network.id / 8f % 8f) / 8f, (network.id / 8f / 8f % 8f) / 8f);
-                Tessellator tessellator = Tessellator.getInstance();
-                BufferBuilder builder = tessellator.getBuilder();
-                builder.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
-                for (BlockPos blockPos : network.pipes.keySet()) {
-                    stack.pushPose();
-
-                    Vector3d pp = Minecraft.getInstance().cameraEntity.getEyePosition(0);
-                    stack.translate(-(pp.x - blockPos.getX() - 0.5f), -(pp.y - blockPos.getY() - 0.5f), -(pp.z - blockPos.getZ() - 0.5f));
-
-                    stack.scale(0.2f, 0.2f, 0.2f);
-                    stack.translate(network.id % 16f / 16f, network.id / 16f % 16f / 16f, 0);
-
-                    drawBox(stack.last().pose(), rgb.x(), rgb.y(), rgb.z(), builder);
-
-                    stack.popPose();
-                }
-
-                for (BlockPos blockPos : network.receivers.keySet()) {
-                    stack.pushPose();
-
-                    Vector3d pp = Minecraft.getInstance().cameraEntity.getEyePosition(0);
-                    stack.translate(-(pp.x - blockPos.getX() - 0.5f), -(pp.y - blockPos.getY() - 0.5f), -(pp.z - blockPos.getZ() - 0.5f));
-
-                    stack.scale(1.1f, 1.1f, 1.1f);
-                    //stack.translate(network.id % 16f / 16f, network.id / 16f % 16f / 16f, 0);
-
-                    drawBox(stack.last().pose(), rgb.x(), rgb.y(), rgb.z(), builder);
-
-                    stack.popPose();
-                }
-
-                for (BlockPos blockPos : network.senders.keySet()) {
-                    stack.pushPose();
-
-                    Vector3d pp = Minecraft.getInstance().cameraEntity.getEyePosition(0);
-                    stack.translate(-(pp.x - blockPos.getX() - 0.5f), -(pp.y - blockPos.getY() - 0.5f), -(pp.z - blockPos.getZ() - 0.5f));
-
-                    stack.scale(1.1f, 1.1f, 1.1f);
-                    //stack.translate(network.id % 16f / 16f, network.id / 16f % 16f / 16f, 0);
-
-                    drawBox(stack.last().pose(), rgb.x(), rgb.y(), rgb.z(), builder);
-
-                    stack.popPose();
-                }
-
-                tessellator.end();
-            }
-
-            stack.popPose();
-
-            GlStateManager._enableCull();
-        }
-    }
-
-    @SubscribeEvent
-    public static void onHighlight(DrawHighlightEvent.HighlightBlock event) {
-        if(RECEIVER_PATH_VISUALISER_ENABLED) {
-            GlStateManager._disableCull();
-            GlStateManager._disableTexture();
-            MatrixStack stack = event.getMatrix();
-            stack.pushPose();
-            BlockPos pos = event.getTarget().getBlockPos();
-            Vector3d pp = Minecraft.getInstance().cameraEntity.getEyePosition(0);
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder builder = tessellator.getBuilder();
-            builder.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
-            PipeNetwork net = null;
-            for (EnergyNetwork network : networks) {
-                boolean found = false;
-                for (BlockPos blockPos : network.receivers.keySet()) {
-                    if(blockPos.getX() == pos.getX() && blockPos.getY() == pos.getY() && blockPos.getZ() == pos.getZ()) {
-                        net = network;
-                        found = true;
-                        break;
-                    }
-                }
-                if(found) break;
-            }
-            if(net != null) {
-                ReceiverPacket rec = net.receivers.get(pos);
-                float r = 0;
-                float g = 0;
-                float b = 0;
-                for (ReceiverToSenderPathList pathList : rec.pathsList.values()) {
-                    b++;
-                    for (ReceiverToSenderPathListEntry path : pathList.paths) {
-                        IPipeTraceable prev = null;
-                        for (IPipeTraceable pipe : path.pipes) {
-                            //g++;
-                            stack.pushPose();
-                            stack.translate(-(pp.x - pipe.getBlockPos().getX() - 0.5f), -(pp.y - pipe.getBlockPos().getY() - 0.5f), -(pp.z - pipe.getBlockPos().getZ() - 0.5f));
-                            stack.translate(r/10f, r/10f, 0.2f);
-                            stack.scale(0.1f, 0.1f, 0.1f);
-                            if(prev != null) {
-                                BlockPos dP = pipe.getBlockPos().subtract(prev.getBlockPos());
-                                stack.scale(Math.abs(dP.getX())*3f+1f, Math.abs(dP.getY())*3f+1f, Math.abs(dP.getZ())*3f+1f);
-                                stack.translate(-dP.getX()/2f, -dP.getY()/2f, -dP.getZ()/2f);
-                            }
-                            drawBox(stack.last().pose(), r/4f, g/32f, b/16f, builder);
-                            stack.popPose();
-                            prev = pipe;
-                        }
-                        r++;
-                    }
-                }
-            }
-            tessellator.end();
-            stack.popPose();
-            GlStateManager._enableTexture();
-            GlStateManager._enableCull();
-        }
-    }*/
 
     @SubscribeEvent
     public static void onWorldUnload(WorldEvent.Unload event) {
