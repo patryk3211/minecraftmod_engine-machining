@@ -103,7 +103,6 @@ public class PowerLimiterTile extends TileEntity implements IPipeTraceable, ITic
     @Override
     public void tick() {
         if(firstTick) {
-            // TODO: Power limiter does not get networks on each of its sides
             if(!level.isClientSide) if(networks.size() == 0) PipeNetwork.addTraceable(this, ModdedCapabilities.ENERGY, () -> new EnergyNetwork(level));
             firstTick = false;
         }

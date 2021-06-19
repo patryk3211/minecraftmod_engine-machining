@@ -106,7 +106,6 @@ public class EnergyWireTile extends TileEntity implements IPipeTraceable, ITicka
     @Override
     public void tick() {
         if(firstTick) {
-            // TODO:                Add this to every traceable
             if(!level.isClientSide) if(network == null) PipeNetwork.addTraceable(this, ModdedCapabilities.ENERGY, () -> new EnergyNetwork(level));
             firstTick = false;
         }

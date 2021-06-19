@@ -111,9 +111,6 @@ public class PipeNetwork {
                 IPipeTraceable neighbour = (IPipeTraceable) nte;
                 // TODO: [12.06.2021] Maybe don't recreate the entire network when one wire is deleted.
                 if (neighbour.getNetwork(d.getOpposite()) != null) continue;
-                //PipeNetwork net = supplier.get();//new PipeNetwork(neighbour.getLevel(), capability);
-                //net.traceNetwork(neighbourPos);
-                //net.traceReceivers();
                 trace(neighbourPos, level, capability, supplier);
             }
         } else {
@@ -123,9 +120,6 @@ public class PipeNetwork {
             IPipeTraceable neighbour = (IPipeTraceable) nte;
             // TODO: [12.06.2021] Maybe don't recreate the entire network when one wire is deleted.
             if (neighbour.getNetwork(dir.getOpposite()) != null) return;
-            //PipeNetwork net = supplier.get();//new PipeNetwork(neighbour.getLevel(), capability);
-            //net.traceNetwork(neighbourPos);
-            //net.traceReceivers();
             trace(neighbourPos, level, capability, supplier);
         }
     }
@@ -158,15 +152,11 @@ public class PipeNetwork {
         IPipeTraceable.Type type = traceable.getMainType(capability);
         if(networks.size() == 0) {
             // Create a new network.
-            //PipeNetwork network = supplier.get();//new PipeNetwork(traceable.getLevel(), capability);
-            //network.traceNetwork(traceable.getBlockPosition());
-            //if(DEBUG_DUMP) network.dump();
-            //network.traceReceivers();
             trace(traceable.getBlockPosition(), traceable.getWorld(), capability, supplier);
         } else if(networks.size() == 1) {
             // Only one network found around the traceable
             networks.forEach((net, dirs) -> {
-                dirs.forEach(dir -> traceable.setNetwork(dir, net));// traceable.setNetwork(null, net);
+                dirs.forEach(dir -> traceable.setNetwork(dir, net));
                 if(dirs.size() == 1) {
                     if(type == IPipeTraceable.Type.PIPE) net.pipes.put(traceable.getBlockPosition(), traceable); // We don't need to retrace a blind pipe
                     else if(type == IPipeTraceable.Type.TRANSCEIVER) {
@@ -319,7 +309,6 @@ public class PipeNetwork {
         IPipeTraceable traceable = (IPipeTraceable) te;
 
         traced.add(traceable);
-        //for(Direction d : Direction.values()) {
         IPipeTraceable.Type type = traceable.getSideType(direction, capability);
         switch (type) {
             case PIPE:
@@ -334,9 +323,7 @@ public class PipeNetwork {
             case NONE:
                 return;
         }
-        //}
 
-        // TODO: Make it so that the trace starts from traceStart+direction
         if(direction != null) {
             PipeNetwork oldNet = ((IPipeTraceable) te).getNetwork(direction);
             traceable.setNetwork(direction, this);
