@@ -90,9 +90,9 @@ public class PipeNetwork {
     // Stores the level in which this network exists
     private final World level;
 
-    private final Capability<? extends ITrackableHandler> capability;
+    private final Capability<?> capability;
 
-    protected PipeNetwork(World level, Capability<? extends ITrackableHandler> capability) {
+    protected PipeNetwork(World level, Capability<?> capability) {
         pipes = new HashMap<>();
         receivers = new HashMap<>();
         senders = new HashMap<>();
@@ -101,7 +101,7 @@ public class PipeNetwork {
         this.level = level;
     }
 
-    public static void removeTraceable(BlockPos traceablePos, World level, Capability<? extends ITrackableHandler> capability, PipeNetwork network, Supplier<? extends PipeNetwork> supplier, Direction dir) {
+    public static void removeTraceable(BlockPos traceablePos, World level, Capability<?> capability, PipeNetwork network, Supplier<? extends PipeNetwork> supplier, Direction dir) {
         if(network != null) network.delete();
         if(dir == null) {
             for (Direction d : Direction.values()) {
@@ -130,7 +130,7 @@ public class PipeNetwork {
         senders.forEach((pos, send) -> send.setNetwork(null, null));
     }
 
-    public static void addTraceable(IPipeTraceable traceable, Capability<? extends ITrackableHandler> capability, Supplier<? extends PipeNetwork> supplier) {
+    public static void addTraceable(IPipeTraceable traceable, Capability<?> capability, Supplier<? extends PipeNetwork> supplier) {
         Map<PipeNetwork, Set<Direction>> networks = new HashMap<>();
         for(Direction d : Direction.values()) {
             if(!traceable.canConnect(d, capability)) continue;

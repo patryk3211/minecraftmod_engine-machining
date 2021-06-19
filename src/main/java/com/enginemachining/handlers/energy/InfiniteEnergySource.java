@@ -26,14 +26,4 @@ public class InfiniteEnergySource implements IEnergyHandler {
     public float getMaxPower() {
         return Integer.MAX_VALUE;
     }
-
-    @Override
-    public boolean canSideExtract(@Nullable Direction dir) {
-        return true;
-    }
-
-    @Override
-    public boolean canSideInsert(@Nullable Direction dir) {
-        return false;
-    }
 }
