@@ -9,16 +9,6 @@ public class DefaultEnergyHandler implements IEnergyHandler {
     public float energy;
 
     @Override
-    public boolean canSideExtract(@Nullable Direction dir) {
-        return true;
-    }
-
-    @Override
-    public boolean canSideInsert(@Nullable Direction dir) {
-        return true;
-    }
-
-    @Override
     public float insertPower(float power, boolean simulate) {
         if(!simulate) energy += power;
         return power;
