@@ -2,7 +2,7 @@ package com.enginemachining.tileentities;
 
 import com.enginemachining.api.energy.IEnergyHandler;
 import com.enginemachining.capabilities.ModdedCapabilities;
-import com.enginemachining.handlers.IEnergySender;
+import com.enginemachining.handlers.IEnergyHandlerProvider;
 import com.enginemachining.handlers.energy.InfiniteEnergySource;
 import com.enginemachining.utils.EnergyNetwork;
 import com.enginemachining.utils.PipeNetwork;
@@ -17,7 +17,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 
 import javax.annotation.Nullable;
 
-public class InfinitePowerSourceTile extends TileEntity implements ITickableTileEntity, IEnergySender {
+public class InfinitePowerSourceTile extends TileEntity implements ITickableTileEntity, IEnergyHandlerProvider {
     private IEnergyHandler handler = new InfiniteEnergySource();
     private LazyOptional<IEnergyHandler> energyHandler = LazyOptional.of(() -> handler);
 
@@ -28,7 +28,7 @@ public class InfinitePowerSourceTile extends TileEntity implements ITickableTile
     }
 
     @Override
-    public IEnergyHandler getHandler() {
+    public IEnergyHandler getEnergyHandler() {
         return handler;
     }
 
@@ -57,12 +57,12 @@ public class InfinitePowerSourceTile extends TileEntity implements ITickableTile
     private PipeNetwork network;
 
     @Override
-    public PipeNetwork getNetwork() {
+    public PipeNetwork getNetwork(@Nullable Direction side) {
         return network;
     }
 
     @Override
-    public void setNetwork(PipeNetwork network) {
+    public void setNetwork(@Nullable Direction side, PipeNetwork network) {
         this.network = network;
     }
 

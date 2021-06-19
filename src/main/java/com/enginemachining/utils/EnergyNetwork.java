@@ -1,19 +1,14 @@
 package com.enginemachining.utils;
 
 import com.enginemachining.capabilities.ModdedCapabilities;
-import com.enginemachining.handlers.IEnergyReceiver;
-import com.enginemachining.handlers.IEnergySender;
+import com.enginemachining.handlers.IEnergyHandlerProvider;
 import com.enginemachining.tileentities.EnergyWireTile;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
-import jdk.nashorn.internal.ir.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.RenderState;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.*;
 import net.minecraft.world.World;
@@ -218,9 +213,12 @@ public class EnergyNetwork extends PipeNetwork {
     @SubscribeEvent
     public static void tickEvent(TickEvent.ServerTickEvent event) {
         if(event.phase == TickEvent.Phase.END) {
+            List<EnergyNetwork> toDelete = new ArrayList<>();
             for (EnergyNetwork network : networks) {
-                network.transferPower();
+                if(network.receivers.size() == 0 && network.senders.size() == 0 && network.pipes.size() == 0) toDelete.add(network);
+                else network.transferPower();
             }
+            toDelete.forEach(EnergyNetwork::delete);
         }
     }
 
@@ -241,7 +239,7 @@ public class EnergyNetwork extends PipeNetwork {
 
     @Override
     public void delete() {
-        networks.removeIf(energyNetwork -> energyNetwork.id == id);
+        networks.remove(this);
         super.delete();
     }
 
@@ -251,20 +249,20 @@ public class EnergyNetwork extends PipeNetwork {
         if(receiversCount == 0 || sendersCount == 0) return;
         AtomicReference<Float> requestedTransfer = new AtomicReference<>((float) 0);
         AtomicReference<Float> maxAvailableTransfer = new AtomicReference<>((float) 0);
-        Map<IEnergySender, Float> senderList = new HashMap<>();
-        Map<IEnergyReceiver, Float> receiverList = new HashMap<>();
+        Map<IEnergyHandlerProvider, Float> senderList = new HashMap<>();
+        Map<IEnergyHandlerProvider, Float> receiverList = new HashMap<>();
         senders.forEach((pos, pair) -> {
-            if(pair instanceof IEnergySender) {
-                IEnergySender sender = (IEnergySender) pair;
-                float max_extract = sender.getHandler().extractPower(Integer.MAX_VALUE, true);
+            if(pair instanceof IEnergyHandlerProvider) {
+                IEnergyHandlerProvider sender = (IEnergyHandlerProvider) pair;
+                float max_extract = sender.getEnergyHandler().extractPower(Integer.MAX_VALUE, true);
                 maxAvailableTransfer.updateAndGet(v -> v + max_extract);
                 senderList.put(sender, 0f);
             }
         });
         receivers.forEach((pos, rec) -> {
-            if(rec.receiver instanceof IEnergyReceiver) {
-                IEnergyReceiver receiver = (IEnergyReceiver) rec.receiver;
-                float max_insert = receiver.getHandler().insertPower(Integer.MAX_VALUE, true);
+            if(rec.receiver instanceof IEnergyHandlerProvider) {
+                IEnergyHandlerProvider receiver = (IEnergyHandlerProvider) rec.receiver;
+                float max_insert = receiver.getEnergyHandler().insertPower(Integer.MAX_VALUE, true);
                 requestedTransfer.updateAndGet(v -> v + max_insert);
                 receiverList.put(receiver, 0f);
 
@@ -276,8 +274,8 @@ public class EnergyNetwork extends PipeNetwork {
         int count = sendersCount;
 
         // Extract the given amount of power from each sender.
-        for(IEnergySender sender : senderList.keySet()) {
-            float max_transfer = sender.getHandler().extractPower(left/(float) count, false);
+        for(IEnergyHandlerProvider sender : senderList.keySet()) {
+            float max_transfer = sender.getEnergyHandler().extractPower(left/(float) count, false);
             left -= max_transfer;
             count--;
             senderList.replace(sender, max_transfer);
@@ -287,8 +285,8 @@ public class EnergyNetwork extends PipeNetwork {
         count = receiversCount;
 
         // Insert the given amount of power into every receiver.
-        for(IEnergyReceiver receiver : receiverList.keySet()) {
-            float max_transfer = receiver.getHandler().insertPower(left/(float) count, false);
+        for(IEnergyHandlerProvider receiver : receiverList.keySet()) {
+            float max_transfer = receiver.getEnergyHandler().insertPower(left/(float) count, false);
             left -= max_transfer;
             count--;
             receiverList.replace(receiver, max_transfer);
@@ -297,8 +295,8 @@ public class EnergyNetwork extends PipeNetwork {
         // Add power flow to each pipe in each path.
         receivers.forEach((pos, packet) -> {
             IPipeTraceable traceable = packet.receiver;
-            if(traceable instanceof IEnergyReceiver) {
-                IEnergyReceiver receiver = (IEnergyReceiver) traceable;
+            if(traceable instanceof IEnergyHandlerProvider) {
+                IEnergyHandlerProvider receiver = (IEnergyHandlerProvider) traceable;
                 final float powerToReceive = receiverList.get(receiver);
                 final float powerPerSender = powerToReceive / packet.pathsList.size();
                 packet.pathsList.forEach((sender, pathList) -> {

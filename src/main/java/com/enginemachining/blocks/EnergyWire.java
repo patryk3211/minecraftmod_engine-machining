@@ -1,11 +1,8 @@
 package com.enginemachining.blocks;
 
 import com.enginemachining.capabilities.ModdedCapabilities;
-import com.enginemachining.handlers.IEnergyReceiver;
-import com.enginemachining.handlers.IEnergySender;
 import com.enginemachining.tileentities.EnergyWireTile;
 import com.enginemachining.utils.*;
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -25,14 +22,9 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
-import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -79,7 +71,7 @@ public abstract class EnergyWire extends Block {
         TileEntity neighbor = worldIn.getBlockEntity(fromPos);
         //if(neighbor != null) System.out.println(((EnergyWireTile)neighbor).disconnectMask);
         boolean blockConnectable = neighbor instanceof EnergyWireTile ||
-                (neighbor != null && neighbor.getCapability(ModdedCapabilities.ENERGY, neighborDir).isPresent());
+                (neighbor != null && neighbor.getCapability(ModdedCapabilities.ENERGY, neighborDir.getOpposite()).isPresent());
         TileEntity te = worldIn.getBlockEntity(pos);
         if(blockConnectable && te instanceof EnergyWireTile && neighbor instanceof EnergyWireTile) {
             blockConnectable = ((EnergyWireTile) te).isSideConnectable(neighborDir) && ((EnergyWireTile) neighbor).isSideConnectable(neighborDir.getOpposite());
@@ -126,9 +118,9 @@ public abstract class EnergyWire extends Block {
         if(!(newState.getBlock() instanceof EnergyWire)) {
             TileEntity entity = worldIn.getBlockEntity(pos);
             PipeNetwork network = null;
-            if(entity instanceof IPipeTraceable) network = ((IPipeTraceable) entity).getNetwork();
+            if(entity instanceof IPipeTraceable) network = ((IPipeTraceable) entity).getNetwork(null);
             worldIn.removeBlockEntity(pos);
-            PipeNetwork.removeTraceable(pos, worldIn, ModdedCapabilities.ENERGY, network, () -> new EnergyNetwork(worldIn));
+            PipeNetwork.removeTraceable(pos, worldIn, ModdedCapabilities.ENERGY, network, () -> new EnergyNetwork(worldIn), null);
         }
     }
 

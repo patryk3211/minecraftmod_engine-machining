@@ -5,6 +5,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 
+import javax.annotation.Nullable;
+
 public interface IPipeTraceable {
     enum Type {
         NONE,
@@ -14,8 +16,8 @@ public interface IPipeTraceable {
         TRANSCEIVER
     }
 
-    PipeNetwork getNetwork();
-    void setNetwork(PipeNetwork network);
+    PipeNetwork getNetwork(@Nullable Direction side);
+    void setNetwork(@Nullable Direction side, PipeNetwork network);
 
     boolean canConnect(Direction side, Capability<?> capability);
 
