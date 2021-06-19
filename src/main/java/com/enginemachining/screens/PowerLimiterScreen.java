@@ -7,17 +7,28 @@ import com.enginemachining.messages.CrusherTileMessage;
 import com.enginemachining.messages.PowerLimiterMessage;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.MouseHelper;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.widget.AbstractSlider;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.fml.client.gui.GuiUtils;
+import net.minecraftforge.fml.client.gui.widget.Slider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PowerLimiterScreen extends ContainerScreen<PowerLimiterContainer> implements IHasContainer<PowerLimiterContainer> {
     private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(EngineMachiningMod.MOD_ID, "textures/gui/power_limiter.png");
 
     private int xOrigin;
     private int yOrigin;
+
+    private double sliderPos;
+    private boolean sliderStuck;
 
     public PowerLimiterScreen(PowerLimiterContainer container, PlayerInventory inventory, ITextComponent title) {
         super(container, inventory, title);
@@ -29,6 +40,10 @@ public class PowerLimiterScreen extends ContainerScreen<PowerLimiterContainer> i
 
         xOrigin = 0;
         yOrigin = 0;
+
+        sliderStuck = false;
+
+        sliderPos = (double)menu.trackedArray.get(5)/menu.trackedArray.get(3);
     }
 
     @Override
@@ -41,19 +56,43 @@ public class PowerLimiterScreen extends ContainerScreen<PowerLimiterContainer> i
             int buttonWidth = 17;
             int buttonHeight = 13;
             if (mouseX > onButtonOriginX && mouseX < onButtonOriginX + buttonWidth && mouseY > onButtonOriginY && mouseY < onButtonOriginY + buttonHeight) {
-                if(menu.trackedArray.get(4) == 0) EngineMachiningPacketHandler.INSTANCE.sendToServer(new PowerLimiterMessage(menu.tileEntity.getBlockPos(), true));
+                if(menu.trackedArray.get(4) == 0) EngineMachiningPacketHandler.INSTANCE.sendToServer(new PowerLimiterMessage(menu.tileEntity.getBlockPos(), true, -1));
             }
             if (mouseX > offButtonOriginX && mouseX < offButtonOriginX + buttonWidth && mouseY > offButtonOriginY && mouseY < offButtonOriginY + buttonHeight) {
-                if(menu.trackedArray.get(4) == 1) EngineMachiningPacketHandler.INSTANCE.sendToServer(new PowerLimiterMessage(menu.tileEntity.getBlockPos(), false));
+                if(menu.trackedArray.get(4) == 1) EngineMachiningPacketHandler.INSTANCE.sendToServer(new PowerLimiterMessage(menu.tileEntity.getBlockPos(), false, -1));
             }
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double p_231045_6_, double p_231045_8_) {
+        // Stick slider to mouse cursor
+        double sliderOffset = (sliderPos*68f/(68f/64f));
+        if(mouseX >= xOrigin+112 && mouseY > yOrigin+71-sliderOffset && mouseX <= xOrigin+112+7 && mouseY <= yOrigin+71+4-sliderOffset && button == 0) sliderStuck = true;
+        if(sliderStuck) {
+            // Move slider to cursor
+            if(mouseY >= yOrigin+7+2 && mouseY <= yOrigin+74) {
+                sliderPos = 1.0 - (mouseY - (yOrigin+7) - 2)/65.0;
+            }
+        }
+        return super.mouseDragged(mouseX, mouseY, button, p_231045_6_, p_231045_8_);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        // Unstick slider
+        sliderStuck = false;
+        EngineMachiningPacketHandler.INSTANCE.sendToServer(new PowerLimiterMessage(menu.tileEntity.getBlockPos(), menu.trackedArray.get(4) == 1, (int)(sliderPos*menu.trackedArray.get(3))));
+        return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
     protected void renderBg(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         minecraft.getTextureManager().bind(GUI_TEXTURE);
+
+        if(Double.compare(sliderPos, Double.NaN) == 0) sliderPos = (double)menu.trackedArray.get(5)/menu.trackedArray.get(3);
 
         xOrigin = (this.width - this.imageWidth) / 2;
         yOrigin = (this.height - this.imageHeight) / 2;
@@ -67,8 +106,29 @@ public class PowerLimiterScreen extends ContainerScreen<PowerLimiterContainer> i
         int extractBarHeight = (int)(extractBarRatio * 68);
         this.blit(stack, xOrigin+104, yOrigin+(68-extractBarHeight)+7, 216, 1+(68-extractBarHeight), 5, extractBarHeight);
 
-        if(menu.trackedArray.get(4) == 1) {
-            this.blit(stack, xOrigin+80, yOrigin+32, 194, 0, 14, 28);
+        if(menu.trackedArray.get(4) == 1) this.blit(stack, xOrigin+80, yOrigin+32, 194, 0, 14, 28);
+
+        // Slider
+        double sliderOffset = (sliderPos*68f/(68f/64f));
+        if(mouseX >= xOrigin+112 && mouseY > yOrigin+71-sliderOffset && mouseX <= xOrigin+112+7 && mouseY <= yOrigin+71+4-sliderOffset) this.blit(stack, xOrigin+112, yOrigin+71-(int)sliderOffset, 183, 30, 7, 4);
+        else this.blit(stack, xOrigin+112, yOrigin+71-(int)sliderOffset, 176, 30, 7, 4);
+
+        List<ITextComponent> lines = new ArrayList<>();
+        if(mouseX >= xOrigin+64 && mouseY >= yOrigin+6 && mouseX <= xOrigin+70 && mouseY <= yOrigin+75) {
+            lines.add(new StringTextComponent("Internal Buffer:"));
+            lines.add(new StringTextComponent(menu.trackedArray.get(0) + "/" + menu.trackedArray.get(1)));
         }
+        if(mouseX >= xOrigin+103 && mouseY >= yOrigin+6 && mouseX <= xOrigin+109 && mouseY <= yOrigin+75) {
+            lines.add(new StringTextComponent("Current Transfer:"));
+            lines.add(new StringTextComponent(menu.trackedArray.get(2) + " EE/t"));
+        }
+        if(mouseX >= xOrigin+111 && mouseY >= yOrigin+6 && mouseX <= xOrigin+119 && mouseY <= yOrigin+75) {
+            lines.add(new StringTextComponent("Max Transfer:"));
+            if(!sliderStuck) lines.add(new StringTextComponent(menu.trackedArray.get(5) + " EE/t"));
+            else lines.add(new StringTextComponent((int)(sliderPos*menu.trackedArray.get(3)) + " EE/t"));
+        }
+        if(lines.size() != 0) GuiUtils.drawHoveringText(stack, lines, mouseX, mouseY, width, height, -1, font);
+
+        // TODO: [20.06.2021] Implement the additional GUI elements which show the path of electricity
     }
 }

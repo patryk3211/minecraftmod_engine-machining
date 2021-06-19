@@ -23,7 +23,7 @@ public class PowerLimiterContainer extends Container {
     public PowerLimiterContainer(int id, PlayerInventory inventory, PowerLimiterTile tile) {
         super(ModdedContainers.power_limiter.get(), id);
 
-        trackedArray = new IntArray(5);
+        trackedArray = new IntArray(6);
         if(!tile.getLevel().isClientSide()) trackedArray = tile.data;
         addDataSlots(trackedArray);
 

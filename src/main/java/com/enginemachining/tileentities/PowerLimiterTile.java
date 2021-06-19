@@ -12,10 +12,12 @@ import com.enginemachining.handlers.energy.ToggableEnergyHandler;
 import com.enginemachining.utils.EnergyNetwork;
 import com.enginemachining.utils.IPipeTraceable;
 import com.enginemachining.utils.PipeNetwork;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -37,7 +39,7 @@ public class PowerLimiterTile extends TileEntity implements IPipeTraceable, ITic
     private final EnergyHandler handler = new EnergyHandler(0);
     private final ConstrainedEnergyHandler constrained = new ConstrainedEnergyHandler(handler);
     private final MeasuringEnergyHandler measurer = new MeasuringEnergyHandler(constrained);
-    private final ToggableEnergyHandler toggle = new ToggableEnergyHandler(measurer, false);
+    private final ToggableEnergyHandler toggle = new ToggableEnergyHandler(measurer, false, true, false);
     private final LazyOptional<IEnergyHandler> energy_handler = LazyOptional.of(() -> toggle);
 
     private boolean firstTick = true;
@@ -52,6 +54,7 @@ public class PowerLimiterTile extends TileEntity implements IPipeTraceable, ITic
                 case 2: return (int) measurer.getExtractAmount();
                 case 3: return maxExtractAmount;
                 case 4: return toggle.isEnabled() ? 1 : 0;
+                case 5: return constrained.getMaxRate();
                 default: return 0;
             }
         }
@@ -60,13 +63,14 @@ public class PowerLimiterTile extends TileEntity implements IPipeTraceable, ITic
         public void set(int index, int value) {
             switch (index) {
                 case 4: toggle.setEnabled(value == 1);
+                case 5: constrained.setMaxRate(value);
                 default: break;
             }
         }
 
         @Override
         public int getCount() {
-            return 5;
+            return 6;
         }
     };
 
@@ -147,11 +151,13 @@ public class PowerLimiterTile extends TileEntity implements IPipeTraceable, ITic
         if(!level.isClientSide) {
             if (firstTick) {
                 // Read the max power limiter power from it's block
-                if(handler.getMaxPower() == 0 && getBlockState().getBlock() instanceof PowerLimiter) {
+                if(getBlockState().getBlock() instanceof PowerLimiter) {
                     PowerLimiter limiterBlock = (PowerLimiter) getBlockState().getBlock();
-                    handler.setMaxEnergy(limiterBlock.getMaxPowerLimit());
-                    constrained.setMaxRate(limiterBlock.getMaxPowerLimit()/2);
-                    maxExtractAmount = limiterBlock.getMaxPowerLimit();
+                    if(handler.getMaxPower() == 0) {
+                        handler.setMaxEnergy(limiterBlock.getMaxPowerLimit());
+                        constrained.setMaxRate(limiterBlock.getMaxPowerLimit() / 2);
+                    }
+                    if(maxExtractAmount == 0) maxExtractAmount = limiterBlock.getMaxPowerLimit();
                 }
                 if (networks.size() == 0) PipeNetwork.addTraceable(this, ModdedCapabilities.ENERGY, () -> new EnergyNetwork(level));
                 firstTick = false;
@@ -174,5 +180,17 @@ public class PowerLimiterTile extends TileEntity implements IPipeTraceable, ITic
     @Override
     public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
         return new PowerLimiterContainer(id, inventory, this);
+    }
+
+    @Override
+    public void load(BlockState state, CompoundNBT nbt) {
+        toggle.deserializeNBT(nbt.getCompound("handler"));
+        super.load(state, nbt);
+    }
+
+    @Override
+    public CompoundNBT save(CompoundNBT nbt) {
+        nbt.put("handler", toggle.serializeNBT());
+        return super.save(nbt);
     }
 }

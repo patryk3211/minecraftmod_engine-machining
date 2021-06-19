@@ -21,6 +21,9 @@ public class ConstrainedEnergyHandler implements ISerializableEnergyHandler {
     public void setMaxRate(int rate) {
         maxRate = rate;
     }
+    public int getMaxRate() {
+        return maxRate;
+    }
 
     public float insertPower(float power, boolean simulate) {
         return parentHandler.insertPower(Float.min(power, maxRate), simulate);
