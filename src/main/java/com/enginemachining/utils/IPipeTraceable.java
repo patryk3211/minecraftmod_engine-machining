@@ -22,8 +22,8 @@ public interface IPipeTraceable {
     Type getSideType(Direction side, Capability<?> capability);
     Type getMainType(Capability<?> capability);
 
-    BlockPos getBlockPos();
-    World getLevel();
+    BlockPos getBlockPosition();
+    World getWorld();
 
     float getResistance();
 }
