@@ -1,6 +1,7 @@
 package com.enginemachining.blocks;
 
 import com.enginemachining.capabilities.ModdedCapabilities;
+import com.enginemachining.tileentities.CrusherTile;
 import com.enginemachining.tileentities.PowerLimiterTile;
 import com.enginemachining.utils.EnergyNetwork;
 import com.enginemachining.utils.IPipeTraceable;
@@ -8,18 +9,24 @@ import com.enginemachining.utils.PipeNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -60,6 +67,10 @@ public abstract class PowerLimiter extends Block {
             .harvestLevel(1)
             .harvestTool(ToolType.PICKAXE));
         this.maxPowerLimit = maxPowerLimit;
+    }
+
+    public int getMaxPowerLimit() {
+        return maxPowerLimit;
     }
 
     @Override
@@ -124,5 +135,19 @@ public abstract class PowerLimiter extends Block {
                 }
             });
         }
+    }
+
+    @Override
+    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity user, Hand hand, BlockRayTraceResult ray) {
+        if(!level.isClientSide) {
+            TileEntity te = level.getBlockEntity(pos);
+            if(te instanceof PowerLimiterTile) {
+                NetworkHooks.openGui((ServerPlayerEntity)user, (PowerLimiterTile)te, pos);
+                return ActionResultType.SUCCESS;
+            }
+        } else {
+            return ActionResultType.SUCCESS;
+        }
+        return ActionResultType.FAIL;
     }
 }
