@@ -65,10 +65,10 @@ public class PowerLimiterScreen extends ContainerScreen<PowerLimiterContainer> i
 
         float extractBarRatio = (float)menu.trackedArray.get(2)/menu.trackedArray.get(3);
         int extractBarHeight = (int)(extractBarRatio * 68);
-        this.blit(stack, xOrigin+104, yOrigin+(68-extractBarHeight)+7, 216, 1, 5, extractBarHeight);
+        this.blit(stack, xOrigin+104, yOrigin+(68-extractBarHeight)+7, 216, 1+(68-extractBarHeight), 5, extractBarHeight);
 
         if(menu.trackedArray.get(4) == 1) {
-            this.blit(stack, xOrigin+80, yOrigin+32, 194, 0, 14, 27);
+            this.blit(stack, xOrigin+80, yOrigin+32, 194, 0, 14, 28);
         }
     }
 }
