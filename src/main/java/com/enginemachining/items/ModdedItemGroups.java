@@ -86,6 +86,10 @@ public class ModdedItemGroups {
             items.add(new ItemStack(ModdedItems.sword_aluminium.get()));
             items.add(new ItemStack(ModdedItems.hoe_aluminium.get()));
             items.add(new ItemStack(ModdedItems.shovel_aluminium.get()));
+            items.add(new ItemStack(ModdedItems.helmet_aluminium.get()));
+            items.add(new ItemStack(ModdedItems.chestplate_aluminium.get()));
+            items.add(new ItemStack(ModdedItems.leggins_aluminium.get()));
+            items.add(new ItemStack(ModdedItems.boots_aluminium.get()));
         }
     };
 
