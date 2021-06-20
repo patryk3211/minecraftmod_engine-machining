@@ -39,7 +39,7 @@ public class EnergyNetwork extends PipeNetwork {
     @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
     public static class EnergyNetworkDebugger {
         private static final boolean NETWORK_VISUALISER_ENABLED = false;
-        private static final boolean RECEIVER_PATH_VISUALISER_ENABLED = true;
+        private static final boolean RECEIVER_PATH_VISUALISER_ENABLED = false;
 
         private static void drawBox(Matrix4f matrix, float r, float g, float b, BufferBuilder builder) {
             builder.vertex(matrix,-0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
