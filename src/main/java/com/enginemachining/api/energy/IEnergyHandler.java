@@ -5,7 +5,7 @@ import net.minecraft.util.Direction;
 
 import javax.annotation.Nullable;
 
-public interface IEnergyHandler extends ITrackableHandler {
+public interface IEnergyHandler {
     /**
      *
      * @param power The amount of power to be inserted

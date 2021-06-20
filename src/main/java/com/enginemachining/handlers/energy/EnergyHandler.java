@@ -1,6 +1,7 @@
 package com.enginemachining.handlers.energy;
 
 import com.enginemachining.api.energy.IEnergyHandler;
+import com.enginemachining.api.energy.ISerializableEnergyHandler;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
@@ -9,13 +10,17 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nullable;
 
-public class EnergyHandler implements IEnergyHandler, INBTSerializable<CompoundNBT> {
+public class EnergyHandler implements ISerializableEnergyHandler {
     int maxEnergy;
     float currentEnergy;
 
     public EnergyHandler(int maxEnergy) {
         this.maxEnergy = maxEnergy;
         currentEnergy = 0;
+    }
+
+    public void setMaxEnergy(int limit) {
+        this.maxEnergy = limit;
     }
 
     public float insertPower(float power, boolean simulate) {
@@ -75,15 +80,5 @@ public class EnergyHandler implements IEnergyHandler, INBTSerializable<CompoundN
     public void deserializeNBT(CompoundNBT nbt) {
         currentEnergy = nbt.getFloat("energyStored");
         maxEnergy = nbt.getInt("capacity");
-    }
-
-    @Override
-    public boolean canSideExtract(@Nullable Direction dir) {
-        return true;
-    }
-
-    @Override
-    public boolean canSideInsert(@Nullable Direction dir) {
-        return true;
     }
 }

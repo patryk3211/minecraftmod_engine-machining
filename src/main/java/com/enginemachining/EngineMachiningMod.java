@@ -5,6 +5,7 @@ import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.containers.ModdedContainers;
 import com.enginemachining.items.*;
 import com.enginemachining.messages.CrusherTileMessage;
+import com.enginemachining.messages.PowerLimiterMessage;
 import com.enginemachining.recipes.ModdedRecipeSerializers;
 import com.enginemachining.tileentities.ModdedTileEntities;
 import net.minecraft.client.Minecraft;
@@ -47,6 +48,7 @@ public class EngineMachiningMod
     private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("Registering Network Packets...");
         EngineMachiningPacketHandler.registerPacketType(CrusherTileMessage.class, CrusherTileMessage::encode, CrusherTileMessage::decode, CrusherTileMessage::handle);
+        EngineMachiningPacketHandler.registerPacketType(PowerLimiterMessage.class, PowerLimiterMessage::encode, PowerLimiterMessage::decode, PowerLimiterMessage::handle);
         LOGGER.info("Registering Capabilities...");
         ModdedCapabilities.register();
         LOGGER.info("Setup Complete!");

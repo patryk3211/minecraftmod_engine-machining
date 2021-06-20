@@ -3,8 +3,8 @@ package com.enginemachining.tileentities;
 import com.enginemachining.api.energy.IEnergyHandler;
 import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.containers.CrusherContainer;
+import com.enginemachining.handlers.IEnergyHandlerProvider;
 import com.enginemachining.handlers.energy.EnergyHandler;
-import com.enginemachining.handlers.IEnergyReceiver;
 import com.enginemachining.items.ModdedItems;
 import com.enginemachining.recipes.CrusherRecipe;
 import com.enginemachining.recipes.ModdedRecipeTypes;
@@ -51,7 +51,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class CrusherTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IEnergyReceiver {
+public class CrusherTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IEnergyHandlerProvider {
     private CrusherContainer container;
 
     private NonNullList<ItemStack> slots = NonNullList.withSize(3, ItemStack.EMPTY);
@@ -359,16 +359,16 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     }
 
     @Override
-    public IEnergyHandler getHandler() {
+    public IEnergyHandler getEnergyHandler() {
         return handler;
     }
 
     private PipeNetwork network;
 
     @Override
-    public PipeNetwork getNetwork() { return network; }
+    public PipeNetwork getNetwork(Direction side) { return network; }
     @Override
-    public void setNetwork(PipeNetwork network) { this.network = network; }
+    public void setNetwork(Direction side, PipeNetwork network) { this.network = network; }
 
     @Override
     public boolean canConnect(Direction side, Capability<?> capability) {

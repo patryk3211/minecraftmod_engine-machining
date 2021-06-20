@@ -3,6 +3,7 @@ package com.enginemachining;
 import com.enginemachining.containers.CrusherContainer;
 import com.enginemachining.containers.ModdedContainers;
 import com.enginemachining.screens.CrusherScreen;
+import com.enginemachining.screens.PowerLimiterScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.gui.screen.Screen;
@@ -20,5 +21,6 @@ public class ClientEventBusSubscriber {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent clientSetupEvent) {
         ScreenManager.register(ModdedContainers.crusher.get(), CrusherScreen::new);
+        ScreenManager.register(ModdedContainers.power_limiter.get(), PowerLimiterScreen::new);
     }
 }

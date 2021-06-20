@@ -82,9 +82,9 @@ public class Crusher extends Block {
                 InventoryHelper.dropContents(worldIn, pos, ((CrusherTile) te).blockInventory);
                 TileEntity entity = worldIn.getBlockEntity(pos);
                 PipeNetwork network = null;
-                if(entity instanceof IPipeTraceable) network = ((IPipeTraceable) entity).getNetwork();
+                if(entity instanceof IPipeTraceable) network = ((IPipeTraceable) entity).getNetwork(null);
                 worldIn.removeBlockEntity(te.getBlockPos());
-                PipeNetwork.removeTraceable(pos, worldIn, ModdedCapabilities.ENERGY, network, () -> new EnergyNetwork(worldIn));
+                PipeNetwork.removeTraceable(pos, worldIn, ModdedCapabilities.ENERGY, network, () -> new EnergyNetwork(worldIn), null);
             }
         }
     }

@@ -1,8 +1,6 @@
 package com.enginemachining.tileentities;
 
 import com.enginemachining.capabilities.ModdedCapabilities;
-import com.enginemachining.handlers.IEnergyReceiver;
-import com.enginemachining.handlers.IEnergySender;
 import com.enginemachining.utils.EnergyNetwork;
 import com.enginemachining.utils.IPipeTraceable;
 import com.enginemachining.utils.PipeNetwork;
@@ -71,9 +69,9 @@ public class EnergyWireTile extends TileEntity implements IPipeTraceable, ITicka
 
     private PipeNetwork network;
     @Override
-    public PipeNetwork getNetwork() { return network; }
+    public PipeNetwork getNetwork(@Nullable Direction side) { return network; }
     @Override
-    public void setNetwork(PipeNetwork network) { this.network = network; }
+    public void setNetwork(@Nullable Direction side, PipeNetwork network) { this.network = network; }
 
     @Override
     public boolean canConnect(Direction side, Capability<?> capability) {
@@ -108,7 +106,7 @@ public class EnergyWireTile extends TileEntity implements IPipeTraceable, ITicka
     @Override
     public void tick() {
         if(firstTick) {
-            if(!level.isClientSide) PipeNetwork.addTraceable(this, ModdedCapabilities.ENERGY, () -> new EnergyNetwork(level));
+            if(!level.isClientSide) if(network == null) PipeNetwork.addTraceable(this, ModdedCapabilities.ENERGY, () -> new EnergyNetwork(level));
             firstTick = false;
         }
         powerFlow = 0;
