@@ -274,22 +274,28 @@ public class EnergyNetwork extends PipeNetwork {
         int count = sendersCount;
 
         // Extract the given amount of power from each sender.
-        for(IEnergyHandlerProvider sender : senderList.keySet()) {
-            float max_transfer = sender.getEnergyHandler().extractPower(left/(float) count, false);
-            left -= max_transfer;
-            count--;
-            senderList.replace(sender, max_transfer);
+        while(left > 0) {
+            for (IEnergyHandlerProvider sender : senderList.keySet()) {
+                if(count == 0) count = 1;
+                float max_transfer = sender.getEnergyHandler().extractPower(left / (float) count, false);
+                left -= max_transfer;
+                count--;
+                senderList.replace(sender, max_transfer);
+            }
         }
 
         left = powerToTransfer;
         count = receiversCount;
 
         // Insert the given amount of power into every receiver.
-        for(IEnergyHandlerProvider receiver : receiverList.keySet()) {
-            float max_transfer = receiver.getEnergyHandler().insertPower(left/(float) count, false);
-            left -= max_transfer;
-            count--;
-            receiverList.replace(receiver, max_transfer);
+        while(left > 0) {
+            for (IEnergyHandlerProvider receiver : receiverList.keySet()) {
+                if(count == 0) count = 1;
+                float max_transfer = receiver.getEnergyHandler().insertPower(left / (float) count, false);
+                left -= max_transfer;
+                count--;
+                receiverList.replace(receiver, max_transfer);
+            }
         }
 
         // Add power flow to each pipe in each path.
