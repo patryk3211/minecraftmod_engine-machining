@@ -467,21 +467,21 @@ public class PipeNetwork {
                 if(neighbour == null) continue;
                 if(!neighbour.canConnect(d.getOpposite(), capability)) continue;
                 pipeDetected = true;
-                traceForSender(pos.offset(d.getNormal()), path, 0, pos, useCount);
+                traceForSender(pos.offset(d.getNormal()), path, 0, pos, useCount, false);
             }
-            if(!pipeDetected) {
+            if(!pipeDetected || rec.pathsList.size() == 0) {
                 for(Direction d : Direction.values()) {
                     List<IPipeTraceable> path = new ArrayList<>();
                     path.add(rec.receiver);
                     if (!rec.receiver.canConnect(d, capability)) continue;
 
                     BlockPos neighbourPos = pos.offset(d.getNormal());
-                    IPipeTraceable neighbour;
-                    if(this.receivers.containsKey(neighbourPos)) neighbour = this.receivers.get(neighbourPos).receiver;
-                    else neighbour = this.senders.get(neighbourPos);
+                    IPipeTraceable neighbour = this.pipes.get(neighbourPos);;
+                    if(neighbour == null && this.receivers.containsKey(neighbourPos)) neighbour = this.receivers.get(neighbourPos).receiver;
+                    else if(neighbour == null) neighbour = this.senders.get(neighbourPos);
                     if(neighbour == null) continue;
                     if(!neighbour.canConnect(d.getOpposite(), capability)) continue;
-                    traceForSender(pos.offset(d.getNormal()), path, 0, pos, useCount);
+                    traceForSender(pos.offset(d.getNormal()), path, 0, pos, useCount, true);
                 }
             }
         });
@@ -505,7 +505,7 @@ public class PipeNetwork {
         return dirs.toArray(new Direction[0]);
     }
 
-    private boolean traceForSender(BlockPos position, List<IPipeTraceable> pipes, float resistance, BlockPos receiver, Map<IPipeTraceable, Integer> useCount) {
+    private boolean traceForSender(BlockPos position, List<IPipeTraceable> pipes, float resistance, BlockPos receiver, Map<IPipeTraceable, Integer> useCount, boolean gotThroughNonPipes) {
         IPipeTraceable pipe = this.pipes.get(position);
         if(pipe == null && this.receivers.containsKey(position)) pipe = this.receivers.get(position).receiver;
         if(pipe == null) pipe = this.senders.get(position);
@@ -558,20 +558,22 @@ public class PipeNetwork {
             if(canConnect) {
                 List<IPipeTraceable> copy = new ArrayList<>(pipes);
                 pipeDetected = true;
-                boolean shouldContinue = traceForSender(neighbourPos, copy, resistance + pipe.getResistance(), receiver, useCount);
+                boolean shouldContinue = traceForSender(neighbourPos, copy, resistance + pipe.getResistance(), receiver, useCount, gotThroughNonPipes);
                 if(!shouldContinue) return false;
             }
         }
-        if(!pipeDetected) {
-            for(Direction d : Direction.values()) {
-                BlockPos neighbourPos = position.offset(d.getNormal());
-                IPipeTraceable neighbour = null;
-                if (this.receivers.containsKey(neighbourPos)) neighbour = this.receivers.get(neighbourPos).receiver;
-                else this.senders.get(neighbourPos);
-                if (neighbour == null) continue;
-                if (neighbour.canConnect(d.getOpposite(), capability)) {
-                    List<IPipeTraceable> copy = new ArrayList<>(pipes);
-                    traceForSender(neighbourPos, copy, resistance + pipe.getResistance(), receiver, useCount);
+        if(gotThroughNonPipes) {
+            if (!pipeDetected || this.receivers.get(receiver).pathsList.size() == 0) {
+                for (Direction d : Direction.values()) {
+                    BlockPos neighbourPos = position.offset(d.getNormal());
+                    IPipeTraceable neighbour = null;
+                    if (this.receivers.containsKey(neighbourPos)) neighbour = this.receivers.get(neighbourPos).receiver;
+                    else this.senders.get(neighbourPos);
+                    if (neighbour == null) continue;
+                    if (neighbour.canConnect(d.getOpposite(), capability)) {
+                        List<IPipeTraceable> copy = new ArrayList<>(pipes);
+                        traceForSender(neighbourPos, copy, resistance + pipe.getResistance(), receiver, useCount, true);
+                    }
                 }
             }
         }

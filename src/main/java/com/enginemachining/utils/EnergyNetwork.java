@@ -39,7 +39,7 @@ public class EnergyNetwork extends PipeNetwork {
     @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
     public static class EnergyNetworkDebugger {
         private static final boolean NETWORK_VISUALISER_ENABLED = false;
-        private static final boolean RECEIVER_PATH_VISUALISER_ENABLED = false;
+        private static final boolean RECEIVER_PATH_VISUALISER_ENABLED = true;
 
         private static void drawBox(Matrix4f matrix, float r, float g, float b, BufferBuilder builder) {
             builder.vertex(matrix,-0.5f, 0.5f, 0.5f).color(r, g, b, 1.0f).endVertex();
@@ -274,13 +274,13 @@ public class EnergyNetwork extends PipeNetwork {
         int count = sendersCount;
 
         // Extract the given amount of power from each sender.
-        while(left > 0) {
+        while((int)left > 0) {
             for (IEnergyHandlerProvider sender : senderList.keySet()) {
                 if(count == 0) count = 1;
                 float max_transfer = sender.getEnergyHandler().extractPower(left / (float) count, false);
                 left -= max_transfer;
                 count--;
-                senderList.replace(sender, max_transfer);
+                senderList.replace(sender, senderList.get(sender)+max_transfer);
             }
         }
 
@@ -288,13 +288,13 @@ public class EnergyNetwork extends PipeNetwork {
         count = receiversCount;
 
         // Insert the given amount of power into every receiver.
-        while(left > 0) {
+        while((int)left > 0) {
             for (IEnergyHandlerProvider receiver : receiverList.keySet()) {
                 if(count == 0) count = 1;
                 float max_transfer = receiver.getEnergyHandler().insertPower(left / (float) count, false);
                 left -= max_transfer;
                 count--;
-                receiverList.replace(receiver, max_transfer);
+                receiverList.replace(receiver, receiverList.get(receiver)+max_transfer);
             }
         }
 
