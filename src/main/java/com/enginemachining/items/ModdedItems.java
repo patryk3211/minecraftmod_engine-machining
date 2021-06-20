@@ -32,6 +32,8 @@ public class ModdedItems {
 
     public static final RegistryObject<Item> power_limiter_copper = ITEMS.register("power_limiter_copper", () -> new BlockItem(ModdedBlocks.power_limiter_copper.get(), new Item.Properties().tab(ItemGroup.TAB_MISC)));
 
+    public static final RegistryObject<Item> breaker_switch_copper = ITEMS.register("breaker_switch_copper", () -> new BlockItem(ModdedBlocks.breaker_switch_copper.get(), new Item.Properties().tab(ItemGroup.TAB_MISC)));
+
     public static final RegistryObject<Item> infinite_power_source = ITEMS.register("infinite_power_source", () -> new BlockItem(ModdedBlocks.infinite_power_source.get(), new Item.Properties().tab(ModdedItemGroups.misc)));
 
     public static final RegistryObject<Item> ingot_copper = ITEMS.register("ingot_copper", IngotCopper::new);

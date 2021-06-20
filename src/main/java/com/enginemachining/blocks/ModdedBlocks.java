@@ -22,5 +22,7 @@ public class ModdedBlocks {
 
     public static final RegistryObject<Block> power_limiter_copper = BLOCKS.register("power_limiter_copper", PowerLimiterCopper::new);
 
+    public static final RegistryObject<Block> breaker_switch_copper = BLOCKS.register("breaker_switch_copper", BreakerSwitchCopper::new);
+
     public static final RegistryObject<Block> infinite_power_source = BLOCKS.register("infinite_power_source", InfinitePowerSource::new);
 }
