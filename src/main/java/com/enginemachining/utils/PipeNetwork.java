@@ -109,6 +109,7 @@ public class PipeNetwork {
                 TileEntity nte = level.getBlockEntity(neighbourPos);
                 if (!(nte instanceof IPipeTraceable)) continue;
                 IPipeTraceable neighbour = (IPipeTraceable) nte;
+                if(!neighbour.canConnect(d.getOpposite(), capability)) continue;
                 // TODO: [12.06.2021] Maybe don't recreate the entire network when one wire is deleted.
                 if (neighbour.getNetwork(d.getOpposite()) != null) continue;
                 trace(neighbourPos, level, capability, supplier);
@@ -125,9 +126,9 @@ public class PipeNetwork {
     }
 
     public void delete() {
-        pipes.forEach((pos, pipe) -> pipe.setNetwork(null, null));
-        receivers.forEach((pos, recPack) -> recPack.receiver.setNetwork(null, null));
-        senders.forEach((pos, send) -> send.setNetwork(null, null));
+        pipes.forEach((pos, pipe) -> pipe.removeNetwork(this));
+        receivers.forEach((pos, recPack) -> recPack.receiver.removeNetwork(this));
+        senders.forEach((pos, send) -> send.removeNetwork(this));
     }
 
     public static void addTraceable(IPipeTraceable traceable, Capability<?> capability, Supplier<? extends PipeNetwork> supplier) {
@@ -218,19 +219,13 @@ public class PipeNetwork {
                 networks.remove(largestNetwork[0]);
                 // Merge other networks into this network
                 networks.forEach((net, use) -> {
-                    net.delete();
-                    net.pipes.forEach((pos, pipe) -> {
-                        pipe.setNetwork(null, largestNetwork[0]);
-                    });
-                    net.receivers.forEach((pos, rec) -> {
-                        rec.receiver.setNetwork(null, largestNetwork[0]);
-                    });
-                    net.senders.forEach((pos, sen) -> {
-                        sen.setNetwork(null, largestNetwork[0]);
-                    });
+                    net.pipes.forEach((pos, pipe) -> pipe.replaceNetwork(net, largestNetwork[0]));
+                    net.receivers.forEach((pos, rec) -> rec.receiver.replaceNetwork(net, largestNetwork[0]));
+                    net.senders.forEach((pos, sen) -> sen.replaceNetwork(net, largestNetwork[0]));
                     largestNetwork[0].pipes.putAll(net.pipes);
                     largestNetwork[0].receivers.putAll(net.receivers);
                     largestNetwork[0].senders.putAll(net.senders);
+                    net.delete();
                 });
 
                 traceable.setNetwork(null, largestNetwork[0]);
@@ -263,6 +258,7 @@ public class PipeNetwork {
                                 net.senders.put(traceable.getBlockPosition(), traceable);
                                 break;
                         }
+                        traceable.setNetwork(dir, net);
                     }
                     if (DEBUG_DUMP) {
                         System.out.println("Network Dump (addTraceable else TRANSCEIVER):");
@@ -289,6 +285,7 @@ public class PipeNetwork {
             net.traceReceivers();
         } else {
             for(Direction d : Direction.values()) {
+                if(traceable.getNetwork(d) != null) traceable.getNetwork(d).delete();
                 PipeNetwork net = supplier.get();
                 net.traceNetwork(traceStart, d);
                 if(DEBUG_DUMP) { System.out.println("Network Dump (trace TRANSCEIVER):"); net.dump(); }
@@ -385,9 +382,6 @@ public class PipeNetwork {
                     case SENDER:
                         oldNet.senders.remove(posToTrace);
                         break;
-                    case TRANSCEIVER:
-                        System.out.println("Transceiver detected!!! (remove from network)");
-                        break;
                 }
                 if (oldNet.senders.size() == 0 && oldNet.receivers.size() == 0 && oldNet.pipes.size() == 0) oldNet.delete();
             }
@@ -412,9 +406,6 @@ public class PipeNetwork {
                             break;
                         case SENDER:
                             oldNet.senders.remove(posToTrace);
-                            break;
-                        case TRANSCEIVER:
-                            System.out.println("Transceiver detected!!! (remove from network)");
                             break;
                     }
                     if (oldNet.senders.size() == 0 && oldNet.receivers.size() == 0 && oldNet.pipes.size() == 0)
