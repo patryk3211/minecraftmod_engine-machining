@@ -39,8 +39,10 @@ public class PowerLimiterScreen extends ContainerScreen<PowerLimiterContainer> i
 
         leftPos = 0;
         topPos = 0;
-        imageHeight = 165;
-        imageWidth = 175;
+        imageHeight = 181;
+        imageWidth = 176;
+
+        inventoryLabelY += 15;
 
         xOrigin = 0;
         yOrigin = 0;
@@ -57,9 +59,9 @@ public class PowerLimiterScreen extends ContainerScreen<PowerLimiterContainer> i
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if(button == 0) {
             int onButtonOriginX = xOrigin + 80;
-            int onButtonOriginY = yOrigin + 32;
+            int onButtonOriginY = yOrigin + 32+10;
             int offButtonOriginX = xOrigin + 80;
-            int offButtonOriginY = yOrigin + 46;
+            int offButtonOriginY = yOrigin + 46+10;
             int buttonWidth = 17;
             int buttonHeight = 13;
             if (mouseX > onButtonOriginX && mouseX < onButtonOriginX + buttonWidth && mouseY > onButtonOriginY && mouseY < onButtonOriginY + buttonHeight) {
@@ -76,11 +78,11 @@ public class PowerLimiterScreen extends ContainerScreen<PowerLimiterContainer> i
     public boolean mouseDragged(double mouseX, double mouseY, int button, double p_231045_6_, double p_231045_8_) {
         // Stick slider to mouse cursor
         double sliderOffset = (sliderPos*68f/(68f/64f));
-        if(mouseX >= xOrigin+112 && mouseY > yOrigin+71-sliderOffset && mouseX <= xOrigin+112+7 && mouseY <= yOrigin+71+4-sliderOffset && button == 0) sliderStuck = true;
+        if(mouseX >= xOrigin+112 && mouseY > yOrigin+71-sliderOffset+10 && mouseX <= xOrigin+112+7 && mouseY <= yOrigin+71+4-sliderOffset+10 && button == 0) sliderStuck = true;
         if(sliderStuck) {
             // Move slider to cursor
-            if(mouseY >= yOrigin+7+2 && mouseY <= yOrigin+74) {
-                sliderPos = 1.0 - (mouseY - (yOrigin+7) - 2)/65.0;
+            if(mouseY >= yOrigin+7+2+10 && mouseY <= yOrigin+74+10) {
+                sliderPos = 1.0 - (mouseY - (yOrigin+7+10) - 2)/65.0;
             }
         }
         return super.mouseDragged(mouseX, mouseY, button, p_231045_6_, p_231045_8_);
@@ -107,38 +109,38 @@ public class PowerLimiterScreen extends ContainerScreen<PowerLimiterContainer> i
 
         float bufferBarRatio = (float)menu.trackedArray.get(0)/menu.trackedArray.get(1);
         int energyBarHeight = (int)(bufferBarRatio * 68);
-        this.blit(stack, xOrigin+65, yOrigin+(68-energyBarHeight)+7, 209, 1, 5, energyBarHeight);
+        this.blit(stack, xOrigin+65, yOrigin+(68-energyBarHeight)+7+10, 209, 1, 5, energyBarHeight);
 
         float extractBarRatio = (float)menu.trackedArray.get(2)/menu.trackedArray.get(3);
         int extractBarHeight = (int)(extractBarRatio * 68);
-        this.blit(stack, xOrigin+104, yOrigin+(68-extractBarHeight)+7, 216, 1+(68-extractBarHeight), 5, extractBarHeight);
+        this.blit(stack, xOrigin+104, yOrigin+(68-extractBarHeight)+7+10, 216, 1+(68-extractBarHeight), 5, extractBarHeight);
 
-        if(menu.trackedArray.get(4) == 1) this.blit(stack, xOrigin+80, yOrigin+32, 194, 0, 14, 28);
+        if(menu.trackedArray.get(4) == 1) this.blit(stack, xOrigin+80, yOrigin+32+10, 194, 0, 14, 28);
 
         // Slider
         double sliderOffset = (sliderPos*68f/(68f/64f));
-        if(mouseX >= xOrigin+112 && mouseY > yOrigin+71-sliderOffset && mouseX <= xOrigin+112+7 && mouseY <= yOrigin+71+4-sliderOffset) this.blit(stack, xOrigin+112, yOrigin+71-(int)sliderOffset, 183, 30, 7, 4);
-        else this.blit(stack, xOrigin+112, yOrigin+71-(int)sliderOffset, 176, 30, 7, 4);
+        if(mouseX >= xOrigin+112 && mouseY > yOrigin+71-sliderOffset+10 && mouseX <= xOrigin+112+7 && mouseY <= yOrigin+71+4-sliderOffset+10) this.blit(stack, xOrigin+112, yOrigin+71-(int)sliderOffset+10, 183, 30, 7, 4);
+        else this.blit(stack, xOrigin+112, yOrigin+71-(int)sliderOffset+10, 176, 30, 7, 4);
 
         List<ITextComponent> lines = new ArrayList<>();
-        if(mouseX >= xOrigin+64 && mouseY >= yOrigin+6 && mouseX <= xOrigin+70 && mouseY <= yOrigin+75) {
+        if(mouseX >= xOrigin+64 && mouseY >= yOrigin+6+10 && mouseX <= xOrigin+70 && mouseY <= yOrigin+75+10) {
             lines.add(new StringTextComponent("Internal Buffer:"));
             lines.add(new StringTextComponent(menu.trackedArray.get(0) + "/" + menu.trackedArray.get(1)));
         }
-        if(mouseX >= xOrigin+103 && mouseY >= yOrigin+6 && mouseX <= xOrigin+109 && mouseY <= yOrigin+75) {
+        if(mouseX >= xOrigin+103 && mouseY >= yOrigin+6+10 && mouseX <= xOrigin+109 && mouseY <= yOrigin+75+10) {
             lines.add(new StringTextComponent("Current Transfer:"));
             lines.add(new StringTextComponent(menu.trackedArray.get(2) + " EE/t"));
         }
-        if(mouseX >= xOrigin+111 && mouseY >= yOrigin+6 && mouseX <= xOrigin+119 && mouseY <= yOrigin+75) {
+        if(mouseX >= xOrigin+111 && mouseY >= yOrigin+6+10 && mouseX <= xOrigin+119 && mouseY <= yOrigin+75+10) {
             lines.add(new StringTextComponent("Max Transfer:"));
             if(!sliderStuck) lines.add(new StringTextComponent(menu.trackedArray.get(5) + " EE/t"));
             else lines.add(new StringTextComponent((int)(sliderPos*menu.trackedArray.get(3)) + " EE/t"));
         }
 
         if(menu.trackedArray.get(0) > 0 || menu.trackedArray.get(2) > 0) {
-            this.blit(stack, xOrigin+72, yOrigin+45, 176, 0, 9, 30);
+            this.blit(stack, xOrigin+72, yOrigin+45+10, 176, 0, 9, 30);
             if(menu.trackedArray.get(4) == 1) {
-                this.blit(stack, xOrigin+93, yOrigin+50, 185, 0, 9, 25);
+                this.blit(stack, xOrigin+93, yOrigin+50+10, 185, 0, 9, 25);
             }
         }
 
@@ -154,8 +156,8 @@ public class PowerLimiterScreen extends ContainerScreen<PowerLimiterContainer> i
             animationStage2 = 0;
         }
 
-        this.blit(stack, xOrigin+73, yOrigin+65+(3-(int)animationStage), 190, 30+(3-(int)animationStage), 9, (int)animationStage);
-        this.blit(stack, xOrigin+93, yOrigin+65, 199, 30, 9, (int)animationStage2);
+        this.blit(stack, xOrigin+73, yOrigin+65+(3-(int)animationStage)+10, 190, 30+(3-(int)animationStage), 9, (int)animationStage);
+        this.blit(stack, xOrigin+93, yOrigin+65+10, 199, 30, 9, (int)animationStage2);
 
         if(lines.size() != 0) {
             GuiUtils.preItemToolTip(ItemStack.EMPTY);
