@@ -12,6 +12,7 @@ import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.AbstractSlider;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -30,6 +31,9 @@ public class PowerLimiterScreen extends ContainerScreen<PowerLimiterContainer> i
     private double sliderPos;
     private boolean sliderStuck;
 
+    private float animationStage;
+    private float animationStage2;
+
     public PowerLimiterScreen(PowerLimiterContainer container, PlayerInventory inventory, ITextComponent title) {
         super(container, inventory, title);
 
@@ -44,6 +48,9 @@ public class PowerLimiterScreen extends ContainerScreen<PowerLimiterContainer> i
         sliderStuck = false;
 
         sliderPos = (double)menu.trackedArray.get(5)/menu.trackedArray.get(3);
+
+        animationStage = 0;
+        animationStage2 = 0;
     }
 
     @Override
@@ -127,8 +134,33 @@ public class PowerLimiterScreen extends ContainerScreen<PowerLimiterContainer> i
             if(!sliderStuck) lines.add(new StringTextComponent(menu.trackedArray.get(5) + " EE/t"));
             else lines.add(new StringTextComponent((int)(sliderPos*menu.trackedArray.get(3)) + " EE/t"));
         }
-        if(lines.size() != 0) GuiUtils.drawHoveringText(stack, lines, mouseX, mouseY, width, height, -1, font);
 
-        // TODO: [20.06.2021] Implement the additional GUI elements which show the path of electricity
+        if(menu.trackedArray.get(0) > 0 || menu.trackedArray.get(2) > 0) {
+            this.blit(stack, xOrigin+72, yOrigin+45, 176, 0, 9, 30);
+            if(menu.trackedArray.get(4) == 1) {
+                this.blit(stack, xOrigin+93, yOrigin+50, 185, 0, 9, 25);
+            }
+        }
+
+        if(menu.trackedArray.get(2) > 0) {
+            animationStage += partialTicks;
+            animationStage = animationStage % 4;
+            double multiplier = (double) menu.trackedArray.get(2)/menu.trackedArray.get(3);
+            if(multiplier < 0.1) multiplier = 0.1;
+            animationStage2 += partialTicks * multiplier;
+            animationStage2 = animationStage2 % 4;
+        } else {
+            animationStage = 0;
+            animationStage2 = 0;
+        }
+
+        this.blit(stack, xOrigin+73, yOrigin+65+(3-(int)animationStage), 190, 30+(3-(int)animationStage), 9, (int)animationStage);
+        this.blit(stack, xOrigin+93, yOrigin+65, 199, 30, 9, (int)animationStage2);
+
+        if(lines.size() != 0) {
+            GuiUtils.preItemToolTip(ItemStack.EMPTY);
+            GuiUtils.drawHoveringText(stack, lines, mouseX, mouseY, width, height, -1, font);
+            GuiUtils.postItemToolTip();
+        }
     }
 }
