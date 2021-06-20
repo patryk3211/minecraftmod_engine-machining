@@ -18,6 +18,8 @@ public interface IPipeTraceable {
 
     PipeNetwork getNetwork(@Nullable Direction side);
     void setNetwork(@Nullable Direction side, PipeNetwork network);
+    void removeNetwork(PipeNetwork network);
+    void replaceNetwork(PipeNetwork oldNetwork, PipeNetwork newNetwork);
 
     boolean canConnect(Direction side, Capability<?> capability);
 

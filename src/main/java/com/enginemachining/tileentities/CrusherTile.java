@@ -371,6 +371,16 @@ public class CrusherTile extends TileEntity implements ITickableTileEntity, INam
     public void setNetwork(Direction side, PipeNetwork network) { this.network = network; }
 
     @Override
+    public void removeNetwork(PipeNetwork network) {
+        if(this.network == network) this.network = null;
+    }
+
+    @Override
+    public void replaceNetwork(PipeNetwork oldNetwork, PipeNetwork newNetwork) {
+        if(network == oldNetwork) network = newNetwork;
+    }
+
+    @Override
     public boolean canConnect(Direction side, Capability<?> capability) {
         return getCapability(capability, side).isPresent();
     }

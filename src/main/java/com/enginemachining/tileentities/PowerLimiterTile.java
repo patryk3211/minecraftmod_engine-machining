@@ -32,8 +32,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class PowerLimiterTile extends TileEntity implements IPipeTraceable, ITickableTileEntity, IEnergyHandlerProvider, INamedContainerProvider {
     private final EnergyHandler handler = new EnergyHandler(0);
@@ -105,6 +104,18 @@ public class PowerLimiterTile extends TileEntity implements IPipeTraceable, ITic
             networks.remove(side);
             if (network != null) networks.put(side, network);
         }
+    }
+
+    @Override
+    public void removeNetwork(PipeNetwork network) {
+        Set<Direction> toRemove = new HashSet<>();
+        networks.forEach((dir, net) -> { if(net == network) toRemove.add(dir); });
+        toRemove.forEach(networks::remove);
+    }
+
+    @Override
+    public void replaceNetwork(PipeNetwork oldNetwork, PipeNetwork newNetwork) {
+        networks.replaceAll((dir, old) -> { if(old == oldNetwork) return newNetwork; else return old; });
     }
 
     @Override

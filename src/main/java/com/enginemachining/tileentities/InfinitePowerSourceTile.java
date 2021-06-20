@@ -67,6 +67,16 @@ public class InfinitePowerSourceTile extends TileEntity implements ITickableTile
     }
 
     @Override
+    public void removeNetwork(PipeNetwork network) {
+        if(this.network == network) this.network = null;
+    }
+
+    @Override
+    public void replaceNetwork(PipeNetwork oldNetwork, PipeNetwork newNetwork) {
+        if(oldNetwork == network) network = newNetwork;
+    }
+
+    @Override
     public boolean canConnect(Direction side, Capability<?> capability) {
         if(capability == ModdedCapabilities.ENERGY) {
             return true;

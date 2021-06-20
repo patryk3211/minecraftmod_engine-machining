@@ -74,6 +74,16 @@ public class EnergyWireTile extends TileEntity implements IPipeTraceable, ITicka
     public void setNetwork(@Nullable Direction side, PipeNetwork network) { this.network = network; }
 
     @Override
+    public void removeNetwork(PipeNetwork network) {
+        if(this.network == network) this.network = null;
+    }
+
+    @Override
+    public void replaceNetwork(PipeNetwork oldNetwork, PipeNetwork newNetwork) {
+        if(oldNetwork == network) network = newNetwork;
+    }
+
+    @Override
     public boolean canConnect(Direction side, Capability<?> capability) {
         if(capability == ModdedCapabilities.ENERGY) return isSideConnectable(side);
         return false;
