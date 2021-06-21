@@ -1,5 +1,6 @@
 {
   "variants": {
-    "": { "model": "enginemachining:block/breaker_switch_off" }
+    "enabled=false": { "model": "enginemachining:block/breaker_switch_off_copper" },
+    "enabled=true": { "model": "enginemachining:block/breaker_switch_on_copper" }
   }
 }

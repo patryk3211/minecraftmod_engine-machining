@@ -1,0 +1,6 @@
+{
+  "parent": "enginemachining:block/breaker_switch_off",
+  "textures": {
+    "main": "enginemachining:block/breaker_switch_copper"
+  }
+}
