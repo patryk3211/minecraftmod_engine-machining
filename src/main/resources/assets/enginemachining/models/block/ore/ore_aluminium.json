@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "enginemachining:block/ore_aluminium"
+    "all": "enginemachining:block/ore/ore_aluminium"
   }
 }

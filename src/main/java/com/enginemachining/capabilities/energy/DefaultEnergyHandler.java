@@ -1,9 +1,6 @@
 package com.enginemachining.capabilities.energy;
 
 import com.enginemachining.api.energy.IEnergyHandler;
-import net.minecraft.util.Direction;
-
-import javax.annotation.Nullable;
 
 public class DefaultEnergyHandler implements IEnergyHandler {
     public float energy;

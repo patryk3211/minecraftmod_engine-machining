@@ -1,14 +1,7 @@
 package com.enginemachining.handlers.energy;
 
-import com.enginemachining.api.energy.IEnergyHandler;
 import com.enginemachining.api.energy.ISerializableEnergyHandler;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.energy.IEnergyStorage;
-
-import javax.annotation.Nullable;
 
 public class EnergyHandler implements ISerializableEnergyHandler {
     int maxEnergy;

@@ -1,10 +1,5 @@
 package com.enginemachining.api.energy;
 
-import com.enginemachining.api.ITrackableHandler;
-import net.minecraft.util.Direction;
-
-import javax.annotation.Nullable;
-
 public interface IEnergyHandler {
     /**
      *

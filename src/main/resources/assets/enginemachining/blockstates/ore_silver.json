@@ -1,5 +1,5 @@
 {
   "variants": {
-    "": { "model": "enginemachining:block/ore_silver" }
+    "": { "model": "enginemachining:block/template/ore_silver" }
   }
 }

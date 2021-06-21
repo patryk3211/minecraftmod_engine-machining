@@ -1,8 +1,6 @@
 package com.enginemachining.utils.gui;
 
 import com.enginemachining.EngineMachiningMod;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
