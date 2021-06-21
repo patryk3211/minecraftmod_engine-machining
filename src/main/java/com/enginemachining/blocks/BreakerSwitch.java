@@ -21,7 +21,15 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 
 public abstract class BreakerSwitch extends Block {
-    private static final VoxelShape NORTH = VoxelShapes.or(Block.box(7, 7, 0, 9, 9, 2),
+    private static final VoxelShape Z_AXIS = VoxelShapes.or(Block.box(7, 7, 0, 9, 9, 2),
+            Block.box(7, 7, 14, 9, 9, 16),
+            Block.box(4, 6, 2, 12, 11, 14)).optimize();
+
+    private static final VoxelShape X_AXIS = VoxelShapes.or(Block.box(0, 7, 7, 2, 9, 9),
+            Block.box(14, 7, 7, 16, 9, 9),
+            Block.box(2, 6, 4, 14, 11, 12)).optimize();
+
+    private static final VoxelShape Y_AXIS = VoxelShapes.or(Block.box(7, 7, 0, 9, 9, 2),
             Block.box(7, 7, 14, 9, 9, 16),
             Block.box(4, 6, 2, 12, 11, 14)).optimize();
 
@@ -32,17 +40,30 @@ public abstract class BreakerSwitch extends Block {
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(BlockStateProperties.ENABLED);
+        builder.add(BlockStateProperties.FACING);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return defaultBlockState().setValue(BlockStateProperties.ENABLED, false);
+        return defaultBlockState().setValue(BlockStateProperties.ENABLED, false).setValue(BlockStateProperties.FACING, context.getClickedFace().getOpposite());
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader block, BlockPos pos, ISelectionContext context) {
-        return NORTH;
+        switch (state.getValue(BlockStateProperties.FACING)) {
+            case NORTH:
+            case SOUTH:
+                return Z_AXIS;
+            case EAST:
+            case WEST:
+                return X_AXIS;
+            case UP:
+            case DOWN:
+                return Y_AXIS;
+            default:
+                return null;
+        }
     }
 
     @Override

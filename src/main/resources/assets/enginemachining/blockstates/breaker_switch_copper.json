@@ -1,6 +1,21 @@
 {
   "variants": {
-    "enabled=false": { "model": "enginemachining:block/breaker_switch_off_copper" },
-    "enabled=true": { "model": "enginemachining:block/breaker_switch_on_copper" }
+    "enabled=false,facing=north": { "model": "enginemachining:block/breaker_switch_off_copper" },
+    "enabled=true,facing=north": { "model": "enginemachining:block/breaker_switch_on_copper" },
+
+    "enabled=false,facing=south": { "model": "enginemachining:block/breaker_switch_off_copper", "y": 180 },
+    "enabled=true,facing=south": { "model": "enginemachining:block/breaker_switch_on_copper", "y": 180 },
+
+    "enabled=false,facing=east": { "model": "enginemachining:block/breaker_switch_off_copper", "y": 90 },
+    "enabled=true,facing=east": { "model": "enginemachining:block/breaker_switch_on_copper", "y": 90 },
+
+    "enabled=false,facing=west": { "model": "enginemachining:block/breaker_switch_off_copper", "y": -90 },
+    "enabled=true,facing=west": { "model": "enginemachining:block/breaker_switch_on_copper", "y": -90 },
+
+    "enabled=false,facing=up": { "model": "enginemachining:block/breaker_switch_off_copper", "x": -90 },
+    "enabled=true,facing=up": { "model": "enginemachining:block/breaker_switch_on_copper", "x": -90 },
+
+    "enabled=false,facing=down": { "model": "enginemachining:block/breaker_switch_off_copper", "x": 90 },
+    "enabled=true,facing=down": { "model": "enginemachining:block/breaker_switch_on_copper", "x": 90 }
   }
 }
