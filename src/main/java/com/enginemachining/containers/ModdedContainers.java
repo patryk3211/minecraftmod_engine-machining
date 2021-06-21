@@ -15,7 +15,4 @@ public class ModdedContainers {
     public static final RegistryObject<ContainerType<CrusherContainer>> crusher = CONTAINERS.register("crusher", () -> IForgeContainerType.create(CrusherContainer::new));
 
     public static final RegistryObject<ContainerType<PowerLimiterContainer>> power_limiter = CONTAINERS.register("power_limiter", () -> IForgeContainerType.create(PowerLimiterContainer::new));
-
-    /*@ObjectHolder("enginemachining:crusher")
-    public static ContainerType<CrusherContainer> crusher;*/
 }

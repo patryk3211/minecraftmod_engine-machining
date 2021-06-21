@@ -63,14 +63,6 @@ public class CrusherScreen extends ContainerScreen<CrusherContainer> implements 
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    /*@Override
-    public void mouseMoved(double mouseX, double mouseY) {
-        if(mouseX > xOrigin && mouseX < xOrigin+20 && mouseY > yOrigin && mouseY < yOrigin+20) {
-            RenderSystem.color4f(1.0f, 1.0f, 1.0f, 0.5f);
-            System.out.println("Hover");
-        } else RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-    }*/
-
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);

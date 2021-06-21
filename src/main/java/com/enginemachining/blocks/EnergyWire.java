@@ -42,13 +42,6 @@ public abstract class EnergyWire extends Block {
                 .setValue(BlockStateProperties.WEST, false)
                 .setValue(BlockStateProperties.UP, false)
                 .setValue(BlockStateProperties.DOWN, false);
-        /*setDefaultState(getDefaultState()
-                .with(BlockStateProperties.NORTH, false)
-                .with(BlockStateProperties.SOUTH, false)
-                .with(BlockStateProperties.EAST, false)
-                .with(BlockStateProperties.WEST, false)
-                .with(BlockStateProperties.UP, false)
-                .with(BlockStateProperties.DOWN, false));*/
         this.maxFEPerTick = maxFEPerTick;
     }
 
@@ -66,10 +59,8 @@ public abstract class EnergyWire extends Block {
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         //Change block state to maybe connect to another wire
         BlockPos deltaPos = fromPos.subtract(pos);
-        //System.out.println(pos.toString() + ' ' + deltaPos);
         Direction neighborDir = Direction.getNearest(deltaPos.getX(), deltaPos.getY(), deltaPos.getZ());
         TileEntity neighbor = worldIn.getBlockEntity(fromPos);
-        //if(neighbor != null) System.out.println(((EnergyWireTile)neighbor).disconnectMask);
         boolean blockConnectable = neighbor instanceof EnergyWireTile ||
                 (neighbor != null && neighbor.getCapability(ModdedCapabilities.ENERGY, neighborDir.getOpposite()).isPresent());
         TileEntity te = worldIn.getBlockEntity(pos);
