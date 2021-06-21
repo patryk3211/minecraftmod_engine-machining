@@ -1,11 +1,7 @@
 package com.enginemachining.handlers.energy;
 
-import com.enginemachining.api.energy.IEnergyHandler;
 import com.enginemachining.api.energy.ISerializableEnergyHandler;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-
-import javax.annotation.Nullable;
 
 public class MeasuringEnergyHandler implements ISerializableEnergyHandler {
     private final ISerializableEnergyHandler handler;

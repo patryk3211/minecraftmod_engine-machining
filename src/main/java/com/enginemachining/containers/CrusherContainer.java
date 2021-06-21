@@ -1,33 +1,19 @@
 package com.enginemachining.containers;
 
-import com.enginemachining.blocks.Crusher;
-import com.enginemachining.blocks.ModdedBlocks;
 import com.enginemachining.items.ModdedItems;
-import com.enginemachining.screens.CrusherScreen;
 import com.enginemachining.tileentities.CrusherTile;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIntArray;
-import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntArray;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.storage.PlayerData;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.BiFunction;
 
 public class CrusherContainer extends Container {
     public CrusherTile tileEntity;

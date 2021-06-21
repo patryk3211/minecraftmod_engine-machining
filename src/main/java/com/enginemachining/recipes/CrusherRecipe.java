@@ -1,9 +1,7 @@
 package com.enginemachining.recipes;
 
-import com.enginemachining.items.ModdedItems;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.mojang.realmsclient.util.JsonUtils;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,11 +15,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CrusherRecipe implements IRecipe<IInventory> {
     private ResourceLocation id;

@@ -1,10 +1,8 @@
 package com.enginemachining.blocks;
 
-import it.unimi.dsi.fastutil.doubles.DoubleList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.*;
 import net.minecraft.world.IBlockReader;

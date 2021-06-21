@@ -2,28 +2,17 @@ package com.enginemachining.screens;
 
 import com.enginemachining.EngineMachiningPacketHandler;
 import com.enginemachining.containers.CrusherContainer;
-import com.enginemachining.containers.ModdedContainers;
 import com.enginemachining.messages.CrusherTileMessage;
 import com.enginemachining.tileentities.CrusherTile;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.network.PacketDistributor;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.system.CallbackI;
 
 @OnlyIn(Dist.CLIENT)
 public class CrusherScreen extends ContainerScreen<CrusherContainer> implements IHasContainer<CrusherContainer> {

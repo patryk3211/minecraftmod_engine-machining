@@ -8,7 +8,6 @@ import com.enginemachining.messages.CrusherTileMessage;
 import com.enginemachining.messages.PowerLimiterMessage;
 import com.enginemachining.recipes.ModdedRecipeSerializers;
 import com.enginemachining.tileentities.ModdedTileEntities;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;

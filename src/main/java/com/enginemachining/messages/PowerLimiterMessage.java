@@ -1,6 +1,5 @@
 package com.enginemachining.messages;
 
-import com.enginemachining.tileentities.CrusherTile;
 import com.enginemachining.tileentities.PowerLimiterTile;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;

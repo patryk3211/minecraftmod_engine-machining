@@ -1,11 +1,6 @@
 package com.enginemachining.handlers.energy;
 
 import com.enginemachining.api.energy.IEnergyHandler;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraftforge.energy.IEnergyStorage;
-
-import javax.annotation.Nullable;
 
 public class InfiniteEnergySource implements IEnergyHandler {
 

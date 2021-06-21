@@ -1,6 +1,5 @@
 package com.enginemachining.handlers.energy;
 
-import com.enginemachining.api.energy.IEnergyHandler;
 import com.enginemachining.api.energy.ISerializableEnergyHandler;
 import net.minecraft.nbt.CompoundNBT;
 
