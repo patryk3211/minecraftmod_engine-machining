@@ -1,5 +1,5 @@
 {
   "variants": {
-    "": { "model": "enginemachining:block/template/ore_aluminium" }
+    "": { "model": "enginemachining:block/ore/ore_aluminium" }
   }
 }

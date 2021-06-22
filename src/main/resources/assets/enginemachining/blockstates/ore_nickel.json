@@ -1,5 +1,5 @@
 {
   "variants": {
-    "": { "model": "enginemachining:block/template/ore_nickel" }
+    "": { "model": "enginemachining:block/ore/ore_nickel" }
   }
 }
