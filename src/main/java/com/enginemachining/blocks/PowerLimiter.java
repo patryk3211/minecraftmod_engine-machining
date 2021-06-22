@@ -54,11 +54,11 @@ public abstract class PowerLimiter extends Block {
     private static final VoxelShape UP = VoxelShapes.or(Block.box(7, 0,7, 9, 3, 9),
             Block.box(6, 3,6, 10, 13, 10),
             Block.box(7, 13,7, 9, 16, 9),
-            Block.box(7, 5,5, 9, 7, 6));
+            Block.box(7, 9,10, 9, 11, 11));
     private static final VoxelShape DOWN = VoxelShapes.or(Block.box(7, 0,7, 9, 3, 9),
             Block.box(6, 3,6, 10, 13, 10),
             Block.box(7, 13,7, 9, 16, 9),
-            Block.box(7, 9,10, 9, 11, 11));
+            Block.box(7, 5,5, 9, 7, 6));
 
     private int maxPowerLimit;
 
