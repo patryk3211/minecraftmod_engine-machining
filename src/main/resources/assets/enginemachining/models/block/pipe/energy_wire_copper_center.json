@@ -1,5 +1,5 @@
 {
-  "parent": "enginemachining:block/pipe_2_center",
+  "parent": "enginemachining:block/template/pipe_2_center",
   "textures": {
     "center": "enginemachining:block/energy_copper_wire"
   }
