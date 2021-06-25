@@ -2,6 +2,7 @@ package com.enginemachining;
 
 import com.enginemachining.containers.ModdedContainers;
 import com.enginemachining.renderers.HandCrankRenderer;
+import com.enginemachining.renderers.KineticGeneratorRenderer;
 import com.enginemachining.screens.CrusherScreen;
 import com.enginemachining.screens.PowerLimiterScreen;
 import net.minecraft.client.gui.ScreenManager;
@@ -20,6 +21,6 @@ public class ClientEventBus {
     }
 
     public static void loadComplete(FMLLoadCompleteEvent loadCompleteEvent) {
-        HandCrankRenderer.init();
+
     }
 }

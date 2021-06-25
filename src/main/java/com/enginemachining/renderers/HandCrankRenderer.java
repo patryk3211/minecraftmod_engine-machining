@@ -77,8 +77,4 @@ public class HandCrankRenderer extends TileEntityRenderer<HandCrankTile> {
     public static void register() {
         ClientRegistry.bindTileEntityRenderer(ModdedTileEntities.handcrank.get(), HandCrankRenderer::new);
     }
-
-    public static void init() {
-
-    }
 }
