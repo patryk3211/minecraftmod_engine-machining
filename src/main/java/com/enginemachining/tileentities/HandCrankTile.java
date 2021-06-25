@@ -28,6 +28,11 @@ public class HandCrankTile extends TileEntity implements ITickableTileEntity {
         public float getSpeed() {
             return velocity;
         }
+
+        @Override
+        public double getCurrentAngle() {
+            return angle;
+        }
     });
 
     public HandCrankTile() {

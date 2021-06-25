@@ -13,4 +13,9 @@ public class ConstantSpeedKineticEnergyHandler implements IKineticEnergyHandler 
     public float getSpeed() {
         return rotationalSpeed;
     }
+
+    @Override
+    public double getCurrentAngle() {
+        return 0;
+    }
 }
