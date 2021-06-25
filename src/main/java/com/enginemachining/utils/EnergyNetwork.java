@@ -270,7 +270,7 @@ public class EnergyNetwork extends PipeNetwork {
         });
         if(maxAvailableTransfer.get() == 0 || requestedTransfer.get() == 0) return;
 
-        float powerToTransfer = Float.min(requestedTransfer.get(), maxAvailableTransfer.get());
+        final float powerToTransfer = Float.min(requestedTransfer.get(), maxAvailableTransfer.get());
 
         float left = powerToTransfer;
         int count = sendersCount;
@@ -307,7 +307,7 @@ public class EnergyNetwork extends PipeNetwork {
                 IEnergyHandlerProvider receiver = (IEnergyHandlerProvider) traceable;
                 final float powerToReceive = receiverList.get(receiver);
                 packet.pathsList.forEach((sender, pathList) -> {
-                    final float powerFromThisSender = powerToReceive * (senderList.get(sender) / maxAvailableTransfer.get());
+                    final float powerFromThisSender = powerToReceive * (senderList.get(sender) / powerToTransfer);
                     for (ReceiverToSenderPathListEntry pathEntry : pathList.paths) {
                         final float powerPerWire;
                         if(pathList.combinedResistance == 0) powerPerWire = powerFromThisSender/pathList.paths.size();
