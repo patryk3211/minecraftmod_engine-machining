@@ -32,7 +32,10 @@ public class ModdedItems {
 
     public static final RegistryObject<Item> power_limiter_copper = ITEMS.register("power_limiter_copper", () -> new BlockItem(ModdedBlocks.power_limiter_copper.get(), new Item.Properties().tab(ItemGroup.TAB_MISC)));
 
+    public static final RegistryObject<Item> kinetic_generator = ITEMS.register("kinetic_generator", () -> new BlockItem(ModdedBlocks.kinetic_generator.get(), new Item.Properties().tab(ItemGroup.TAB_MISC)));
     public static final RegistryObject<Item> infinite_power_source = ITEMS.register("infinite_power_source", () -> new BlockItem(ModdedBlocks.infinite_power_source.get(), new Item.Properties().tab(ModdedItemGroups.misc)));
+
+    public static final RegistryObject<Item> handcrank = ITEMS.register("handcrank", () -> new BlockItem(ModdedBlocks.handcrank.get(), new Item.Properties().tab(ItemGroup.TAB_MISC)));
 
     public static final RegistryObject<Item> ingot_copper = ITEMS.register("ingot_copper", IngotCopper::new);
     public static final RegistryObject<Item> ingot_tin = ITEMS.register("ingot_tin", IngotTin::new);

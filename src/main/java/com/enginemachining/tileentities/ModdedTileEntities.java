@@ -15,5 +15,8 @@ public class ModdedTileEntities {
     public static final RegistryObject<TileEntityType<EnergyWireTile>> energy_wire = TILE_ENTITIES.register("energy_wire", () -> TileEntityType.Builder.of(EnergyWireTile::new, ModdedBlocks.energy_wire_copper.get()).build(null));
     public static final RegistryObject<TileEntityType<PowerLimiterTile>> power_limiter = TILE_ENTITIES.register("power_limiter", () -> TileEntityType.Builder.of(PowerLimiterTile::new, ModdedBlocks.power_limiter_copper.get()).build(null));
 
+    public static final RegistryObject<TileEntityType<KineticGeneratorTile>> kinetic_generator = TILE_ENTITIES.register("kinetic_generator", () -> TileEntityType.Builder.of(KineticGeneratorTile::new, ModdedBlocks.kinetic_generator.get()).build(null));
     public static final RegistryObject<TileEntityType<InfinitePowerSourceTile>> infinite_power_source = TILE_ENTITIES.register("infinite_power_source", () -> TileEntityType.Builder.of(InfinitePowerSourceTile::new, ModdedBlocks.infinite_power_source.get()).build(null));
+
+    public static final RegistryObject<TileEntityType<HandCrankTile>> handcrank = TILE_ENTITIES.register("handcrank", () -> TileEntityType.Builder.of(HandCrankTile::new, ModdedBlocks.handcrank.get()).build(null));
 }

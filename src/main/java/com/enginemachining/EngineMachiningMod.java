@@ -40,7 +40,11 @@ public class EngineMachiningMod
         ModdedRecipeSerializers.RECIPES.register(modBus);
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventBus::clientSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventBus::loadComplete);
+
         MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoad);
+
         MinecraftForge.EVENT_BUS.register(this);
     }
 
