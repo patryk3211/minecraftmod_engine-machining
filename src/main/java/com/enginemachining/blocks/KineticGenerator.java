@@ -1,7 +1,11 @@
 package com.enginemachining.blocks;
 
 import com.enginemachining.api.rotation.KineticBlockProperties;
+import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.tileentities.KineticGeneratorTile;
+import com.enginemachining.utils.EnergyNetwork;
+import com.enginemachining.utils.IPipeTraceable;
+import com.enginemachining.utils.PipeNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -82,7 +86,12 @@ public class KineticGenerator extends Block {
     public void onRemove(BlockState state, World level, BlockPos pos, BlockState newState, boolean isMoving) {
         if(level.isClientSide) return;
         if(!(newState.getBlock() instanceof KineticGenerator)) {
-            level.removeBlockEntity(pos);
+            TileEntity entity = level.getBlockEntity(pos);
+            if(entity instanceof KineticGeneratorTile) {
+                PipeNetwork network = ((IPipeTraceable) entity).getNetwork(null);
+                level.removeBlockEntity(pos);
+                PipeNetwork.removeTraceable(pos, level, ModdedCapabilities.ENERGY, network, () -> new EnergyNetwork(level), null);
+            } else level.removeBlockEntity(pos);
         }
     }
 }

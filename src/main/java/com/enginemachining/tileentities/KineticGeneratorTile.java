@@ -5,6 +5,7 @@ import com.enginemachining.api.rotation.IKineticEnergyHandler;
 import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.handlers.IEnergyHandlerProvider;
 import com.enginemachining.handlers.energy.EnergyHandler;
+import com.enginemachining.utils.EnergyNetwork;
 import com.enginemachining.utils.PipeNetwork;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -56,6 +57,8 @@ public class KineticGeneratorTile extends TileEntity implements ITickableTileEnt
     };
     private final LazyOptional<IEnergyHandler> handler = LazyOptional.of(() -> ehandler);
 
+    private boolean firstTick = true;
+
     public KineticGeneratorTile() {
         super(ModdedTileEntities.kinetic_generator.get());
     }
@@ -73,6 +76,10 @@ public class KineticGeneratorTile extends TileEntity implements ITickableTileEnt
     @Override
     public void tick() {
         if(!level.isClientSide) {
+            if(firstTick) {
+                if(network == null) PipeNetwork.addTraceable(this, ModdedCapabilities.ENERGY, () -> new EnergyNetwork(level));
+                firstTick = false;
+            }
             Direction facing = getBlockState().getValue(BlockStateProperties.FACING);
             TileEntity te = level.getBlockEntity(worldPosition.offset(facing.getNormal()));
             if(te != null) {
