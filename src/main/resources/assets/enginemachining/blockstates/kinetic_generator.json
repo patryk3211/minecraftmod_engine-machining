@@ -1,10 +1,17 @@
 {
   "variants": {
-    "facing=north": { "model": "enginemachining:block/kinetic_generator" },
-    "facing=south": { "model": "enginemachining:block/kinetic_generator", "y": 180 },
-    "facing=east": { "model": "enginemachining:block/kinetic_generator", "y": 90 },
-    "facing=west": { "model": "enginemachining:block/kinetic_generator", "y": -90 },
-    "facing=up": { "model": "enginemachining:block/kinetic_generator", "x": -90 },
-    "facing=down": { "model": "enginemachining:block/kinetic_generator", "x": 90 }
+    "facing=north,model_type=body": { "model": "enginemachining:block/kinetic_generator" },
+    "facing=south,model_type=body": { "model": "enginemachining:block/kinetic_generator", "y": 180 },
+    "facing=east,model_type=body": { "model": "enginemachining:block/kinetic_generator", "y": 90 },
+    "facing=west,model_type=body": { "model": "enginemachining:block/kinetic_generator", "y": -90 },
+    "facing=up,model_type=body": { "model": "enginemachining:block/kinetic_generator", "x": -90 },
+    "facing=down,model_type=body": { "model": "enginemachining:block/kinetic_generator", "x": 90 },
+
+    "facing=north,model_type=shaft": { "model": "enginemachining:block/shaft_1" },
+    "facing=south,model_type=shaft": { "model": "enginemachining:block/shaft_1", "y": 180 },
+    "facing=east,model_type=shaft": { "model": "enginemachining:block/shaft_1", "y": 90 },
+    "facing=west,model_type=shaft": { "model": "enginemachining:block/shaft_1", "y": -90 },
+    "facing=up,model_type=shaft": { "model": "enginemachining:block/shaft_1", "x": -90 },
+    "facing=down,model_type=shaft": { "model": "enginemachining:block/shaft_1", "x": 90 }
   }
 }

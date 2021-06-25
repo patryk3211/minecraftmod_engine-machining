@@ -18,6 +18,7 @@ public class ClientEventBus {
         ScreenManager.register(ModdedContainers.power_limiter.get(), PowerLimiterScreen::new);
 
         HandCrankRenderer.register();
+        KineticGeneratorRenderer.register();
     }
 
     public static void loadComplete(FMLLoadCompleteEvent loadCompleteEvent) {
