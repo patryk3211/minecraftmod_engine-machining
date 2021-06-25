@@ -314,8 +314,7 @@ public class PipeNetwork {
         IPipeTraceable traceable = (IPipeTraceable) te;
 
         traced.add(traceable);
-        IPipeTraceable.Type type = traceable.getSideType(direction, capability);
-        switch (type) {
+        switch (traceable.getMainType(capability)) {
             case PIPE:
                 pipes.put(traceStart, traceable);
                 break;
@@ -325,8 +324,24 @@ public class PipeNetwork {
             case SENDER:
                 senders.put(traceStart, traceable);
                 break;
-            case NONE:
-                return;
+            case TRANSCEIVER:
+                IPipeTraceable.Type type = traceable.getSideType(direction, capability);
+                switch (type) {
+                    case PIPE:
+                        pipes.put(traceStart, traceable);
+                        break;
+                    case RECEIVER:
+                        receivers.put(traceStart, new ReceiverPacket(traceable));
+                        break;
+                    case SENDER:
+                        senders.put(traceStart, traceable);
+                        break;
+                    case NONE:
+                        return;
+                    default: throw new IllegalArgumentException("Unknown side traceable type!");
+                }
+            case NONE: return;
+            default: throw new IllegalArgumentException("Unknown traceable type!");
         }
 
         if(direction != null) {
