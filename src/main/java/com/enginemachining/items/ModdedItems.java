@@ -94,4 +94,6 @@ public class ModdedItems {
     public static final RegistryObject<Item> nugget_lead = ITEMS.register("nugget_lead", NuggetLead::new);
 
     public static final RegistryObject<Item> battery_disposable = ITEMS.register("battery_disposable", BatteryDisposable::new);
+
+    public static final RegistryObject<Item> aluminium_can = ITEMS.register("aluminium_can", () -> new Item(new Item.Properties().tab(ModdedItemGroups.misc)));
 }
