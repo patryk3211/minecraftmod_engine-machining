@@ -69,6 +69,9 @@
   "item.enginemachining.battery_disposable": "Disposable Battery",
   "block.enginemachining.power_limiter_copper": "Copper Power Limiter",
 
-  "block.enginemachining.infinite_power_source": "Infinite Power Source"
+  "block.enginemachining.infinite_power_source": "Infinite Power Source",
+
+  "item.enginemachining.aluminium_can": "Aluminium Can",
+  "item.enginemachining.hammer": "Hammer"
 }
 

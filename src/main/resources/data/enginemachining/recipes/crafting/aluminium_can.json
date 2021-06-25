@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X X",
+    "X X",
+    " X "
+  ],
+  "key": {
+    "X": {
+      "item": "enginemachining:nugget_aluminium"
+    }
+  },
+  "result": {
+    "item": "enginemachining:aluminium_can",
+    "count": 1
+  }
+}
