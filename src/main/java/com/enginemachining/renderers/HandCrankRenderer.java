@@ -71,6 +71,7 @@ public class HandCrankRenderer extends TileEntityRenderer<HandCrankTile> {
 
         double rotateBy = tile.toRotate * partialTicks;
         tile.toRotate -= rotateBy;
+        tile.lastRenderAngle = tile.angle;
         tile.angle += rotateBy;
     }
 

@@ -20,6 +20,7 @@ import javax.annotation.Nullable;
 public class HandCrankTile extends TileEntity implements ITickableTileEntity {
     public float velocity;
 
+    public double lastRenderAngle;
     public double angle;
     public double toRotate;
 
@@ -31,7 +32,7 @@ public class HandCrankTile extends TileEntity implements ITickableTileEntity {
 
         @Override
         public double getCurrentAngle() {
-            return angle;
+            return lastRenderAngle;
         }
     });
 
@@ -41,6 +42,7 @@ public class HandCrankTile extends TileEntity implements ITickableTileEntity {
         velocity = 0;
         angle = 0;
         toRotate = 0;
+        lastRenderAngle = 0;
     }
 
 
