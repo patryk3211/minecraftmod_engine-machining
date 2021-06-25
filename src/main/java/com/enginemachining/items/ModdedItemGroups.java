@@ -19,31 +19,37 @@ public class ModdedItemGroups {
             items.add(new ItemStack(ModdedItems.dust_copper.get()));
             items.add(new ItemStack(ModdedBlocks.ore_copper.get()));
             items.add(new ItemStack(ModdedItems.nugget_copper.get()));
+            items.add(new ItemStack(ModdedItems.block_copper.get()));
 
             items.add(new ItemStack(ModdedItems.ingot_tin.get()));
             items.add(new ItemStack(ModdedItems.dust_tin.get()));
             items.add(new ItemStack(ModdedBlocks.ore_tin.get()));
             items.add(new ItemStack(ModdedItems.nugget_tin.get()));
+            items.add(new ItemStack(ModdedItems.block_tin.get()));
 
             items.add(new ItemStack(ModdedItems.ingot_aluminium.get()));
             items.add(new ItemStack(ModdedItems.dust_aluminium.get()));
             items.add(new ItemStack(ModdedBlocks.ore_aluminium.get()));
             items.add(new ItemStack(ModdedItems.nugget_aluminium.get()));
+            items.add(new ItemStack(ModdedItems.block_aluminium.get()));
 
             items.add(new ItemStack(ModdedItems.ingot_nickel.get()));
             items.add(new ItemStack(ModdedItems.dust_nickel.get()));
             items.add(new ItemStack(ModdedBlocks.ore_nickel.get()));
             items.add(new ItemStack(ModdedItems.nugget_nickel.get()));
+            items.add(new ItemStack(ModdedItems.block_nickel.get()));
 
             items.add(new ItemStack(ModdedItems.ingot_lead.get()));
             items.add(new ItemStack(ModdedItems.dust_lead.get()));
             items.add(new ItemStack(ModdedBlocks.ore_lead.get()));
             items.add(new ItemStack(ModdedItems.nugget_lead.get()));
+            items.add(new ItemStack(ModdedItems.block_lead.get()));
 
             items.add(new ItemStack(ModdedItems.ingot_silver.get()));
             items.add(new ItemStack(ModdedItems.dust_silver.get()));
             items.add(new ItemStack(ModdedBlocks.ore_silver.get()));
             items.add(new ItemStack(ModdedItems.nugget_silver.get()));
+            items.add(new ItemStack(ModdedItems.block_silver.get()));
 
             items.add(new ItemStack(ModdedItems.dust_coal.get()));
             items.add(new ItemStack(ModdedItems.dust_lapis.get()));

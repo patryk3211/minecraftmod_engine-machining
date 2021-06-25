@@ -90,5 +90,12 @@ public class ModdedItems {
     public static final RegistryObject<Item> nugget_nickel = ITEMS.register("nugget_nickel", NuggetNickel::new);
     public static final RegistryObject<Item> nugget_lead = ITEMS.register("nugget_lead", NuggetLead::new);
 
+    public static final RegistryObject<Item> block_nickel = ITEMS.register("block_nickel", () -> new BlockItem(ModdedBlocks.block_nickel.get(), new Item.Properties().tab(ModdedItemGroups.metals)));
+    public static final RegistryObject<Item> block_aluminium = ITEMS.register("block_aluminium", () -> new BlockItem(ModdedBlocks.block_aluminium.get(), new Item.Properties().tab(ModdedItemGroups.metals)));
+    public static final RegistryObject<Item> block_lead = ITEMS.register("block_lead", () -> new BlockItem(ModdedBlocks.block_lead.get(), new Item.Properties().tab(ModdedItemGroups.metals)));
+    public static final RegistryObject<Item> block_tin = ITEMS.register("block_tin", () -> new BlockItem(ModdedBlocks.block_tin.get(), new Item.Properties().tab(ModdedItemGroups.metals)));
+    public static final RegistryObject<Item> block_silver = ITEMS.register("block_silver", () -> new BlockItem(ModdedBlocks.block_silver.get(), new Item.Properties().tab(ModdedItemGroups.metals)));
+    public static final RegistryObject<Item> block_copper = ITEMS.register("block_copper", () -> new BlockItem(ModdedBlocks.block_copper.get(), new Item.Properties().tab(ModdedItemGroups.metals)));
+
     public static final RegistryObject<Item> battery_disposable = ITEMS.register("battery_disposable", BatteryDisposable::new);
 }
