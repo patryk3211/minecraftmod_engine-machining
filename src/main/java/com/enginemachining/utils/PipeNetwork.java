@@ -51,6 +51,14 @@ public class PipeNetwork {
             this.pathResistance = pathResistance;
             this.pipes = pipes;
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(obj instanceof ReceiverToSenderPathListEntry) {
+                return pipes.equals(((ReceiverToSenderPathListEntry) obj).pipes);
+            }
+            return false;
+        }
     }
 
     protected static class Pair<T, V> {
@@ -460,7 +468,7 @@ public class PipeNetwork {
                 pipeDetected = true;
                 traceForSender(pos.offset(d.getNormal()), path, 0, pos, useCount, false);
             }
-            if(!pipeDetected || rec.pathsList.size() == 0) {
+            if(!pipeDetected || !rec.pathsList.keySet().containsAll(senders.values())) {
                 for(Direction d : Direction.values()) {
                     List<IPipeTraceable> path = new ArrayList<>();
                     path.add(rec.receiver);
@@ -524,11 +532,11 @@ public class PipeNetwork {
                     list = new ReceiverToSenderPathList();
                     packet.pathsList.put(sender, list);
                 }
-                if(list.paths.size() >= MAX_SENDER_PATH_COUNT) return false;
+                if(list.paths.size() >= MAX_SENDER_PATH_COUNT) continue;//return true;
 
                 list.combinedResistance += resistance + pipe.getResistance();
                 ReceiverToSenderPathListEntry pathListEntry = new ReceiverToSenderPathListEntry(resistance + pipe.getResistance(), pipes);
-                list.paths.add(pathListEntry);
+                if(!list.paths.contains(pathListEntry)) list.paths.add(pathListEntry);
 
                 if(DEBUG_DUMP) {
                     System.out.println("Sender: " + neighbourPos);
@@ -554,12 +562,12 @@ public class PipeNetwork {
             }
         }
         if(gotThroughNonPipes) {
-            if (!pipeDetected || this.receivers.get(receiver).pathsList.size() == 0) {
+            if (!pipeDetected || this.receivers.get(receiver).pathsList.size() == 0/*.keySet().containsAll(senders.values())*/) {
                 for (Direction d : Direction.values()) {
                     BlockPos neighbourPos = position.offset(d.getNormal());
                     IPipeTraceable neighbour = null;
                     if (this.receivers.containsKey(neighbourPos)) neighbour = this.receivers.get(neighbourPos).receiver;
-                    else this.senders.get(neighbourPos);
+                    else neighbour = this.senders.get(neighbourPos);
                     if (neighbour == null) continue;
                     if (neighbour.canConnect(d.getOpposite(), capability)) {
                         List<IPipeTraceable> copy = new ArrayList<>(pipes);
