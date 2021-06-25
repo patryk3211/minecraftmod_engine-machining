@@ -1,16 +1,19 @@
 package com.enginemachining.blocks;
 
+import com.enginemachining.tileentities.KineticGeneratorTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
@@ -54,5 +57,24 @@ public class KineticGenerator extends Block {
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         return defaultBlockState().setValue(BlockStateProperties.FACING, context.getNearestLookingDirection().getOpposite());
+    }
+
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        return new KineticGeneratorTile();
+    }
+
+    @Override
+    public void onRemove(BlockState state, World level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if(level.isClientSide) return;
+        if(!(newState.getBlock() instanceof KineticGenerator)) {
+            level.removeBlockEntity(pos);
+        }
     }
 }

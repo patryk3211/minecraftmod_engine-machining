@@ -5,16 +5,21 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -62,5 +67,27 @@ public class HandCrank extends Block {
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new HandCrankTile();
+    }
+
+    @Override
+    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity user, Hand hand, BlockRayTraceResult ray) {
+        if(!level.isClientSide) {
+            TileEntity te = level.getBlockEntity(pos);
+            if(!(te instanceof HandCrankTile)) return ActionResultType.FAIL;
+            ((HandCrankTile) te).velocity = 1.5f;
+            te.setChanged();
+            level.sendBlockUpdated(pos, state, state, Constants.BlockFlags.BLOCK_UPDATE);
+            user.causeFoodExhaustion(0.5f);
+            return ActionResultType.SUCCESS;
+        }
+        return ActionResultType.CONSUME;
+    }
+
+    @Override
+    public void onRemove(BlockState state, World level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if(level.isClientSide) return;
+        if(!(newState.getBlock() instanceof HandCrank)) {
+            level.removeBlockEntity(pos);
+        }
     }
 }

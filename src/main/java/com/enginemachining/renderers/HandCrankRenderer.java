@@ -69,12 +69,9 @@ public class HandCrankRenderer extends TileEntityRenderer<HandCrankTile> {
         }
         stack.popPose();
 
-        //if(tile.time > 0) {
-        //    tile.time -= partialTicks;
         double rotateBy = tile.toRotate * partialTicks;
         tile.toRotate -= rotateBy;
         tile.angle += rotateBy;
-        //}
     }
 
     public static void register() {
