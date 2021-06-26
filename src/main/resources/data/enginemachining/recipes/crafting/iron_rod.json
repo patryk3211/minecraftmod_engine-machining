@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "H",
+    "I"
+  ],
+  "key": {
+    "H": {
+      "item": "enginemachining:hammer"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "enginemachining:iron_rod",
+    "count": 1
+  }
+}

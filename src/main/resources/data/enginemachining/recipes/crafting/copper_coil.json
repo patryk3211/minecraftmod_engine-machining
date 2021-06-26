@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " W ",
+    "WRW",
+    " W "
+  ],
+  "key": {
+    "W": {
+      "item": "enginemachining:energy_wire_copper"
+    },
+    "R": {
+      "item": "enginemachining:iron_rod"
+    }
+  },
+  "result": {
+    "item": "enginemachining:copper_coil",
+    "count": 1
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X X",
+    "XHX",
+    " X "
+  ],
+  "key": {
+    "X": {
+      "item": "enginemachining:nugget_aluminium"
+    },
+    "H": {
+      "item": "enginemachining:hammer"
+    }
+  },
+  "result": {
+    "item": "enginemachining:aluminium_can",
+    "count": 1
+  }
+}

@@ -6,6 +6,7 @@ import com.enginemachining.blocks.ModdedBlocks;
 import com.enginemachining.items.nuggets.*;
 import com.enginemachining.items.dust.*;
 import com.enginemachining.items.ingot.*;
+import com.enginemachining.tools.Hammer;
 import com.enginemachining.tools.aluminium.*;
 import com.enginemachining.tools.copper.*;
 import com.enginemachining.tools.silver.*;
@@ -94,4 +95,9 @@ public class ModdedItems {
     public static final RegistryObject<Item> nugget_lead = ITEMS.register("nugget_lead", NuggetLead::new);
 
     public static final RegistryObject<Item> battery_disposable = ITEMS.register("battery_disposable", BatteryDisposable::new);
+
+    public static final RegistryObject<Item> hammer = ITEMS.register("hammer", Hammer::new);
+    public static final RegistryObject<Item> aluminium_can = ITEMS.register("aluminium_can", () -> new Item(new Item.Properties().tab(ModdedItemGroups.misc)));
+    public static final RegistryObject<Item> iron_rod = ITEMS.register("iron_rod", () -> new Item(new Item.Properties().tab(ModdedItemGroups.misc)));
+    public static final RegistryObject<Item> copper_coil = ITEMS.register("copper_coil", () -> new Item(new Item.Properties().tab(ModdedItemGroups.misc)));
 }

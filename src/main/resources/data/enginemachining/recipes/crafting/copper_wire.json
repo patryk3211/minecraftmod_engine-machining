@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " H ",
+    "CCC"
+  ],
+  "key": {
+    "H": {
+      "item": "enginemachining:hammer"
+    },
+    "C": {
+      "item": "enginemachining:ingot_copper"
+    }
+  },
+  "result": {
+    "item": "enginemachining:energy_wire_copper",
+    "count": 2
+  }
+}
