@@ -9,6 +9,7 @@ public enum ModItemTier implements IItemTier {
     copper(2, 200, 5.0f, 1.0f, 9, Ingredient.of(ModdedItems.ingot_copper.get())),
     aluminium(2, 250, 4.5f, 1.0f, 12, Ingredient.of(ModdedItems.ingot_aluminium.get())),
     silver(2, 100, 9.0f, 1.0f, 22, Ingredient.of(ModdedItems.ingot_silver.get()));
+    tin(2, 200, 5.0f, 1.0f, 9, Ingredient.of(ModdedItems.infot_tin.get()));
 
     private final int harvestLevel;
     private final int maxUses;
