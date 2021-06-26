@@ -9,6 +9,7 @@ import com.enginemachining.items.ingot.*;
 import com.enginemachining.tools.aluminium.*;
 import com.enginemachining.tools.copper.*;
 import com.enginemachining.tools.silver.*;
+import com.enginemachining.tools.tin.PickaxeTin;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;

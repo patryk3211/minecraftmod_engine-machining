@@ -1,5 +1,4 @@
-
-package com.enginemachining.tools.aluminium;
+package com.enginemachining.tools.tin;
 
 import com.enginemachining.items.ModdedItemGroups;
 import com.enginemachining.tools.ModItemTier;
