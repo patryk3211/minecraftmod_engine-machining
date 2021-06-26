@@ -1,6 +1,7 @@
 package com.enginemachining.tileentities;
 
 import com.enginemachining.api.rotation.IKineticEnergyHandler;
+import com.enginemachining.api.rotation.RotationalNetwork;
 import com.enginemachining.capabilities.ModdedCapabilities;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -24,7 +25,9 @@ public class HandCrankTile extends TileEntity implements ITickableTileEntity {
     public double angle;
     public double toRotate;
 
-    private LazyOptional<IKineticEnergyHandler> handler = LazyOptional.of(() -> new IKineticEnergyHandler() {
+    private RotationalNetwork network;
+
+    private final LazyOptional<IKineticEnergyHandler> handler = LazyOptional.of(() -> new IKineticEnergyHandler() {
         @Override
         public float getSpeed() {
             return velocity;
@@ -33,6 +36,16 @@ public class HandCrankTile extends TileEntity implements ITickableTileEntity {
         @Override
         public double getCurrentAngle() {
             return lastRenderAngle;
+        }
+
+        @Override
+        public RotationalNetwork getNetwork() {
+            return network;
+        }
+
+        @Override
+        public void setNetwork(RotationalNetwork network) {
+            HandCrankTile.this.network = network;
         }
     });
 
@@ -88,6 +101,7 @@ public class HandCrankTile extends TileEntity implements ITickableTileEntity {
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if(cap == ModdedCapabilities.ROTATION) {
             if(side == getBlockState().getValue(BlockStateProperties.FACING)) return handler.cast();
+            else if(side == null) return handler.cast();
             return LazyOptional.empty();
         }
         return super.getCapability(cap, side);
