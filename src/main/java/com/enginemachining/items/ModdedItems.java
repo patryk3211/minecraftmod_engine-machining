@@ -98,4 +98,6 @@ public class ModdedItems {
 
     public static final RegistryObject<Item> hammer = ITEMS.register("hammer", Hammer::new);
     public static final RegistryObject<Item> aluminium_can = ITEMS.register("aluminium_can", () -> new Item(new Item.Properties().tab(ModdedItemGroups.misc)));
+    public static final RegistryObject<Item> iron_rod = ITEMS.register("iron_rod", () -> new Item(new Item.Properties().tab(ModdedItemGroups.misc)));
+    public static final RegistryObject<Item> copper_coil = ITEMS.register("copper_coil", () -> new Item(new Item.Properties().tab(ModdedItemGroups.misc)));
 }

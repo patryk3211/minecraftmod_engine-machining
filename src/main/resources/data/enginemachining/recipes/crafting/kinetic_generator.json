@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ICI",
+    "WCR",
+    "ICI"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "enginemachining:iron_rod"
+    },
+    "C": {
+      "item": "enginemachining:copper_coil"
+    },
+    "W": {
+      "item": "enginemachining:energy_wire_copper"
+    }
+  },
+  "result": {
+    "item": "enginemachining:kinetic_generator",
+    "count": 1
+  }
+}
