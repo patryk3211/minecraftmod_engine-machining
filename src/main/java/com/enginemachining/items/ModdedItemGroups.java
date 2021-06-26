@@ -96,6 +96,7 @@ public class ModdedItemGroups {
             items.add(new ItemStack(ModdedItems.chestplate_aluminium.get()));
             items.add(new ItemStack(ModdedItems.leggins_aluminium.get()));
             items.add(new ItemStack(ModdedItems.boots_aluminium.get()));
+            items.add(new ItemStack(ModdedItems.pickaxe_copper.get()));
         }
     };
 
