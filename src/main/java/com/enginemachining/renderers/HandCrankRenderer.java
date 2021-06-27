@@ -1,6 +1,7 @@
 package com.enginemachining.renderers;
 
 import com.enginemachining.EngineMachiningMod;
+import com.enginemachining.api.rotation.ClientRotationalNetwork;
 import com.enginemachining.tileentities.HandCrankTile;
 import com.enginemachining.tileentities.ModdedTileEntities;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -49,11 +50,15 @@ public class HandCrankRenderer extends TileEntityRenderer<HandCrankTile> {
         IVertexBuilder builder = type.getBuffer(RenderType.solid());
         stack.pushPose();
 
-        Vector3i normal = facing.getNormal();
-        Vector3f plane = new Vector3f((1-Math.abs(normal.getX()))*0.5f, (1-Math.abs(normal.getY()))*0.5f, (1-Math.abs(normal.getZ()))*0.5f);
-        stack.translate(plane.x(), plane.y(), plane.z());
-        stack.mulPose(new Quaternion((float)(normal.getX()*tile.angle), (float)(normal.getY()*tile.angle), (float)(normal.getZ()*tile.angle), true));
-        stack.translate(-plane.x(), -plane.y(), -plane.z());
+        ClientRotationalNetwork network = (ClientRotationalNetwork) tile.getNetwork();
+        if(network != null) {
+            double angle = network.getAngle();
+            Vector3i normal = facing.getNormal();
+            Vector3f plane = new Vector3f((1 - Math.abs(normal.getX())) * 0.5f, (1 - Math.abs(normal.getY())) * 0.5f, (1 - Math.abs(normal.getZ())) * 0.5f);
+            stack.translate(plane.x(), plane.y(), plane.z());
+            stack.mulPose(new Quaternion((float) (normal.getX() * angle), (float) (normal.getY() * angle), (float) (normal.getZ() * angle), true));
+            stack.translate(-plane.x(), -plane.y(), -plane.z());
+        }
 
         // Render the culled faces
         for(Direction dir : Direction.values()) {
@@ -69,10 +74,10 @@ public class HandCrankRenderer extends TileEntityRenderer<HandCrankTile> {
         }
         stack.popPose();
 
-        double rotateBy = tile.toRotate * partialTicks;
+        /*double rotateBy = tile.toRotate * partialTicks;
         tile.toRotate -= rotateBy;
         tile.lastRenderAngle = tile.angle;
-        tile.angle += rotateBy;
+        tile.angle += rotateBy;*/
     }
 
     public static void register() {

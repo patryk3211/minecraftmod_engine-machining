@@ -1,5 +1,6 @@
 package com.enginemachining.blocks;
 
+import com.enginemachining.api.rotation.RotationalNetwork;
 import com.enginemachining.tileentities.HandCrankTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -17,12 +18,14 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Random;
+import java.util.UUID;
 
 public class HandCrank extends Block {
     private static final VoxelShape NORTH = VoxelShapes.or(Block.box(6.5, 6.5, 0, 9.5, 9.5, 3), Block.box(1, 1, 3, 15, 15, 6)).optimize();
@@ -82,10 +85,12 @@ public class HandCrank extends Block {
         if(!level.isClientSide) {
             TileEntity te = level.getBlockEntity(pos);
             if(!(te instanceof HandCrankTile)) return ActionResultType.FAIL;
-            ((HandCrankTile) te).velocity = 1.5f;
-            te.setChanged();
-            level.sendBlockUpdated(pos, state, state, Constants.BlockFlags.BLOCK_UPDATE);
-            user.causeFoodExhaustion(0.5f);
+            HandCrankTile hct = (HandCrankTile) te;
+            RotationalNetwork net = (RotationalNetwork) hct.getNetwork();
+            float force = net.calculateForceForSpeed(1.5f);
+            force = Math.min(force, 10f);
+            net.applyTickForce(force);
+            user.causeFoodExhaustion(force/20f);
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.CONSUME;
@@ -95,6 +100,7 @@ public class HandCrank extends Block {
     public void onRemove(BlockState state, World level, BlockPos pos, BlockState newState, boolean isMoving) {
         if(level.isClientSide) return;
         if(!(newState.getBlock() instanceof HandCrank)) {
+            RotationalNetwork.removeFromNetwork(pos, level);
             level.removeBlockEntity(pos);
         }
     }

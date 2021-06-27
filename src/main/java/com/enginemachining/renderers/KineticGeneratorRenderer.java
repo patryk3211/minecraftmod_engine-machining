@@ -1,6 +1,7 @@
 package com.enginemachining.renderers;
 
 import com.enginemachining.EngineMachiningMod;
+import com.enginemachining.api.rotation.ClientRotationalNetwork;
 import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.tileentities.KineticGeneratorTile;
 import com.enginemachining.tileentities.ModdedTileEntities;
@@ -41,16 +42,14 @@ public class KineticGeneratorRenderer extends TileEntityRenderer<KineticGenerato
         IVertexBuilder builder = type.getBuffer(RenderType.solid());
         stack.pushPose();
 
-        TileEntity neighbour = tile.getLevel().getBlockEntity(tile.getBlockPosition().offset(facing.getNormal()));
-        if(neighbour != null) {
-            neighbour.getCapability(ModdedCapabilities.ROTATION, facing.getOpposite()).ifPresent(handler -> {
-                double angle = handler.getCurrentAngle();
-                Vector3i normal = facing.getOpposite().getNormal();
-                Vector3f plane = new Vector3f((1-Math.abs(normal.getX()))*0.5f, (1-Math.abs(normal.getY()))*0.5f, (1-Math.abs(normal.getZ()))*0.5f);
-                stack.translate(plane.x(), plane.y(), plane.z());
-                stack.mulPose(new Quaternion((float)(normal.getX()*angle), (float)(normal.getY()*angle), (float)(normal.getZ()*angle), true));
-                stack.translate(-plane.x(), -plane.y(), -plane.z());
-            });
+        ClientRotationalNetwork net = (ClientRotationalNetwork) tile.getNetwork();
+        if(net != null) {
+            double angle = net.getAngle();
+            Vector3i normal = facing.getOpposite().getNormal();
+            Vector3f plane = new Vector3f((1 - Math.abs(normal.getX())) * 0.5f, (1 - Math.abs(normal.getY())) * 0.5f, (1 - Math.abs(normal.getZ())) * 0.5f);
+            stack.translate(plane.x(), plane.y(), plane.z());
+            stack.mulPose(new Quaternion((float) (normal.getX() * angle), (float) (normal.getY() * angle), (float) (normal.getZ() * angle), true));
+            stack.translate(-plane.x(), -plane.y(), -plane.z());
         }
 
         RenderHelper.renderModel(builder, stack, model, state, combinedLight, combinedOverlay, Minecraft.getInstance().level.random);

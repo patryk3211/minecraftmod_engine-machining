@@ -2,6 +2,8 @@ package com.enginemachining.tileentities;
 
 import com.enginemachining.api.energy.IEnergyHandler;
 import com.enginemachining.api.rotation.IKineticEnergyHandler;
+import com.enginemachining.api.rotation.IRotationalNetwork;
+import com.enginemachining.api.rotation.RotationalNetwork;
 import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.handlers.IEnergyHandlerProvider;
 import com.enginemachining.handlers.energy.EnergyHandler;
@@ -23,6 +25,7 @@ import javax.annotation.Nullable;
 public class KineticGeneratorTile extends TileEntity implements ITickableTileEntity, IEnergyHandlerProvider {
     private float currentGeneration = 0;
     private float storedPower = 0;
+    private float extractedPower = 0;
     // TODO: [25.06.2021] To future me, please use LazyOptionals in the EnergyNetwork
     private IEnergyHandler ehandler = new IEnergyHandler() {
         @Override
@@ -37,11 +40,17 @@ public class KineticGeneratorTile extends TileEntity implements ITickableTileEnt
 
             if(storedPower < power) {
                 float ret = storedPower;
-                if(!simulate) storedPower = 0;
+                if(!simulate) {
+                    storedPower = 0;
+                    extractedPower += ret;
+                }
                 return ret;
             }
 
-            if(!simulate) storedPower -= power;
+            if(!simulate) {
+                storedPower -= power;
+                extractedPower += power;
+            }
             return power;
         }
 
@@ -57,6 +66,29 @@ public class KineticGeneratorTile extends TileEntity implements ITickableTileEnt
     };
     private final LazyOptional<IEnergyHandler> handler = LazyOptional.of(() -> ehandler);
 
+    private IRotationalNetwork rnetwork;
+    private final LazyOptional<IKineticEnergyHandler> khandler = LazyOptional.of(() -> new IKineticEnergyHandler() {
+        @Override
+        public IRotationalNetwork getNetwork() {
+            return rnetwork;
+        }
+
+        @Override
+        public void setNetwork(IRotationalNetwork network) {
+            rnetwork = network;
+        }
+
+        @Override
+        public float getInertiaMass() {
+            return 2;
+        }
+
+        @Override
+        public float getFriction() {
+            return 0.1f;
+        }
+    });
+
     private boolean firstTick = true;
 
     public KineticGeneratorTile() {
@@ -69,6 +101,10 @@ public class KineticGeneratorTile extends TileEntity implements ITickableTileEnt
         if(cap == ModdedCapabilities.ENERGY) {
             if(side == getBlockState().getValue(BlockStateProperties.FACING).getOpposite()) return handler.cast();
             return LazyOptional.empty();
+        } else if(cap == ModdedCapabilities.ROTATION) {
+            if(side == getBlockState().getValue(BlockStateProperties.FACING)) return khandler.cast();
+            else if(side == null) return khandler.cast();
+            return LazyOptional.empty();
         }
         return super.getCapability(cap, side);
     }
@@ -78,18 +114,16 @@ public class KineticGeneratorTile extends TileEntity implements ITickableTileEnt
         if(!level.isClientSide) {
             if(firstTick) {
                 if(network == null) PipeNetwork.addTraceable(this, ModdedCapabilities.ENERGY, () -> new EnergyNetwork(level));
+                RotationalNetwork.addToNetwork(worldPosition, level);
                 firstTick = false;
             }
-            Direction facing = getBlockState().getValue(BlockStateProperties.FACING);
-            TileEntity te = level.getBlockEntity(worldPosition.offset(facing.getNormal()));
-            if(te != null) {
-                LazyOptional<IKineticEnergyHandler> capability = te.getCapability(ModdedCapabilities.ROTATION, facing.getOpposite());
-                capability.ifPresent(handler -> {
-                    float generation = handler.getSpeed();
-                    currentGeneration = generation * 50f;
-                    storedPower = generation * 50f;
-                });
-            }
+            RotationalNetwork network = (RotationalNetwork) rnetwork;
+            float generation = network.getCurrentSpeed();
+            currentGeneration = generation * 50f;
+            storedPower = generation * 50f;
+            float counterForce = extractedPower * 1f / 50f;
+            extractedPower = 0;
+            network.applyCounterTickForce(counterForce);
         }
     }
 
@@ -155,5 +189,9 @@ public class KineticGeneratorTile extends TileEntity implements ITickableTileEnt
     @Override
     public float getResistance() {
         return 0;
+    }
+
+    public IRotationalNetwork getNetwork() {
+        return rnetwork;
     }
 }

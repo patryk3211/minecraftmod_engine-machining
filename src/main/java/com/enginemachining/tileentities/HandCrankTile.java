@@ -1,6 +1,7 @@
 package com.enginemachining.tileentities;
 
 import com.enginemachining.api.rotation.IKineticEnergyHandler;
+import com.enginemachining.api.rotation.IRotationalNetwork;
 import com.enginemachining.api.rotation.RotationalNetwork;
 import com.enginemachining.capabilities.ModdedCapabilities;
 import net.minecraft.block.BlockState;
@@ -19,81 +20,44 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class HandCrankTile extends TileEntity implements ITickableTileEntity {
-    public float velocity;
-
-    public double lastRenderAngle;
-    public double angle;
-    public double toRotate;
-
-    private RotationalNetwork network;
+    private IRotationalNetwork network;
+    private boolean firstTick = true;
 
     private final LazyOptional<IKineticEnergyHandler> handler = LazyOptional.of(() -> new IKineticEnergyHandler() {
         @Override
-        public float getSpeed() {
-            return velocity;
-        }
-
-        @Override
-        public double getCurrentAngle() {
-            return lastRenderAngle;
-        }
-
-        @Override
-        public RotationalNetwork getNetwork() {
+        public IRotationalNetwork getNetwork() {
             return network;
         }
 
         @Override
-        public void setNetwork(RotationalNetwork network) {
+        public void setNetwork(IRotationalNetwork network) {
             HandCrankTile.this.network = network;
+        }
+
+        @Override
+        public float getInertiaMass() {
+            return 0.5f;
+        }
+
+        @Override
+        public float getFriction() {
+            return 0.1f;
         }
     });
 
     public HandCrankTile() {
         super(ModdedTileEntities.handcrank.get());
-
-        velocity = 0;
-        angle = 0;
-        toRotate = 0;
-        lastRenderAngle = 0;
     }
 
 
     @Override
     public void tick() {
-        if(level.isClientSide) {
-            toRotate = (velocity * 360f) * (1/20f);
-        } else {
-            if(velocity > 0) {
-                velocity -= 0.1f;
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+        if(!level.isClientSide) {
+            if(firstTick) {
+                firstTick = false;
+                RotationalNetwork.addToNetwork(worldPosition, level);
             }
         }
-    }
-
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT nbt = new CompoundNBT();
-        nbt.putFloat("velocity", velocity);
-        return new SUpdateTileEntityPacket(worldPosition, 1, nbt);
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        velocity = pkt.getTag().getFloat("velocity");
-    }
-
-    @Override
-    public void load(BlockState state, CompoundNBT nbt) {
-        velocity = nbt.getFloat("velocity");
-        super.load(state, nbt);
-    }
-
-    @Override
-    public CompoundNBT save(CompoundNBT nbt) {
-        nbt.putFloat("velocity", velocity);
-        return super.save(nbt);
     }
 
     @Nonnull
@@ -105,5 +69,9 @@ public class HandCrankTile extends TileEntity implements ITickableTileEntity {
             return LazyOptional.empty();
         }
         return super.getCapability(cap, side);
+    }
+
+    public IRotationalNetwork getNetwork() {
+        return network;
     }
 }
