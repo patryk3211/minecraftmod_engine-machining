@@ -19,6 +19,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.*;
@@ -26,17 +27,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RotationalNetwork implements IRotationalNetwork {
     private static final Map<RegistryKey<World>, Set<RotationalNetwork>> networks = new HashMap<>();
-    private static final Map<RegistryKey<World>, Set<ServerPlayerEntity>> players = new HashMap<>();
+    // Map of players in dimensions with a map of rotational networks tracked by players
+    private static final Map<RegistryKey<World>, Map<ServerPlayerEntity, Set<RotationalNetwork>>> players = new HashMap<>();
+    private static final List<Runnable> playersToTick = new ArrayList<>();
+
+    public Set<ServerPlayerEntity> trackers = new HashSet<>();
 
     private double speed;
-    private boolean awaitingLoad;
     private final Map<BlockPos, LazyOptional<IKineticEnergyHandler>> devices = new HashMap<>();
     private final World level;
     private float inertia;
     private float friction;
     private final UUID id;
-
-    private static boolean firstTick = true;
 
     public static void registerEvents() {
         MinecraftForge.EVENT_BUS.addListener(RotationalNetwork::onWorldLoad);
@@ -48,43 +50,59 @@ public class RotationalNetwork implements IRotationalNetwork {
         MinecraftForge.EVENT_BUS.addListener(RotationalNetwork::onTick);
     }
 
-    private static void onTick(TickEvent.ServerTickEvent event) {
-        if(event.phase == TickEvent.Phase.END) {
-            if(firstTick) {
-                networks.forEach((dim, nets) -> {
-                    Set<RotationalNetwork> copy = new HashSet<>(nets);
-                    for (RotationalNetwork network : copy) {
-                        if(network.awaitingLoad) {
-                            for (BlockPos position : network.devices.keySet()) {
-                                TileEntity entity = network.level.getBlockEntity(position);
-                                if(entity == null) throw new IllegalStateException("Tile Entity not found!");
-                                LazyOptional<IKineticEnergyHandler> lazy = entity.getCapability(ModdedCapabilities.ROTATION);
-                                lazy.ifPresent(handler -> {
-                                    RotationalNetwork oldNet = (RotationalNetwork) handler.getNetwork();
-                                    if(oldNet != null) {
-                                        oldNet.devices.forEach((pos, lazy2) -> lazy2.ifPresent(handler2 -> handler2.setNetwork(null)));
-                                        networks.get(oldNet.level.dimension()).remove(oldNet);
-                                    }
-                                    handler.setNetwork(network);
-                                });
-                                network.devices.replace(position, lazy);
-                                // TODO: [27.06.2021] Maybe don't crash the entire game when tile entity was not found, try to recover.
-                            }
-                            network.recalculateNetwork();
-                            network.awaitingLoad = false;
-                        }
+    private static void onTick(TickEvent.WorldTickEvent event) {
+        if(event.side == LogicalSide.CLIENT) return;
+        if(event.phase == TickEvent.Phase.START) {
+            if(!networks.containsKey(event.world.dimension())) return;
+            if(!players.containsKey(event.world.dimension())) return;
+            for (RotationalNetwork network : networks.get(event.world.dimension())) {
+                if(network.isNetworkLoaded()) {
+                    for (BlockPos position : network.devices.keySet()) {
+                        if(network.devices.get(position) != null) continue;
+                        TileEntity te = network.level.getBlockEntity(position);
+                        // TODO: [02.07.2021] Maybe don't crash the entire game when tile entity was not found, try to recover.
+                        if(te == null) throw new IllegalStateException("Tile entity does not exist!");
+                        LazyOptional<IKineticEnergyHandler> cap = te.getCapability(ModdedCapabilities.ROTATION);
+                        cap.ifPresent(handler -> handler.setNetwork(network));
+                        network.devices.replace(position, cap);
                     }
-                });
-                firstTick = false;
+                    network.recalculateNetwork();
+                    players.get(event.world.dimension()).forEach((player, trackedNetworks) -> {
+                        if(!trackedNetworks.contains(network)) {
+                            sendNetwork(PacketDistributor.PLAYER.with(() -> player), network);
+                            trackedNetworks.add(network);
+                            network.trackers.add(player);
+                        }
+                    });
+                } else {
+                    for (BlockPos position : network.devices.keySet()) {
+                        if(network.devices.get(position) != null) continue;
+                        network.devices.replace(position, null);
+                    }
+                    players.get(event.world.dimension()).forEach((player, trackedNetworks) -> {
+                        if(trackedNetworks.contains(network)) {
+                            EngineMachiningPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.DELETE_NETWORK, network.getId()));
+                            trackedNetworks.remove(network);
+                            network.trackers.remove(player);
+                        }
+                    });
+                }
             }
-            networks.forEach((dim, nets) -> {
+        }
+        if(event.phase == TickEvent.Phase.END) {
+            List<Runnable> copy = new ArrayList<>(playersToTick);
+            copy.forEach(Runnable::run);
+            playersToTick.removeAll(copy);
+            if(networks.containsKey(event.world.dimension())) {
+                Set<RotationalNetwork> nets = networks.get(event.world.dimension());
                 for (RotationalNetwork network : nets) {
+                    if(!network.isNetworkLoaded()) continue;
                     int sign = 0;
                     if(network.speed > 0) sign = 1;
                     else if(network.speed < 0) sign = -1;
                     network.applyTickForce(network.friction * -sign);
                 }
-            });
+            }
         }
     }
 
@@ -97,7 +115,6 @@ public class RotationalNetwork implements IRotationalNetwork {
             for (INBT entry : ((ListNBT) list)) {
                 if(!(entry instanceof CompoundNBT)) continue;
                 RotationalNetwork network = new RotationalNetwork(world);
-                network.awaitingLoad = true;
                 CompoundNBT netTag = (CompoundNBT) entry;
                 network.speed = netTag.getFloat("speed");
                 INBT blocksINBT = netTag.get("blocks");
@@ -155,10 +172,10 @@ public class RotationalNetwork implements IRotationalNetwork {
         if(event.getPlayer() instanceof ServerPlayerEntity) {
             ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
             if(players.containsKey(event.getFrom())) players.get(event.getFrom()).remove(player);
-            if(players.containsKey(event.getTo())) players.get(event.getTo()).add(player);
+            if(players.containsKey(event.getTo())) players.get(event.getTo()).put(player, new HashSet<>());
             else {
-                Set<ServerPlayerEntity> list = new HashSet<>();
-                list.add(player);
+                Map<ServerPlayerEntity, Set<RotationalNetwork>> list = new HashMap<>();
+                list.put(player, new HashSet<>());
                 players.put(event.getTo(), list);
             }
             PacketDistributor.PacketTarget target = PacketDistributor.PLAYER.with(() -> player);
@@ -173,15 +190,17 @@ public class RotationalNetwork implements IRotationalNetwork {
             ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
             RegistryKey<World> dim = player.getLevel().dimension();
             if(players.containsKey(dim)) {
-                players.get(dim).add(player);
+                players.get(dim).put(player, new HashSet<>());
             } else {
-                Set<ServerPlayerEntity> list = new HashSet<>();
-                list.add(player);
+                Map<ServerPlayerEntity, Set<RotationalNetwork>> list = new HashMap<>();
+                list.put(player, new HashSet<>());
                 players.put(dim, list);
             }
-            PacketDistributor.PacketTarget target = PacketDistributor.PLAYER.with(() -> player);
-            EngineMachiningPacketHandler.INSTANCE.send(target, new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.DELETE_ALL, new UUID(0, 0)));
-            if(networks.containsKey(dim)) networks.get(dim).forEach(net -> sendNetwork(target, net));
+            playersToTick.add(() -> {
+                PacketDistributor.PacketTarget target = PacketDistributor.PLAYER.with(() -> player);
+                EngineMachiningPacketHandler.INSTANCE.send(target, new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.DELETE_ALL, new UUID(0, 0)));
+                if(networks.containsKey(dim)) networks.get(dim).forEach(net -> sendNetwork(target, net));
+            });
             // TODO: [27.06.2021] Synchronize network's velocity on join.
         }
     }
@@ -196,7 +215,8 @@ public class RotationalNetwork implements IRotationalNetwork {
 
     private static void onWorldUnload(WorldEvent.Unload event) {
         networks.clear();
-        firstTick = true;
+        players.clear();
+        playersToTick.clear();
     }
 
     private RotationalNetwork(World level) {
@@ -209,8 +229,7 @@ public class RotationalNetwork implements IRotationalNetwork {
         }
         id = UUID.randomUUID();
         this.level = level;
-        awaitingLoad = false;
-        if(players.containsKey(level.dimension())) players.get(level.dimension()).forEach(player -> sendNetwork(PacketDistributor.PLAYER.with(() -> player), this));
+        if(players.containsKey(level.dimension())) players.get(level.dimension()).forEach((player, nets) -> sendNetwork(PacketDistributor.PLAYER.with(() -> player), this));
     }
 
     public UUID getId() {
@@ -249,13 +268,27 @@ public class RotationalNetwork implements IRotationalNetwork {
             LazyOptional<IKineticEnergyHandler> cap = dev.getCapability(ModdedCapabilities.ROTATION, dir.getOpposite());
             cap.ifPresent(handler -> { if(handler.getNetwork() != null) nets.add((RotationalNetwork) handler.getNetwork()); });
         });
+
         LazyOptional<IKineticEnergyHandler> cap = device.getCapability(ModdedCapabilities.ROTATION);
+        AtomicBoolean hasNetwork = new AtomicBoolean(false);
+        cap.ifPresent(handler -> hasNetwork.set(handler.getNetwork() != null));
+        if(hasNetwork.get()) return;
+
+        if(networks.containsKey(level.dimension())) networks.get(level.dimension()).forEach(network -> {
+            if(network.devices.containsKey(position)) {
+                hasNetwork.set(true);
+                cap.ifPresent(handler -> handler.setNetwork(network));
+                network.devices.replace(position, cap);
+            }
+        });
+        if(hasNetwork.get()) return;
+
         if(nets.size() == 0) {
             // No networks found around.
             RotationalNetwork net = new RotationalNetwork(level);
             cap.ifPresent(handler -> handler.setNetwork(net));
             net.devices.put(position, cap);
-            EngineMachiningPacketHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(net.level::dimension), new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.ADD_TILE, net.id).setTilePos(position));
+            if(players.containsKey(level.dimension())) players.get(level.dimension()).forEach((player, list) -> EngineMachiningPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.ADD_TILE, net.id).setTilePos(position)));
             net.recalculateNetwork();
         } else if(nets.size() == 1) {
             // Only one network found, add this handler to it.
@@ -266,7 +299,7 @@ public class RotationalNetwork implements IRotationalNetwork {
                     net.inertia += handler.getInertiaMass();
                     net.friction += handler.getFriction();
                 });
-                EngineMachiningPacketHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(net.level::dimension), new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.ADD_TILE, net.id).setTilePos(position));
+                if(players.containsKey(level.dimension())) players.get(level.dimension()).forEach((player, list) -> EngineMachiningPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.ADD_TILE, net.id).setTilePos(position)));
             }
         } else {
             // More than one network found, merge them all together.
@@ -311,10 +344,12 @@ public class RotationalNetwork implements IRotationalNetwork {
 
     private void speedChanged() {
         // TODO: [27.06.2021] Make it so that only players within a certain distance from the network receive speed updates.
-        EngineMachiningPacketHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(level::dimension), new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.UPDATE_VELOCITY, id).setSpeed(getCurrentSpeed()));
+        trackers.forEach(player -> EngineMachiningPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.UPDATE_VELOCITY, id).setSpeed(getCurrentSpeed())));
     }
 
     private void recalculateNetwork() {
+        inertia = 0;
+        friction = 0;
         devices.forEach((pos, lazy) -> lazy.ifPresent(handler -> {
             inertia += handler.getInertiaMass();
             friction += handler.getFriction();
@@ -326,6 +361,7 @@ public class RotationalNetwork implements IRotationalNetwork {
      * @param force The force to be applied.
      */
     public void applyTickForce(float force) {
+        if(inertia == 0) return;
         double acceleration = force/inertia;
         double deltaSpeed = acceleration*(1/20f);
         speed += deltaSpeed;
@@ -338,6 +374,7 @@ public class RotationalNetwork implements IRotationalNetwork {
      * @param force The force to be applied.
      */
     public void applyCounterTickForce(float force) {
+        if(inertia == 0) return;
         double acceleration = force/inertia;
         double deltaSpeed = acceleration*(1/20f);
         if(speed > 0) speed -= deltaSpeed;
@@ -363,5 +400,24 @@ public class RotationalNetwork implements IRotationalNetwork {
      */
     public float getCurrentSpeed() {
         return (float)speed;
+    }
+
+    /**
+     * This method checks if a network is loaded by any player.
+     * @return Returns true if any block of this network is loaded.
+     */
+    public boolean isNetworkLoaded() {
+        for (BlockPos pos : devices.keySet()) {
+            if(level.isLoaded(pos)) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof RotationalNetwork) {
+            return devices.values().equals(((RotationalNetwork) obj).devices.values());
+        }
+        return false;
     }
 }
