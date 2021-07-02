@@ -67,7 +67,7 @@ public class RotationalNetwork implements IRotationalNetwork {
                         cap.ifPresent(handler -> handler.setNetwork(network));
                         network.devices.replace(position, cap);
                     }
-                    network.recalculateNetwork();
+                    network.recalculateNetwork(false);
                     players.get(event.world.dimension()).forEach((player, trackedNetworks) -> {
                         if(!trackedNetworks.contains(network)) {
                             sendNetwork(PacketDistributor.PLAYER.with(() -> player), network);
@@ -291,14 +291,14 @@ public class RotationalNetwork implements IRotationalNetwork {
             cap.ifPresent(handler -> handler.setNetwork(net));
             net.devices.put(position, cap);
             if(players.containsKey(level.dimension())) players.get(level.dimension()).forEach((player, list) -> EngineMachiningPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.ADD_TILE, net.id).setTilePos(position)));
-            net.recalculateNetwork();
+            net.recalculateNetwork(true);
         } else if(nets.size() == 1) {
             // Only one network found, add this handler to it.
             for (RotationalNetwork net : nets) {
                 net.devices.put(position, cap);
                 cap.ifPresent(handler -> {
                     handler.setNetwork(net);
-                    net.recalculateNetwork();
+                    net.recalculateNetwork(true);
                 });
                 if(players.containsKey(level.dimension())) players.get(level.dimension()).forEach((player, list) -> EngineMachiningPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.ADD_TILE, net.id).setTilePos(position)));
             }
@@ -405,7 +405,7 @@ public class RotationalNetwork implements IRotationalNetwork {
             for(Direction dir : Direction.values()) {
                 if(network.devices.containsKey(pos.offset(dir.getNormal()))) devCountAround++;
             }
-            if(devCountAround == 1) network.recalculateNetwork();
+            if(devCountAround == 1) network.recalculateNetwork(true);
             if(devCountAround > 1) {
                 network.trackers.forEach(player -> EngineMachiningPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.DELETE_NETWORK, network.id)));
                 for(Direction dir : Direction.values()) {
@@ -413,7 +413,7 @@ public class RotationalNetwork implements IRotationalNetwork {
                     if(newNet.isEmpty()) networks.get(newNet.level.dimension()).remove(newNet);
                     newNet.trackers.addAll(network.trackers);
                     newNet.trackers.forEach(player -> sendNetwork(PacketDistributor.PLAYER.with(() -> player), newNet));
-                    newNet.recalculateNetwork();
+                    newNet.recalculateNetwork(true);
                     newNet.speed = network.getCurrentSpeed();
                     newNet.speedChanged();
                 }
@@ -427,7 +427,7 @@ public class RotationalNetwork implements IRotationalNetwork {
         trackers.forEach(player -> EngineMachiningPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.UPDATE_VELOCITY, id).setSpeed(getCurrentSpeed())));
     }
 
-    private void recalculateNetwork() {
+    private void recalculateNetwork(boolean affectVelocity) {
         float startInertia = inertia;
         inertia = 0;
         friction = 0;
@@ -436,7 +436,7 @@ public class RotationalNetwork implements IRotationalNetwork {
             friction += handler.getFriction();
         }));
         float inertiaChange = startInertia/inertia;
-        if(inertiaChange < 1) speed *= inertiaChange;
+        if(affectVelocity && inertiaChange < 1) speed *= inertiaChange;
     }
 
     /**
