@@ -118,7 +118,7 @@ public class KineticGeneratorTile extends TileEntity implements ITickableTileEnt
                 firstTick = false;
             }
             RotationalNetwork network = (RotationalNetwork) rnetwork;
-            float generation = network.getCurrentSpeed();
+            float generation = Math.abs(network.getCurrentSpeed());
             currentGeneration = generation * 50f;
             storedPower = generation * 50f;
             float counterForce = extractedPower * 1f / 50f;
@@ -157,7 +157,7 @@ public class KineticGeneratorTile extends TileEntity implements ITickableTileEnt
     @Override
     public boolean canConnect(Direction side, Capability<?> capability) {
         if(capability == ModdedCapabilities.ENERGY) {
-            if(side == getBlockState().getValue(BlockStateProperties.FACING).getOpposite()) return true;
+            return side == getBlockState().getValue(BlockStateProperties.FACING).getOpposite();
         }
         return false;
     }

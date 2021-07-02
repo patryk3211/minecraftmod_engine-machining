@@ -20,9 +20,9 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 public class Shaft extends Block {
-    private static final VoxelShape Z = Block.box(7, 7, 0, 9, 9, 16);
-    private static final VoxelShape Y = Block.box(7, 0, 7, 9, 16, 9);
-    private static final VoxelShape X = Block.box(0, 7, 7, 16, 9, 9);
+    private static final VoxelShape Z = Block.box(6.5, 6.5, 0, 9.5, 9.5, 16);
+    private static final VoxelShape Y = Block.box(6.5, 0, 6.5, 9.5, 16, 9.5);
+    private static final VoxelShape X = Block.box(0, 6.5, 6.5, 16, 9.5, 9.5);
 
     public Shaft() {
         super(Properties.of(Material.METAL));

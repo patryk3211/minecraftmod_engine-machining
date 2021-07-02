@@ -32,7 +32,7 @@ public class ClientRotationalNetwork implements IRotationalNetwork {
             lastNanos = currentNanos;
             if(Minecraft.getInstance().isPaused()) return;
             networks.forEach((id, network) -> {
-                if(network.speed < 0.0001f) return;
+                if(Math.abs(network.speed) < 0.0001f) return;
                 network.angle += (network.speed * 360f) * deltaSeconds;
                 network.angle = network.angle % 360;
             });

@@ -19,6 +19,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -77,13 +78,16 @@ public class HandCrank extends Block {
     public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity user, Hand hand, BlockRayTraceResult ray) {
         if(!level.isClientSide) {
             TileEntity te = level.getBlockEntity(pos);
+            Vector3i normal = state.getValue(BlockStateProperties.FACING).getNormal();
+            float spinDir = normal.getX() + normal.getY() + normal.getZ();
             if(!(te instanceof HandCrankTile)) return ActionResultType.FAIL;
             HandCrankTile hct = (HandCrankTile) te;
             RotationalNetwork net = (RotationalNetwork) hct.getNetwork();
-            float force = net.calculateForceForSpeed(1.5f);
-            force = Math.min(force, 10f);
+            float force = net.calculateForceForSpeed(1.5f * spinDir);
+            if(spinDir >= 0) force = Math.min(force, 10f);
+            else force = Math.max(force, -10f);
             net.applyTickForce(force);
-            user.causeFoodExhaustion(force/20f);
+            user.causeFoodExhaustion(Math.abs(force/20f));
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.CONSUME;

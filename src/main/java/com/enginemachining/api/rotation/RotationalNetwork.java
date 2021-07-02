@@ -24,6 +24,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class RotationalNetwork implements IRotationalNetwork {
     private static final Map<RegistryKey<World>, Set<RotationalNetwork>> networks = new HashMap<>();
@@ -144,6 +145,7 @@ public class RotationalNetwork implements IRotationalNetwork {
             networks.forEach((dim, nets) -> {
                 if(!world.dimension().equals(dim)) return;
                 for (RotationalNetwork network : nets) {
+                    if(network.isEmpty()) continue;
                     CompoundNBT netTag = new CompoundNBT();
                     netTag.putFloat("speed", network.getCurrentSpeed());
                     ListNBT blocks = new ListNBT();
@@ -296,15 +298,23 @@ public class RotationalNetwork implements IRotationalNetwork {
                 net.devices.put(position, cap);
                 cap.ifPresent(handler -> {
                     handler.setNetwork(net);
-                    net.inertia += handler.getInertiaMass();
-                    net.friction += handler.getFriction();
+                    net.recalculateNetwork();
                 });
                 if(players.containsKey(level.dimension())) players.get(level.dimension()).forEach((player, list) -> EngineMachiningPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.ADD_TILE, net.id).setTilePos(position)));
             }
         } else {
             // More than one network found, merge them all together.
             RotationalNetwork main = null;
+            Set<BlockPos> newTiles = new HashSet<>();
+            newTiles.add(position);
+            AtomicReference<Float> inertiaCombined = new AtomicReference<>((float) 0);
+            AtomicReference<Float> frictionCombined = new AtomicReference<>((float) 0);
+            float speedCombined = 0;
             for(RotationalNetwork net : nets) {
+                speedCombined += net.getCurrentSpeed();
+                frictionCombined.updateAndGet(v -> (v + net.friction));
+                inertiaCombined.updateAndGet(v -> (v + net.inertia));
+
                 if(main == null) {
                     main = net;
                     continue;
@@ -312,17 +322,69 @@ public class RotationalNetwork implements IRotationalNetwork {
                 RotationalNetwork finalMain = main;
                 net.devices.forEach((pos, lazy) -> {
                     finalMain.devices.put(pos, lazy);
+                    newTiles.add(pos);
                     lazy.ifPresent(handler -> handler.setNetwork(finalMain));
                 });
+                net.trackers.forEach(player -> {
+                    EngineMachiningPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.DELETE_NETWORK, net.getId()));
+                    if(!finalMain.trackers.contains(player)) {
+                        finalMain.trackers.add(player);
+                        sendNetwork(PacketDistributor.PLAYER.with(() -> player), finalMain);
+                    }
+                });
+
+                networks.get(net.level.dimension()).remove(net);
             }
+            RotationalNetwork finalMain = main;
+            cap.ifPresent(handler -> {
+                handler.setNetwork(finalMain);
+                inertiaCombined.updateAndGet(v -> (v + handler.getInertiaMass()));
+                frictionCombined.updateAndGet(v -> (v + handler.getFriction()));
+            });
+            main.trackers.forEach(player -> EngineMachiningPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.ADD_TILES, finalMain.getId()).setTiles(newTiles)));
             main.devices.put(position, cap);
-            main.recalculateNetwork();
-            // TODO: [27.06.2021] Delete network on client side and send the list of new tiles in the main network.
+
+            // TODO: [02.07.2021] Check if this makes any sense.
+            main.speed = speedCombined/inertiaCombined.get();
+            main.inertia = inertiaCombined.get();
+            main.friction = frictionCombined.get();
         }
     }
 
+    private RotationalNetwork traceNewNetwork(BlockPos start) {
+        RotationalNetwork network = new RotationalNetwork(level);
+        traceIntoNetwork(start, network);
+        return network;
+    }
+
+    private void traceIntoNetwork(BlockPos position, RotationalNetwork network) {
+        if(!devices.containsKey(position)) return;
+        TileEntity device = level.getBlockEntity(position);
+        if(device == null) return;
+        LazyOptional<IKineticEnergyHandler> cap = device.getCapability(ModdedCapabilities.ROTATION);
+        cap.ifPresent(handler -> {
+            RotationalNetwork oldNet = (RotationalNetwork) handler.getNetwork();
+            if(oldNet != null) {
+                oldNet.devices.remove(position);
+                handler.setNetwork(null);
+            }
+            handler.setNetwork(network);
+            network.devices.put(position, cap);
+            for(Direction dir : Direction.values()) {
+                if(!device.getCapability(ModdedCapabilities.ROTATION, dir).isPresent()) continue;
+                BlockPos neighbourPos = position.offset(dir.getNormal());
+                if(!devices.containsKey(neighbourPos)) continue;
+                TileEntity neighbour = level.getBlockEntity(neighbourPos);
+                if(neighbour == null) continue;
+                if(!neighbour.getCapability(ModdedCapabilities.ROTATION, dir.getOpposite()).isPresent()) continue;
+                traceIntoNetwork(neighbourPos, network);
+            }
+        });
+    }
+
     /**
-     * This network will remove a kinetic energy device from it's rotational network
+     * This network will remove a kinetic energy device from it's rotational network.
+     * You have to call this method BEFORE you remove the tile entity
      * @param pos Position of the device
      * @param level Level of the device
      */
@@ -335,10 +397,28 @@ public class RotationalNetwork implements IRotationalNetwork {
             if(network == null) return;
             network.devices.remove(pos);
             handler.setNetwork(null);
-            network.inertia -= handler.getInertiaMass();
-            network.friction -= handler.getFriction();
-            if(network.devices.size() == 0) networks.get(network.level.dimension()).remove(network);
-            // TODO: [27.06.2021] Split the network if this device was connection point
+            if(network.isEmpty()) {
+                networks.get(network.level.dimension()).remove(network);
+                return;
+            }
+            int devCountAround = 0;
+            for(Direction dir : Direction.values()) {
+                if(network.devices.containsKey(pos.offset(dir.getNormal()))) devCountAround++;
+            }
+            if(devCountAround == 1) network.recalculateNetwork();
+            if(devCountAround > 1) {
+                network.trackers.forEach(player -> EngineMachiningPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new RotationalNetworkMessage(RotationalNetworkMessage.MessageType.DELETE_NETWORK, network.id)));
+                for(Direction dir : Direction.values()) {
+                    RotationalNetwork newNet = network.traceNewNetwork(pos.offset(dir.getNormal()));
+                    if(newNet.isEmpty()) networks.get(newNet.level.dimension()).remove(newNet);
+                    newNet.trackers.addAll(network.trackers);
+                    newNet.trackers.forEach(player -> sendNetwork(PacketDistributor.PLAYER.with(() -> player), newNet));
+                    newNet.recalculateNetwork();
+                    newNet.speed = network.getCurrentSpeed();
+                    newNet.speedChanged();
+                }
+                networks.get(network.level.dimension()).remove(network);
+            }
         });
     }
 
@@ -348,12 +428,15 @@ public class RotationalNetwork implements IRotationalNetwork {
     }
 
     private void recalculateNetwork() {
+        float startInertia = inertia;
         inertia = 0;
         friction = 0;
         devices.forEach((pos, lazy) -> lazy.ifPresent(handler -> {
             inertia += handler.getInertiaMass();
             friction += handler.getFriction();
         }));
+        float inertiaChange = startInertia/inertia;
+        if(inertiaChange < 1) speed *= inertiaChange;
     }
 
     /**
@@ -411,6 +494,14 @@ public class RotationalNetwork implements IRotationalNetwork {
             if(level.isLoaded(pos)) return true;
         }
         return false;
+    }
+
+    /**
+     * Checks if this network is empty.
+     * @return Returns true if this network does not have any devices.
+     */
+    public boolean isEmpty() {
+        return devices.isEmpty();
     }
 
     @Override
