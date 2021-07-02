@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "group": "ingot_silver",
+  "group": "block_tin",
   "pattern": [
     "###",
     "###",
@@ -8,10 +8,10 @@
   ],
   "key": {
     "#": {
-      "item": "enginemachining:nugget_silver"
+      "item": "enginemachining:ingot_tin"
     }
   },
   "result": {
-    "item": "enginemachining:ingot_silver"
+    "item": "enginemachining:block_tin"
   }
 }

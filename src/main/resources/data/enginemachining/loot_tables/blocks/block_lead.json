@@ -1,0 +1,16 @@
+{
+  "type":"minecraft:block",
+  "pools": [
+    {
+      "name": "enginemachining:block_lead",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "enginemachining:block_lead",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

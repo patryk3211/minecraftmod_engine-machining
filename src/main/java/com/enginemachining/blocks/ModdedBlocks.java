@@ -16,6 +16,13 @@ public class ModdedBlocks {
     public static final RegistryObject<Block> ore_lead = BLOCKS.register("ore_lead", OreLead::new);
     public static final RegistryObject<Block> ore_nickel = BLOCKS.register("ore_nickel", OreNickel::new);
 
+    public static final RegistryObject<Block> block_nickel = BLOCKS.register("block_nickel", BlockNickel::new);
+    public static final RegistryObject<Block> block_tin = BLOCKS.register("block_tin", BlockTin::new);
+    public static final RegistryObject<Block> block_lead = BLOCKS.register("block_lead", BlockLead::new);
+    public static final RegistryObject<Block> block_aluminium = BLOCKS.register("block_aluminium", BlockAluminium::new);
+    public static final RegistryObject<Block> block_copper = BLOCKS.register("block_copper", BlockCopper::new);
+    public static final RegistryObject<Block> block_silver = BLOCKS.register("block_silver", BlockSilver::new);
+
     public static final RegistryObject<Block> crusher = BLOCKS.register("crusher", Crusher::new);
 
     public static final RegistryObject<Block> energy_wire_copper = BLOCKS.register("energy_wire_copper", EnergyWireCopper::new);
