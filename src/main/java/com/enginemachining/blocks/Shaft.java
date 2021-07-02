@@ -1,5 +1,6 @@
 package com.enginemachining.blocks;
 
+import com.enginemachining.api.rotation.KineticBlockProperties;
 import com.enginemachining.api.rotation.RotationalNetwork;
 import com.enginemachining.tileentities.ShaftTile;
 import net.minecraft.block.Block;
@@ -30,12 +31,13 @@ public class Shaft extends Block {
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(BlockStateProperties.AXIS);
+        builder.add(KineticBlockProperties.MODEL_TYPE);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return defaultBlockState().setValue(BlockStateProperties.AXIS, context.getClickedFace().getAxis());
+        return defaultBlockState().setValue(BlockStateProperties.AXIS, context.getClickedFace().getAxis()).setValue(KineticBlockProperties.MODEL_TYPE, KineticBlockProperties.ModelType.BODY);
     }
 
     @Override

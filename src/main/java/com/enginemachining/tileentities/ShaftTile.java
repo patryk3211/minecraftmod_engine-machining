@@ -65,4 +65,8 @@ public class ShaftTile extends TileEntity implements ITickableTileEntity {
         }
         return super.getCapability(cap, side);
     }
+
+    public IRotationalNetwork getNetwork() {
+        return network;
+    }
 }

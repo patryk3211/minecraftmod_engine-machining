@@ -1,7 +1,11 @@
 {
   "variants": {
-    "axis=z": { "model": "enginemachining:block/shaft_16" },
-    "axis=y": { "model": "enginemachining:block/shaft_16", "x": 90 },
-    "axis=x": { "model": "enginemachining:block/shaft_16", "y": 90 }
+    "axis=z,model_type=body": { "model": "minecraft:block/air" },
+    "axis=y,model_type=body": { "model": "minecraft:block/air" },
+    "axis=x,model_type=body": { "model": "minecraft:block/air" },
+
+    "axis=z,model_type=shaft": { "model": "enginemachining:block/shaft_16" },
+    "axis=y,model_type=shaft": { "model": "enginemachining:block/shaft_16", "x": 90 },
+    "axis=x,model_type=shaft": { "model": "enginemachining:block/shaft_16", "y": 90 }
   }
 }

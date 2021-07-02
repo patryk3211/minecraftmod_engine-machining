@@ -4,6 +4,7 @@ import com.enginemachining.api.rotation.ClientRotationalNetwork;
 import com.enginemachining.containers.ModdedContainers;
 import com.enginemachining.renderers.HandCrankRenderer;
 import com.enginemachining.renderers.KineticGeneratorRenderer;
+import com.enginemachining.renderers.ShaftRenderer;
 import com.enginemachining.screens.CrusherScreen;
 import com.enginemachining.screens.PowerLimiterScreen;
 import net.minecraft.client.gui.ScreenManager;
@@ -23,6 +24,7 @@ public class ClientEventBus {
 
         HandCrankRenderer.register();
         KineticGeneratorRenderer.register();
+        ShaftRenderer.register();
     }
 
     public static void loadComplete(FMLLoadCompleteEvent loadCompleteEvent) {
