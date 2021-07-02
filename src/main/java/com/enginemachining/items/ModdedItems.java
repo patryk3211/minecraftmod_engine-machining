@@ -81,10 +81,10 @@ public class ModdedItems {
     public static final RegistryObject<Item> boots_silver = ITEMS.register("boots_silver", BootsSilver::new);
 
     public static final RegistryObject<Item> pickaxe_tin = ITEMS.register("pickaxe_tin", PickaxeTin::new);
-    public static final RegistryObject<Item> axe_tin = ITEMS.register("axe_silver", AxeTin::new);
-    public static final RegistryObject<Item> sword_tin = ITEMS.register("sword_silver", SwordTin::new);
-    public static final RegistryObject<Item> hoe_tin = ITEMS.register("hoe_silver", HoeTin::new);
-    public static final RegistryObject<Item> shovel_tin = ITEMS.register("shovel_silver", ShovelTin::new);
+    public static final RegistryObject<Item> axe_tin = ITEMS.register("axe_tin", AxeTin::new);
+    public static final RegistryObject<Item> sword_tin = ITEMS.register("sword_tin", SwordTin::new);
+    public static final RegistryObject<Item> hoe_tin = ITEMS.register("hoe_tin", HoeTin::new);
+    public static final RegistryObject<Item> shovel_tin = ITEMS.register("shovel_tin", ShovelTin::new);
 
     public static final RegistryObject<Item> pickaxe_aluminium = ITEMS.register("pickaxe_aluminium", PickaxeAluminium::new);
     public static final RegistryObject<Item> axe_aluminium = ITEMS.register("axe_aluminium", AxeAluminium::new);
