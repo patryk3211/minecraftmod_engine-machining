@@ -19,4 +19,6 @@ public class ModdedTileEntities {
     public static final RegistryObject<TileEntityType<InfinitePowerSourceTile>> infinite_power_source = TILE_ENTITIES.register("infinite_power_source", () -> TileEntityType.Builder.of(InfinitePowerSourceTile::new, ModdedBlocks.infinite_power_source.get()).build(null));
 
     public static final RegistryObject<TileEntityType<HandCrankTile>> handcrank = TILE_ENTITIES.register("handcrank", () -> TileEntityType.Builder.of(HandCrankTile::new, ModdedBlocks.handcrank.get()).build(null));
+
+    public static final RegistryObject<TileEntityType<ShaftTile>> shaft = TILE_ENTITIES.register("shaft", () -> TileEntityType.Builder.of(ShaftTile::new, ModdedBlocks.shaft.get()).build(null));
 }
