@@ -1,10 +1,17 @@
 {
   "variants": {
-    "facing=north": { "model": "enginemachining:block/handcrank" },
-    "facing=south": { "model": "enginemachining:block/handcrank", "y": 180 },
-    "facing=east": { "model": "enginemachining:block/handcrank", "y": 90 },
-    "facing=west": { "model": "enginemachining:block/handcrank", "y": -90 },
-    "facing=up": { "model": "enginemachining:block/handcrank", "x": -90 },
-    "facing=down": { "model": "enginemachining:block/handcrank", "x": 90 }
+    "facing=north,model_type=shaft": { "model": "enginemachining:block/handcrank" },
+    "facing=south,model_type=shaft": { "model": "enginemachining:block/handcrank", "y": 180 },
+    "facing=east,model_type=shaft": { "model": "enginemachining:block/handcrank", "y": 90 },
+    "facing=west,model_type=shaft": { "model": "enginemachining:block/handcrank", "y": -90 },
+    "facing=up,model_type=shaft": { "model": "enginemachining:block/handcrank", "x": -90 },
+    "facing=down,model_type=shaft": { "model": "enginemachining:block/handcrank", "x": 90 },
+
+    "facing=north,model_type=body": { "model": "minecraft:block/air" },
+    "facing=south,model_type=body": { "model": "minecraft:block/air" },
+    "facing=east,model_type=body": { "model": "minecraft:block/air" },
+    "facing=west,model_type=body": { "model": "minecraft:block/air" },
+    "facing=up,model_type=body": { "model": "minecraft:block/air" },
+    "facing=down,model_type=body": { "model": "minecraft:block/air" }
   }
 }

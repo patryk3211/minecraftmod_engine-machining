@@ -1,33 +1,24 @@
 package com.enginemachining.renderers;
 
-import com.enginemachining.EngineMachiningMod;
 import com.enginemachining.api.rotation.ClientRotationalNetwork;
-import com.enginemachining.capabilities.ModdedCapabilities;
+import com.enginemachining.api.rotation.KineticBlockProperties;
 import com.enginemachining.tileentities.KineticGeneratorTile;
 import com.enginemachining.tileentities.ModdedTileEntities;
-import com.enginemachining.utils.RenderHelper;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.math.vector.Vector3i;
+import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 public class KineticGeneratorRenderer extends TileEntityRenderer<KineticGeneratorTile> {
-    private static final ResourceLocation MODEL_LOC = new ResourceLocation(EngineMachiningMod.MOD_ID, "kinetic_generator");
-
     public KineticGeneratorRenderer(TileEntityRendererDispatcher dispatcher) {
         super(dispatcher);
     }
@@ -37,9 +28,6 @@ public class KineticGeneratorRenderer extends TileEntityRenderer<KineticGenerato
         BlockState state = tile.getBlockState();
         Direction facing = state.getValue(BlockStateProperties.FACING);
 
-        IBakedModel model = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(MODEL_LOC, "facing=" + facing + ",model_type=shaft"));
-
-        IVertexBuilder builder = type.getBuffer(RenderType.solid());
         stack.pushPose();
 
         ClientRotationalNetwork net = (ClientRotationalNetwork) tile.getNetwork();
@@ -52,7 +40,7 @@ public class KineticGeneratorRenderer extends TileEntityRenderer<KineticGenerato
             stack.translate(-plane.x(), -plane.y(), -plane.z());
         }
 
-        RenderHelper.renderModel(builder, stack, model, state, combinedLight, combinedOverlay, Minecraft.getInstance().level.random);
+        Minecraft.getInstance().getBlockRenderer().renderBlock(state.setValue(KineticBlockProperties.MODEL_TYPE, KineticBlockProperties.ModelType.SHAFT), stack, type, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
 
         stack.popPose();
     }
