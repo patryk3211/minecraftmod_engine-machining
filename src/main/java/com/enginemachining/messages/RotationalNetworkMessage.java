@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -122,35 +123,38 @@ public class RotationalNetworkMessage {
     }
 
     public static void handle(RotationalNetworkMessage msg, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            switch (msg.type) {
-                case CREATE_NETWORK:
-                    new ClientRotationalNetwork(msg.network_uuid, Minecraft.getInstance().level);
-                    break;
-                case DELETE_NETWORK:
-                    ClientRotationalNetwork.deleteNetwork(msg.network_uuid);
-                    break;
-                case DELETE_ALL:
-                    ClientRotationalNetwork.deleteAll();
-                    break;
-                case ADD_TILES: {
-                    ClientRotationalNetwork network = ClientRotationalNetwork.getNetwork(msg.network_uuid);
-                    for (BlockPos tile : msg.tiles) {
-                        network.addTile(tile);
-                    }
-                    break;
-                } case ADD_TILE:
-                    ClientRotationalNetwork.getNetwork(msg.network_uuid).addTile(msg.tile);
-                    break;
-                case REMOVE_TILE:
-                    ClientRotationalNetwork.getNetwork(msg.network_uuid).removeTile(msg.tile);
-                    break;
-                case UPDATE_VELOCITY:
-                    ClientRotationalNetwork.getNetwork(msg.network_uuid).setSpeed(msg.speed);
-                    break;
-                default: throw new IllegalStateException("Unknown message type detected!");
-            }
-        }));
+        ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> handleClient(msg)));
         ctx.get().setPacketHandled(true);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static void handleClient(RotationalNetworkMessage msg) {
+        switch (msg.type) {
+            case CREATE_NETWORK:
+                new ClientRotationalNetwork(msg.network_uuid, Minecraft.getInstance().level);
+                break;
+            case DELETE_NETWORK:
+                ClientRotationalNetwork.deleteNetwork(msg.network_uuid);
+                break;
+            case DELETE_ALL:
+                ClientRotationalNetwork.deleteAll();
+                break;
+            case ADD_TILES: {
+                ClientRotationalNetwork network = ClientRotationalNetwork.getNetwork(msg.network_uuid);
+                for (BlockPos tile : msg.tiles) {
+                    network.addTile(tile);
+                }
+                break;
+            } case ADD_TILE:
+                ClientRotationalNetwork.getNetwork(msg.network_uuid).addTile(msg.tile);
+                break;
+            case REMOVE_TILE:
+                ClientRotationalNetwork.getNetwork(msg.network_uuid).removeTile(msg.tile);
+                break;
+            case UPDATE_VELOCITY:
+                ClientRotationalNetwork.getNetwork(msg.network_uuid).setSpeed(msg.speed);
+                break;
+            default: throw new IllegalStateException("Unknown message type detected!");
+        }
     }
 }
