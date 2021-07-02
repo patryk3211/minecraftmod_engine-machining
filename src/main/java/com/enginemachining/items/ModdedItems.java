@@ -39,6 +39,8 @@ public class ModdedItems {
 
     public static final RegistryObject<Item> handcrank = ITEMS.register("handcrank", () -> new BlockItem(ModdedBlocks.handcrank.get(), new Item.Properties().tab(ItemGroup.TAB_MISC)));
 
+    public static final RegistryObject<Item> shaft = ITEMS.register("shaft", () -> new BlockItem(ModdedBlocks.shaft.get(), new Item.Properties().tab(ItemGroup.TAB_MISC)));
+
     public static final RegistryObject<Item> ingot_copper = ITEMS.register("ingot_copper", IngotCopper::new);
     public static final RegistryObject<Item> ingot_tin = ITEMS.register("ingot_tin", IngotTin::new);
     public static final RegistryObject<Item> ingot_aluminium = ITEMS.register("ingot_aluminium", IngotAluminium::new);

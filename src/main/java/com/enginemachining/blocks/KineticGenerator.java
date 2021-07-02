@@ -1,6 +1,7 @@
 package com.enginemachining.blocks;
 
 import com.enginemachining.api.rotation.KineticBlockProperties;
+import com.enginemachining.api.rotation.RotationalNetwork;
 import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.tileentities.KineticGeneratorTile;
 import com.enginemachining.utils.EnergyNetwork;
@@ -87,6 +88,7 @@ public class KineticGenerator extends Block {
         if(level.isClientSide) return;
         if(!(newState.getBlock() instanceof KineticGenerator)) {
             TileEntity entity = level.getBlockEntity(pos);
+            RotationalNetwork.removeFromNetwork(pos, level);
             if(entity instanceof KineticGeneratorTile) {
                 PipeNetwork network = ((IPipeTraceable) entity).getNetwork(null);
                 level.removeBlockEntity(pos);

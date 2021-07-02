@@ -1,11 +1,13 @@
 package com.enginemachining;
 
+import com.enginemachining.api.rotation.RotationalNetwork;
 import com.enginemachining.blocks.*;
 import com.enginemachining.capabilities.ModdedCapabilities;
 import com.enginemachining.containers.ModdedContainers;
 import com.enginemachining.items.*;
 import com.enginemachining.messages.CrusherTileMessage;
 import com.enginemachining.messages.PowerLimiterMessage;
+import com.enginemachining.messages.RotationalNetworkMessage;
 import com.enginemachining.recipes.ModdedRecipeSerializers;
 import com.enginemachining.tileentities.ModdedTileEntities;
 import net.minecraftforge.common.MinecraftForge;
@@ -44,6 +46,7 @@ public class EngineMachiningMod
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventBus::loadComplete);
 
         MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoad);
+        RotationalNetwork.registerEvents();
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -52,6 +55,7 @@ public class EngineMachiningMod
         LOGGER.info("Registering Network Packets...");
         EngineMachiningPacketHandler.registerPacketType(CrusherTileMessage.class, CrusherTileMessage::encode, CrusherTileMessage::decode, CrusherTileMessage::handle);
         EngineMachiningPacketHandler.registerPacketType(PowerLimiterMessage.class, PowerLimiterMessage::encode, PowerLimiterMessage::decode, PowerLimiterMessage::handle);
+        EngineMachiningPacketHandler.registerPacketType(RotationalNetworkMessage.class, RotationalNetworkMessage::encode, RotationalNetworkMessage::decode, RotationalNetworkMessage::handle);
         LOGGER.info("Registering Capabilities...");
         ModdedCapabilities.register();
         LOGGER.info("Setup Complete!");

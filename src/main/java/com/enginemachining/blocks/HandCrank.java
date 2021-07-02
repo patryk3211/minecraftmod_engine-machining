@@ -1,8 +1,9 @@
 package com.enginemachining.blocks;
 
+import com.enginemachining.api.rotation.KineticBlockProperties;
+import com.enginemachining.api.rotation.RotationalNetwork;
 import com.enginemachining.tileentities.HandCrankTile;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,18 +12,18 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class HandCrank extends Block {
     private static final VoxelShape NORTH = VoxelShapes.or(Block.box(6.5, 6.5, 0, 9.5, 9.5, 3), Block.box(1, 1, 3, 15, 15, 6)).optimize();
@@ -40,12 +41,13 @@ public class HandCrank extends Block {
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(BlockStateProperties.FACING);
+        builder.add(KineticBlockProperties.MODEL_TYPE);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return defaultBlockState().setValue(BlockStateProperties.FACING, context.getClickedFace().getOpposite());
+        return defaultBlockState().setValue(BlockStateProperties.FACING, context.getClickedFace().getOpposite()).setValue(KineticBlockProperties.MODEL_TYPE, KineticBlockProperties.ModelType.BODY);
     }
 
     @Override
@@ -59,11 +61,6 @@ public class HandCrank extends Block {
             case UP: return UP;
             default: return VoxelShapes.block();
         }
-    }
-
-    @Override
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @Override
@@ -81,11 +78,16 @@ public class HandCrank extends Block {
     public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity user, Hand hand, BlockRayTraceResult ray) {
         if(!level.isClientSide) {
             TileEntity te = level.getBlockEntity(pos);
+            Vector3i normal = state.getValue(BlockStateProperties.FACING).getNormal();
+            float spinDir = normal.getX() + normal.getY() + normal.getZ();
             if(!(te instanceof HandCrankTile)) return ActionResultType.FAIL;
-            ((HandCrankTile) te).velocity = 1.5f;
-            te.setChanged();
-            level.sendBlockUpdated(pos, state, state, Constants.BlockFlags.BLOCK_UPDATE);
-            user.causeFoodExhaustion(0.5f);
+            HandCrankTile hct = (HandCrankTile) te;
+            RotationalNetwork net = (RotationalNetwork) hct.getNetwork();
+            float force = net.calculateForceForSpeed(1.5f * spinDir);
+            if(spinDir >= 0) force = Math.min(force, 10f);
+            else force = Math.max(force, -10f);
+            net.applyTickForce(force);
+            user.causeFoodExhaustion(Math.abs(force/20f));
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.CONSUME;
@@ -95,6 +97,7 @@ public class HandCrank extends Block {
     public void onRemove(BlockState state, World level, BlockPos pos, BlockState newState, boolean isMoving) {
         if(level.isClientSide) return;
         if(!(newState.getBlock() instanceof HandCrank)) {
+            RotationalNetwork.removeFromNetwork(pos, level);
             level.removeBlockEntity(pos);
         }
     }

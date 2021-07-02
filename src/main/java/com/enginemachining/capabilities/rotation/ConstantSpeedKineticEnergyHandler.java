@@ -1,21 +1,31 @@
 package com.enginemachining.capabilities.rotation;
 
 import com.enginemachining.api.rotation.IKineticEnergyHandler;
+import com.enginemachining.api.rotation.IRotationalNetwork;
+import com.enginemachining.api.rotation.RotationalNetwork;
 
 public class ConstantSpeedKineticEnergyHandler implements IKineticEnergyHandler {
-    private final float rotationalSpeed;
+    private IRotationalNetwork network;
 
-    public ConstantSpeedKineticEnergyHandler(float rotationalSpeed) {
-        this.rotationalSpeed = rotationalSpeed;
+    public ConstantSpeedKineticEnergyHandler(float rotationalSpeed) { }
+
+    @Override
+    public IRotationalNetwork getNetwork() {
+        return network;
     }
 
     @Override
-    public float getSpeed() {
-        return rotationalSpeed;
+    public void setNetwork(IRotationalNetwork network) {
+        this.network = network;
     }
 
     @Override
-    public double getCurrentAngle() {
+    public float getInertiaMass() {
+        return 1;
+    }
+
+    @Override
+    public float getFriction() {
         return 0;
     }
 }
