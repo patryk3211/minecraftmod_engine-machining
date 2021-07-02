@@ -96,7 +96,11 @@ public class ModdedItemGroups {
             items.add(new ItemStack(ModdedItems.chestplate_aluminium.get()));
             items.add(new ItemStack(ModdedItems.leggins_aluminium.get()));
             items.add(new ItemStack(ModdedItems.boots_aluminium.get()));
-            items.add(new ItemStack(ModdedItems.pickaxe_copper.get()));
+            items.add(new ItemStack(ModdedItems.pickaxe_tin.get()));
+            items.add(new ItemStack(ModdedItems.axe_tin.get()));
+            items.add(new ItemStack(ModdedItems.sword_tin.get()));
+            items.add(new ItemStack(ModdedItems.hoe_tin.get()));
+            items.add(new ItemStack(ModdedItems.shovel_tin.get()));
         }
     };
 
